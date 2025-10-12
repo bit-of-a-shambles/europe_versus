@@ -348,6 +348,19 @@ Ensure these files exist in production:
 
 ## ⚠️ Troubleshooting
 
+### Task appears stuck or frozen
+
+**Population fetch specifically:**
+- The population data fetch requests data for 52 countries from Our World in Data
+- This can take 30-60 seconds and may appear frozen
+- Look for the message: "Requesting data for 52 countries..."
+- The task has a 120-second timeout - if it truly hangs, it will fail after 2 minutes
+- If it times out repeatedly:
+  ```bash
+  # Try fetching fewer countries or check OWID API status
+  # Visit https://ourworldindata.org/grapher/population to verify the API is working
+  ```
+
 ### "Population data fetch failed"
 - Check network connectivity to ourworldindata.org
 - Verify the OWID API is accessible
