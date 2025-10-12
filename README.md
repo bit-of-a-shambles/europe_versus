@@ -225,7 +225,7 @@ Help make EuropeVersus accessible to more people:
 
 ## 📄 License
 
-This project is open source and available under the [MIT License](LICENSE).
+This project is open source and available under the [GNU License](LICENSE).
 
 ## � Data Quality & Review Process
 
@@ -286,7 +286,7 @@ Found incorrect data or questionable sources?
 
 ## 📄 License
 
-This project is open source and available under the [MIT License](LICENSE).
+This project is open source and available under the [GNU License](LICENSE).
 
 ---
 
