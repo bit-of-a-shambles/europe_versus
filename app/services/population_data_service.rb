@@ -80,8 +80,18 @@ class PopulationDataService
     # Fetch data from OWID
     url = "https://ourworldindata.org/grapher/population.csv?tab=table&time=#{start_year}..#{end_year}&country=#{owid_countries}"
     
+    puts "Requesting data for #{COUNTRIES.size} countries from #{start_year} to #{end_year}..."
+    puts "This may take 30-60 seconds..."
+    
     begin
-      response = Net::HTTP.get_response(URI(url))
+      uri = URI(url)
+      http = Net::HTTP.new(uri.host, uri.port)
+      http.use_ssl = true
+      http.open_timeout = 30
+      http.read_timeout = 120
+      
+      request = Net::HTTP::Get.new(uri.request_uri)
+      response = http.request(request)
       
       unless response.code == '200'
         puts "Error fetching data: HTTP #{response.code}"
