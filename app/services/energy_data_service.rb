@@ -2,8 +2,6 @@ require 'net/http'
 require 'json'
 
 class EnergyDataService
-  extend OurWorldInDataService
-  
   # Energy consumption metrics from Our World in Data
   ENERGY_METRICS = {
     'energy_consumption_per_capita' => 'per-capita-energy-use',
@@ -18,7 +16,7 @@ class EnergyDataService
     result = {}
     
     # Fetch energy consumption per capita data
-    energy_data = fetch_chart_data('per-capita-energy-use', start_year: 2015, end_year: 2024)
+    energy_data = OurWorldInDataService.fetch_chart_data('per-capita-energy-use', start_year: 2015, end_year: 2024)
     
     unless energy_data[:error]
       countries.each do |country_key|
@@ -50,7 +48,7 @@ class EnergyDataService
     result = {}
     
     # Fetch renewable energy share data
-    renewable_data = fetch_chart_data('renewable-share-energy', start_year: 2015, end_year: 2024)
+    renewable_data = OurWorldInDataService.fetch_chart_data('renewable-share-energy', start_year: 2015, end_year: 2024)
     
     unless renewable_data[:error]
       countries.each do |country_key|
@@ -82,7 +80,7 @@ class EnergyDataService
     result = {}
     
     # Fetch CO2 emissions per capita data
-    co2_data = fetch_chart_data('co2-per-capita', start_year: 2015, end_year: 2024)
+    co2_data = OurWorldInDataService.fetch_chart_data('co2-per-capita', start_year: 2015, end_year: 2024)
     
     unless co2_data[:error]
       countries.each do |country_key|

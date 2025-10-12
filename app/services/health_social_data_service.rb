@@ -2,8 +2,6 @@ require 'net/http'
 require 'json'
 
 class HealthSocialDataService
-  extend OurWorldInDataService
-  
   # Health and social metrics from Our World in Data
   HEALTH_SOCIAL_METRICS = {
     'healthcare_spending_per_capita' => 'healthcare-expenditure-per-capita',
@@ -19,7 +17,7 @@ class HealthSocialDataService
     result = {}
     
     # Fetch healthcare spending per capita data
-    healthcare_data = fetch_chart_data('healthcare-expenditure-per-capita', start_year: 2015, end_year: 2024)
+    healthcare_data = OurWorldInDataService.fetch_chart_data('healthcare-expenditure-per-capita', start_year: 2015, end_year: 2024)
     
     unless healthcare_data[:error]
       countries.each do |country_key|
@@ -51,7 +49,7 @@ class HealthSocialDataService
     result = {}
     
     # Fetch education spending as % of GDP data
-    education_data = fetch_chart_data('government-expenditure-on-education-of-gdp', start_year: 2015, end_year: 2024)
+    education_data = OurWorldInDataService.fetch_chart_data('government-expenditure-on-education-of-gdp', start_year: 2015, end_year: 2024)
     
     unless education_data[:error]
       countries.each do |country_key|
@@ -83,7 +81,7 @@ class HealthSocialDataService
     result = {}
     
     # Fetch happiness index data (Cantril Ladder)
-    happiness_data = fetch_chart_data('happiness-cantril-ladder', start_year: 2015, end_year: 2024)
+    happiness_data = OurWorldInDataService.fetch_chart_data('happiness-cantril-ladder', start_year: 2015, end_year: 2024)
     
     unless happiness_data[:error]
       countries.each do |country_key|
@@ -115,7 +113,7 @@ class HealthSocialDataService
     result = {}
     
     # Fetch internet users data
-    internet_data = fetch_chart_data('share-of-individuals-using-the-internet', start_year: 2015, end_year: 2024)
+    internet_data = OurWorldInDataService.fetch_chart_data('share-of-individuals-using-the-internet', start_year: 2015, end_year: 2024)
     
     unless internet_data[:error]
       countries.each do |country_key|
