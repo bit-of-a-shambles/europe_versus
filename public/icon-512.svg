@@ -1,0 +1,38 @@
+<svg width="512" height="512" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bgGradient512" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#3B82F6;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#2563EB;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#1E40AF;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="textGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#FFFFFF;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#E5E7EB;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Background circle with shadow effect -->
+  <circle cx="256" cy="256" r="240" fill="url(#bgGradient512)" stroke="#1E40AF" stroke-width="8"/>
+  
+  <!-- EU letters with modern typography -->
+  <text x="256" y="300" font-family="Arial, sans-serif" font-size="140" font-weight="900" text-anchor="middle" fill="url(#textGradient)">EU</text>
+  
+  <!-- European stars in circle pattern -->
+  <g fill="white" opacity="0.9">
+    <!-- Top star -->
+    <polygon points="256,100 264,124 290,124 270,140 278,164 256,148 234,164 242,140 222,124 248,124" />
+    
+    <!-- Stars at 30-degree intervals -->
+    <polygon points="334,140 342,164 368,164 348,180 356,204 334,188 312,204 320,180 300,164 326,164" transform="rotate(30 256 256)" />
+    <polygon points="334,140 342,164 368,164 348,180 356,204 334,188 312,204 320,180 300,164 326,164" transform="rotate(60 256 256)" />
+    <polygon points="334,140 342,164 368,164 348,180 356,204 334,188 312,204 320,180 300,164 326,164" transform="rotate(90 256 256)" />
+    <polygon points="334,140 342,164 368,164 348,180 356,204 334,188 312,204 320,180 300,164 326,164" transform="rotate(120 256 256)" />
+    <polygon points="334,140 342,164 368,164 348,180 356,204 334,188 312,204 320,180 300,164 326,164" transform="rotate(150 256 256)" />
+    <polygon points="334,140 342,164 368,164 348,180 356,204 334,188 312,204 320,180 300,164 326,164" transform="rotate(180 256 256)" />
+    <polygon points="334,140 342,164 368,164 348,180 356,204 334,188 312,204 320,180 300,164 326,164" transform="rotate(210 256 256)" />
+    <polygon points="334,140 342,164 368,164 348,180 356,204 334,188 312,204 320,180 300,164 326,164" transform="rotate(240 256 256)" />
+    <polygon points="334,140 342,164 368,164 348,180 356,204 334,188 312,204 320,180 300,164 326,164" transform="rotate(270 256 256)" />
+    <polygon points="334,140 342,164 368,164 348,180 356,204 334,188 312,204 320,180 300,164 326,164" transform="rotate(300 256 256)" />
+    <polygon points="334,140 342,164 368,164 348,180 356,204 334,188 312,204 320,180 300,164 326,164" transform="rotate(330 256 256)" />
+  </g>
+</svg>

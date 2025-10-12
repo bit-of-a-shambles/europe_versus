@@ -1,0 +1,907 @@
+<% 
+  # Define countries array for use throughout the template
+  key_countries = [
+    # Major EU economies (top row)
+    { key: 'germany', flag: '🇩🇪', name: 'Germany' },
+    { key: 'france', flag: '🇫🇷', name: 'France' },
+    { key: 'italy', flag: '🇮🇹', name: 'Italy' },
+    { key: 'spain', flag: '🇪🇸', name: 'Spain' },
+    { key: 'netherlands', flag: '🇳🇱', name: 'Netherlands' },
+    { key: 'poland', flag: '🇵🇱', name: 'Poland' },
+    { key: 'sweden', flag: '🇸🇪', name: 'Sweden' },
+    { key: 'denmark', flag: '🇩🇰', name: 'Denmark' },
+    # More EU countries
+    { key: 'finland', flag: '🇫🇮', name: 'Finland' },
+    { key: 'austria', flag: '🇦🇹', name: 'Austria' },
+    { key: 'belgium', flag: '🇧🇪', name: 'Belgium' },
+    { key: 'ireland', flag: '🇮🇪', name: 'Ireland' },
+    { key: 'portugal', flag: '🇵🇹', name: 'Portugal' },
+    { key: 'greece', flag: '🇬🇷', name: 'Greece' },
+    { key: 'czech_republic', flag: '🇨🇿', name: 'Czechia' },
+    { key: 'hungary', flag: '🇭🇺', name: 'Hungary' },
+    # Central/Eastern EU countries
+    { key: 'romania', flag: '🇷🇴', name: 'Romania' },
+    { key: 'croatia', flag: '🇭🇷', name: 'Croatia' },
+    { key: 'bulgaria', flag: '🇧🇬', name: 'Bulgaria' },
+    { key: 'slovakia', flag: '🇸🇰', name: 'Slovakia' },
+    { key: 'slovenia', flag: '🇸🇮', name: 'Slovenia' },
+    { key: 'estonia', flag: '🇪🇪', name: 'Estonia' },
+    { key: 'latvia', flag: '🇱🇻', name: 'Latvia' },
+    { key: 'lithuania', flag: '🇱🇹', name: 'Lithuania' },
+    # Small EU countries
+    { key: 'luxembourg', flag: '🇱🇺', name: 'Luxembourg' },
+    { key: 'malta', flag: '🇲🇹', name: 'Malta' },
+    { key: 'cyprus', flag: '🇨🇾', name: 'Cyprus' },
+    # Other European countries
+    { key: 'switzerland', flag: '🇨🇭', name: 'Switzerland' },
+    { key: 'norway', flag: '🇳🇴', name: 'Norway' },
+    { key: 'united_kingdom', flag: '🇬🇧', name: 'UK' },
+    { key: 'iceland', flag: '🇮🇸', name: 'Iceland' },
+    # Regional aggregates
+    { key: 'europe', flag: '🇪🇺', name: 'Europe' },
+    { key: 'european_union', flag: '🇪🇺', name: 'European Union' },
+    { key: 'europe_central_asia', flag: '🇪🇺', name: 'Europe & CA' },
+    # Global comparisons
+    { key: 'usa', flag: '🇺🇸', name: 'USA' },
+    { key: 'china', flag: '🇨🇳', name: 'China' },
+    { key: 'india', flag: '🇮🇳', name: 'India' }
+  ]
+%>
+
+<div class="max-w-7xl mx-auto px-4 py-8">
+  <!-- Header -->
+  <div class="text-center mb-12">
+    <h1 class="text-5xl font-bold mb-6 bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+      <%= @chart_data.dig(:metadata, :title) || @chart_name.humanize %>
+    </h1>
+    <p class="text-xl text-slate-600 max-w-3xl mx-auto">
+      <%= @chart_data.dig(:metadata, :description) || "Comparing Europe with major economies" %>
+    </p>
+  </div>
+
+  <% if @chart_data && !@chart_data[:error] %>
+ 
+
+    <!-- Latest Values -->
+    <div class="mb-12">
+      <% latest_year = @chart_data[:years]&.max || 2024 %>
+      
+      <!-- OWID interactive chart embed -->
+      <div class="mb-8">
+        <div style="position:relative;padding-bottom:56.25%;height:0;overflow:hidden;border-radius:12px;box-shadow:0 8px 24px rgba(15,23,42,0.06);">
+          <iframe
+            src="https://ourworldindata.org/grapher/<%= @chart_name %>?tab=chart&country=Germany~France~Italy~Spain~Netherlands~Poland~Sweden~Denmark~Finland~Austria~Belgium~Czechia~Estonia~Greece~Hungary~Ireland~Latvia~Lithuania~Luxembourg~Malta~Portugal~Slovakia~Slovenia~Bulgaria~Croatia~Romania~Cyprus~Norway~Switzerland~United+Kingdom~Iceland~European+Union+%2827%29~Europe+and+Central+Asia+%28WB%29~United+States~India~China&time=2000..2024&yScale=linear"
+            style="position:absolute;top:0;left:0;width:100%;height:100%;border:0;background:white;border-radius:12px;"
+            title="<%= @chart_data.dig(:metadata, :title) || @chart_name.humanize %>"
+            loading="lazy"
+          ></iframe>
+        </div>
+      </div>
+
+      <!-- Comparison with other regions -->
+      <div>
+        <h3 class="text-xl font-bold text-slate-800 mb-4">🌍 Regional Comparison</h3>
+        <div class="grid md:grid-cols-2 lg:grid-cols-5 gap-4">
+          <% 
+            comparison_countries = [
+              { key: 'europe', flag: '🇪🇺', name: 'Europe', color: 'from-blue-500 to-blue-600' },
+              { key: 'european_union', flag: '🇪🇺', name: 'EU', color: 'from-blue-500 to-blue-600' },
+              { key: 'usa', flag: '🇺🇸', name: 'United States', color: 'from-red-500 to-red-600' },
+              { key: 'india', flag: '🇮🇳', name: 'India', color: 'from-orange-500 to-orange-600' },
+              { key: 'china', flag: '🇨🇳', name: 'China', color: 'from-red-600 to-red-700' }
+            ]
+          %>
+          <% comparison_countries.each do |country| %>
+            <% 
+              country_data = @chart_data.dig(:countries, country[:key], :data) || {}
+              latest_country_year = country_data.keys.max
+              value = latest_country_year ? country_data[latest_country_year] : nil
+            %>
+            <div class="bg-white rounded-2xl p-6 shadow-lg border border-gray-100">
+              <div class="flex items-center mb-4">
+                <div class="w-12 h-12 bg-gradient-to-r <%= country[:color] %> rounded-xl flex items-center justify-center mr-3">
+                  <span class="text-xl"><%= country[:flag] %></span>
+                </div>
+                <div>
+                  <h3 class="font-bold text-slate-800"><%= country[:name] %></h3>
+                  <p class="text-sm text-slate-500"><%= latest_country_year || 'No data' %></p>
+                </div>
+              </div>
+              <div class="text-right">
+                <% if value %>
+                  <p class="text-2xl font-bold text-slate-800">
+                    <%= format_metric_value(value, @chart_data[:metadata]) %>
+                  </p>
+                <% else %>
+                  <p class="text-lg text-slate-400">No data</p>
+                <% end %>
+              </div>
+            </div>
+          <% end %>
+        </div>
+      </div>
+    </div>
+
+    <!-- Time Series Chart Data -->
+    <div class="bg-white rounded-3xl p-8 shadow-xl border border-gray-100 mb-12">
+      <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between mb-6">
+        <h3 class="text-2xl font-bold text-slate-800 mb-4 lg:mb-0">Historical Trends</h3>
+        
+        <!-- Country Filter Controls -->
+        <div class="flex flex-col lg:flex-row gap-4">
+          <!-- Category Filters -->
+          <div class="flex flex-wrap gap-2">
+            <button data-filter="all" class="filter-btn active px-4 py-2 text-sm font-medium rounded-lg transition-all duration-200 bg-blue-600 text-white hover:bg-blue-700">
+              All Countries
+            </button>
+            <button data-filter="major-eu" class="filter-btn px-4 py-2 text-sm font-medium rounded-lg transition-all duration-200 bg-gray-100 text-gray-700 hover:bg-gray-200">
+              Major EU
+            </button>
+            <button data-filter="small-eu" class="filter-btn px-4 py-2 text-sm font-medium rounded-lg transition-all duration-200 bg-gray-100 text-gray-700 hover:bg-gray-200">
+              Small EU
+            </button>
+            <button data-filter="non-eu" class="filter-btn px-4 py-2 text-sm font-medium rounded-lg transition-all duration-200 bg-gray-100 text-gray-700 hover:bg-gray-200">
+              Non-EU Europe
+            </button>
+            <button data-filter="global" class="filter-btn px-4 py-2 text-sm font-medium rounded-lg transition-all duration-200 bg-gray-100 text-gray-700 hover:bg-gray-200">
+              Global Powers
+            </button>
+            <button data-filter="aggregates" class="filter-btn px-4 py-2 text-sm font-medium rounded-lg transition-all duration-200 bg-gray-100 text-gray-700 hover:bg-gray-200">
+              Aggregates
+            </button>
+          </div>
+          
+          <!-- Individual Country Picker -->
+                    <!-- Individual Country Picker for Historical Trends -->
+          <div class="flex items-center gap-2">
+            <label class="text-sm font-medium text-gray-700 whitespace-nowrap">Pick Countries:</label>
+            <div class="relative">
+              <button type="button" 
+                      id="table-country-trigger"
+                      class="px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white min-w-48 text-left flex justify-between items-center">
+                <span id="table-country-display" class="truncate">Select countries...</span>
+                <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                </svg>
+              </button>
+              
+              <!-- Dropdown Menu -->
+              <div id="table-country-dropdown" 
+                   class="hidden absolute z-50 mt-1 w-80 bg-white border border-gray-300 rounded-lg shadow-lg">
+                <!-- Search Input -->
+                <div class="p-2 border-b border-gray-200">
+                  <input type="text" 
+                         id="table-country-search"
+                         placeholder="Search countries..."
+                         class="w-full px-3 py-2 text-sm border border-gray-300 rounded focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                </div>
+                
+                <!-- Options List -->
+                <div class="max-h-64 overflow-y-auto" id="table-country-options">
+                  <% key_countries.each do |country| %>
+                    <% 
+                      category = if ['usa', 'china', 'india'].include?(country[:key])
+                        'global'
+                      elsif ['switzerland', 'norway', 'united_kingdom', 'iceland'].include?(country[:key])
+                        'non-eu'
+                      elsif ['germany', 'france', 'italy', 'spain', 'netherlands', 'poland', 'sweden', 'denmark'].include?(country[:key])
+                        'major-eu'
+                      elsif ['europe', 'european_union', 'europe_central_asia'].include?(country[:key])
+                        'aggregates'
+                      else
+                        'small-eu'
+                      end
+                    %>
+                    <label class="flex items-center px-3 py-2 hover:bg-gray-50 cursor-pointer table-country-option" 
+                           data-country="<%= country[:key] %>"
+                           data-category="<%= category %>"
+                           data-name="<%= country[:name] %>">
+                      <input type="checkbox" 
+                             value="<%= country[:key] %>"
+                             class="mr-3 rounded border-gray-300 text-blue-600 focus:ring-blue-500 table-country-checkbox">
+                      <span class="text-sm"><%= country[:flag] %> <%= country[:name] %></span>
+                    </label>
+                  <% end %>
+                </div>
+                
+                <!-- Footer Actions -->
+                <div class="p-2 border-t border-gray-200 flex justify-between items-center">
+                  <div class="flex gap-2">
+                    <button type="button" 
+                            id="table-select-all"
+                            class="text-xs text-blue-600 hover:text-blue-800">
+                      Select All
+                    </button>
+                    <button type="button" 
+                            id="table-clear-all"
+                            class="text-xs text-red-600 hover:text-red-800">
+                      Clear All
+                    </button>
+                  </div>
+                  <button type="button" 
+                          id="table-apply-filter"
+                          class="px-3 py-1 text-xs font-medium text-white bg-blue-600 rounded hover:bg-blue-700">
+                    Apply
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Table with key countries (limit to avoid overcrowding) -->
+      <div class="overflow-x-auto">
+        <table class="w-full">
+          <thead>
+            <tr class="border-b border-gray-200">
+              <th class="sticky left-0 z-10 bg-white text-left py-3 px-4 font-semibold text-slate-700 border-r border-gray-200 shadow-sm">Year</th>
+              <% key_countries.each_with_index do |country, index| %>
+                <% 
+                  # Categorize countries for filtering
+                  category = if ['usa', 'china', 'india'].include?(country[:key])
+                    'global'
+                  elsif ['switzerland', 'norway', 'united_kingdom', 'iceland'].include?(country[:key])
+                    'non-eu'
+                  elsif ['germany', 'france', 'italy', 'spain', 'netherlands', 'poland', 'sweden', 'denmark'].include?(country[:key])
+                    'major-eu'
+                  elsif ['europe', 'european_union', 'europe_central_asia'].include?(country[:key])
+                    'aggregates'
+                  else
+                    'small-eu'
+                  end
+                %>
+                <th class="country-column text-right py-3 px-4 font-semibold text-slate-700 text-sm" 
+                    data-category="<%= category %>" 
+                    data-country="<%= country[:key] %>">
+                  <%= country[:flag] %> <%= country[:name] %>
+                </th>
+              <% end %>
+            </tr>
+          </thead>
+          <tbody>
+            <% @chart_data[:years].reverse.first(10).each do |year| %>
+              <tr class="border-b border-gray-100 hover:bg-gray-50">
+                <td class="sticky left-0 z-10 bg-white py-3 px-4 font-medium text-slate-800 border-r border-gray-200 shadow-sm"><%= year %></td>
+                <% key_countries.each do |country| %>
+                  <% 
+                    # Categorize countries for filtering (same logic as headers)
+                    category = if ['usa', 'china', 'india'].include?(country[:key])
+                      'global'
+                    elsif ['switzerland', 'norway', 'united_kingdom', 'iceland'].include?(country[:key])
+                      'non-eu'
+                    elsif ['germany', 'france', 'italy', 'spain', 'netherlands', 'poland', 'sweden', 'denmark'].include?(country[:key])
+                      'major-eu'
+                    elsif ['europe', 'european_union', 'europe_central_asia'].include?(country[:key])
+                      'aggregates'
+                    else
+                      'small-eu'
+                    end
+                    
+                    value = @chart_data.dig(:countries, country[:key], :data, year)
+                  %>
+                  <td class="country-column py-3 px-4 text-right" 
+                      data-category="<%= category %>" 
+                      data-country="<%= country[:key] %>">
+                    <% if value %>
+                      <span class="font-semibold text-slate-700 text-sm">
+                        <%= format_metric_value(value, @chart_data[:metadata]) %>
+                      </span>
+                    <% else %>
+                      <span class="text-slate-400">—</span>
+                    <% end %>
+                  </td>
+                <% end %>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+      
+      <% if @chart_data[:years].length > 10 %>
+        <div class="text-center mt-4">
+          <p class="text-sm text-slate-500">
+            Showing latest 10 years. Total data spans <%= @chart_data[:years].length %> years 
+            (<%= @chart_data[:years].first %> - <%= @chart_data[:years].last %>)
+          </p>
+        </div>
+      <% end %>
+    </div>
+
+    <!-- Growth Analysis -->
+    <div class="mb-12">
+      <h3 class="text-2xl font-bold text-slate-800 mb-6">Growth Analysis</h3>
+      
+      <!-- Growth Analysis Filter Controls -->
+      <div class="bg-white rounded-2xl p-6 shadow-lg border border-gray-100 mb-6">
+        <div class="flex flex-col lg:flex-row gap-4">
+          <!-- Category Filters -->
+          <div class="flex flex-wrap gap-2">
+            <button data-growth-filter="all" class="growth-filter-btn active px-4 py-2 text-sm font-medium rounded-lg transition-all duration-200 bg-emerald-600 text-white hover:bg-emerald-700">
+              All Countries
+            </button>
+            <button data-growth-filter="major-eu" class="growth-filter-btn px-4 py-2 text-sm font-medium rounded-lg transition-all duration-200 bg-gray-100 text-gray-700 hover:bg-gray-200">
+              Major EU
+            </button>
+            <button data-growth-filter="small-eu" class="growth-filter-btn px-4 py-2 text-sm font-medium rounded-lg transition-all duration-200 bg-gray-100 text-gray-700 hover:bg-gray-200">
+              Small EU
+            </button>
+            <button data-growth-filter="non-eu" class="growth-filter-btn px-4 py-2 text-sm font-medium rounded-lg transition-all duration-200 bg-gray-100 text-gray-700 hover:bg-gray-200">
+              Non-EU Europe
+            </button>
+            <button data-growth-filter="global" class="growth-filter-btn px-4 py-2 text-sm font-medium rounded-lg transition-all duration-200 bg-gray-100 text-gray-700 hover:bg-gray-200">
+              Global Powers
+            </button>
+            <button data-growth-filter="aggregates" class="growth-filter-btn px-4 py-2 text-sm font-medium rounded-lg transition-all duration-200 bg-gray-100 text-gray-700 hover:bg-gray-200">
+              Aggregates
+            </button>
+          </div>
+          
+          <!-- Individual Country Picker for Growth Analysis -->
+          <div class="flex items-center gap-2">
+            <label class="text-sm font-medium text-gray-700 whitespace-nowrap">Pick Countries:</label>
+            <div class="relative">
+              <button type="button" 
+                      id="growth-country-trigger"
+                      class="px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 bg-white min-w-48 text-left flex justify-between items-center">
+                <span id="growth-country-display" class="truncate">Select countries...</span>
+                <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                </svg>
+              </button>
+              
+              <!-- Dropdown Menu -->
+              <div id="growth-country-dropdown" 
+                   class="hidden absolute z-50 mt-1 w-80 bg-white border border-gray-300 rounded-lg shadow-lg">
+                <!-- Search Input -->
+                <div class="p-2 border-b border-gray-200">
+                  <input type="text" 
+                         id="growth-country-search"
+                         placeholder="Search countries..."
+                         class="w-full px-3 py-2 text-sm border border-gray-300 rounded focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500">
+                </div>
+                
+                <!-- Options List -->
+                <div class="max-h-64 overflow-y-auto" id="growth-country-options">
+                  <% key_countries.each do |country| %>
+                    <% 
+                      category = if ['usa', 'china', 'india'].include?(country[:key])
+                        'global'
+                      elsif ['switzerland', 'norway', 'united_kingdom', 'iceland'].include?(country[:key])
+                        'non-eu'
+                      elsif ['germany', 'france', 'italy', 'spain', 'netherlands', 'poland', 'sweden', 'denmark'].include?(country[:key])
+                        'major-eu'
+                      elsif ['european_union', 'europe_central_asia'].include?(country[:key])
+                        'aggregates'
+                      else
+                        'small-eu'
+                      end
+                    %>
+                    <label class="flex items-center px-3 py-2 hover:bg-gray-50 cursor-pointer growth-country-option" 
+                           data-country="<%= country[:key] %>"
+                           data-category="<%= category %>"
+                           data-name="<%= country[:name] %>">
+                      <input type="checkbox" 
+                             value="<%= country[:key] %>"
+                             class="mr-3 rounded border-gray-300 text-emerald-600 focus:ring-emerald-500 growth-country-checkbox">
+                      <span class="text-sm"><%= country[:flag] %> <%= country[:name] %></span>
+                    </label>
+                  <% end %>
+                </div>
+                
+                <!-- Footer Actions -->
+                <div class="p-2 border-t border-gray-200 flex justify-between items-center">
+                  <div class="flex gap-2">
+                    <button type="button" 
+                            id="growth-select-all"
+                            class="text-xs text-emerald-600 hover:text-emerald-800">
+                      Select All
+                    </button>
+                    <button type="button" 
+                            id="growth-clear-all"
+                            class="text-xs text-red-600 hover:text-red-800">
+                      Clear All
+                    </button>
+                  </div>
+                  <button type="button" 
+                          id="growth-apply-filter"
+                          class="px-3 py-1 text-xs font-medium text-white bg-emerald-600 rounded hover:bg-emerald-700">
+                    Apply
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6" id="growth-analysis-grid">
+        <% 
+          analysis_countries = [
+            { key: 'germany', flag: '🇩🇪', name: 'Germany' },
+            { key: 'france', flag: '🇫🇷', name: 'France' },
+            { key: 'italy', flag: '🇮🇹', name: 'Italy' },
+            { key: 'spain', flag: '🇪🇸', name: 'Spain' },
+            { key: 'netherlands', flag: '🇳🇱', name: 'Netherlands' },
+            { key: 'poland', flag: '🇵🇱', name: 'Poland' },
+            { key: 'sweden', flag: '🇸🇪', name: 'Sweden' },
+            { key: 'denmark', flag: '🇩🇰', name: 'Denmark' },
+            { key: 'finland', flag: '🇫🇮', name: 'Finland' },
+            { key: 'austria', flag: '🇦🇹', name: 'Austria' },
+            { key: 'belgium', flag: '🇧🇪', name: 'Belgium' },
+            { key: 'switzerland', flag: '🇨🇭', name: 'Switzerland' },
+            { key: 'norway', flag: '🇳🇴', name: 'Norway' },
+            { key: 'united_kingdom', flag: '🇬🇧', name: 'United Kingdom' },
+            { key: 'ireland', flag: '🇮🇪', name: 'Ireland' },
+            { key: 'portugal', flag: '🇵🇹', name: 'Portugal' },
+            { key: 'greece', flag: '🇬🇷', name: 'Greece' },
+            { key: 'czech_republic', flag: '🇨🇿', name: 'Czech Republic' },
+            { key: 'hungary', flag: '🇭🇺', name: 'Hungary' },
+            { key: 'romania', flag: '🇷🇴', name: 'Romania' },
+            { key: 'croatia', flag: '🇭🇷', name: 'Croatia' },
+            { key: 'bulgaria', flag: '🇧🇬', name: 'Bulgaria' },
+            { key: 'slovakia', flag: '🇸🇰', name: 'Slovakia' },
+            { key: 'slovenia', flag: '🇸🇮', name: 'Slovenia' },
+            { key: 'estonia', flag: '🇪🇪', name: 'Estonia' },
+            { key: 'latvia', flag: '🇱🇻', name: 'Latvia' },
+            { key: 'lithuania', flag: '🇱🇹', name: 'Lithuania' },
+            { key: 'luxembourg', flag: '🇱🇺', name: 'Luxembourg' },
+            { key: 'malta', flag: '🇲🇹', name: 'Malta' },
+            { key: 'cyprus', flag: '🇨🇾', name: 'Cyprus' },
+            { key: 'iceland', flag: '🇮🇸', name: 'Iceland' },
+            { key: 'europe', flag: '🇪🇺', name: 'Europe' },
+            { key: 'european_union', flag: '🇪🇺', name: 'European Union' },
+            { key: 'europe_central_asia', flag: '🇪🇺', name: 'Europe & Central Asia' },
+            { key: 'usa', flag: '🇺🇸', name: 'United States' },
+            { key: 'china', flag: '🇨🇳', name: 'China' },
+            { key: 'india', flag: '🇮🇳', name: 'India' }
+          ]
+        %>
+        <% analysis_countries.each do |country| %>
+        <% country_data = @chart_data.dig(:countries, country[:key], :data) %>
+        <% if country_data&.any? %>
+          <% 
+            # Categorize countries for filtering
+            category = if ['usa', 'china', 'india'].include?(country[:key])
+              'global'
+            elsif ['switzerland', 'norway', 'united_kingdom', 'iceland'].include?(country[:key])
+              'non-eu'
+            elsif ['germany', 'france', 'italy', 'spain', 'netherlands', 'poland', 'sweden', 'denmark'].include?(country[:key])
+              'major-eu'
+            elsif ['europe', 'european_union', 'europe_central_asia'].include?(country[:key])
+              'aggregates'
+            else
+              'small-eu'
+            end
+            
+            sorted_years = country_data.keys.sort
+            first_value = country_data[sorted_years.first]
+            last_value = country_data[sorted_years.last]
+            growth_rate = first_value && last_value && first_value > 0 ? 
+              ((last_value / first_value) ** (1.0 / (sorted_years.last - sorted_years.first)) - 1) * 100 : nil
+          %>
+          <div class="growth-card bg-white rounded-2xl p-6 shadow-lg border border-gray-100 transition-all duration-300" 
+               data-growth-category="<%= category %>" 
+               data-growth-country="<%= country[:key] %>">
+            <div class="flex items-center mb-4">
+              <span class="text-2xl mr-3"><%= country[:flag] %></span>
+              <div>
+                <h4 class="font-bold text-slate-800"><%= country[:name] %></h4>
+                <p class="text-sm text-slate-500">Growth Analysis</p>
+              </div>
+            </div>
+            <div class="space-y-2">
+              <div class="flex justify-between">
+                <span class="text-slate-600">Period:</span>
+                <span class="font-semibold"><%= sorted_years.first %> - <%= sorted_years.last %></span>
+              </div>
+              <% if first_value && last_value %>
+                <div class="flex justify-between">
+                  <span class="text-slate-600">Start:</span>
+                  <span class="font-semibold"><%= format_metric_value(first_value, @chart_data[:metadata]) %></span>
+                </div>
+                <div class="flex justify-between">
+                  <span class="text-slate-600">Latest:</span>
+                  <span class="font-semibold"><%= format_metric_value(last_value, @chart_data[:metadata]) %></span>
+                </div>
+                <% if growth_rate %>
+                  <div class="flex justify-between pt-2 border-t">
+                    <span class="text-slate-600">Avg. Annual Growth:</span>
+                    <span class="font-bold <%= growth_rate_color_class(growth_rate, @chart_data[:metadata]) %>">
+                      <%= growth_rate > 0 ? '+' : '' %><%= '%.1f' % growth_rate %>%
+                    </span>
+                  </div>
+                <% end %>
+              <% end %>
+            </div>
+          </div>
+        <% end %>
+      <% end %>
+      </div>
+    </div>
+
+  <% else %>
+    <!-- Error State -->
+    <div class="text-center py-12">
+      <div class="w-16 h-16 mx-auto mb-4 bg-red-100 rounded-full flex items-center justify-center">
+        <svg class="w-8 h-8 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+        </svg>
+      </div>
+      <h3 class="text-xl font-bold text-slate-800 mb-2">Unable to load data</h3>
+      <p class="text-slate-600 mb-6">
+        <% if @chart_data&.dig(:error) %>
+          Error: <%= @chart_data[:error] %>
+        <% else %>
+          There was an issue fetching data from Our World in Data.
+        <% end %>
+      </p>
+      <button onclick="window.location.reload()" class="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
+        Try Again
+      </button>
+    </div>
+  <% end %>
+
+  <!-- Navigation back to statistics -->
+  <div class="text-center mb-8">
+    <%= link_to statistics_path, class: "inline-flex items-center text-blue-600 hover:text-blue-800 font-semibold transition-colors" do %>
+      <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+      </svg>
+      Back to All Statistics
+    <% end %>
+  </div>
+
+  <!-- Data Source Attribution -->
+  <div class="text-center mt-8 p-8 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-3xl">
+    <h3 class="text-2xl font-bold text-slate-800 mb-4">Real-time Data from Our World in Data</h3>
+    <p class="text-slate-600 mb-6 max-w-2xl mx-auto">
+      This page displays live data from Our World in Data, sourced from the World Bank, Eurostat, OECD, and IMF. 
+      Data is fetched directly from their API to ensure accuracy and timeliness.
+    </p>
+    <div class="flex items-center justify-center space-x-4 text-sm text-slate-500">
+      <a href="https://ourworldindata.org/grapher/gdp-per-capita-worldbank" target="_blank" class="hover:text-blue-600 transition-colors">
+        View Source Data
+      </a>
+      <span>•</span>
+      <%= link_to "About This Project", root_path, class: "hover:text-blue-600 transition-colors" %>
+    </div>
+  </div>
+</div>
+
+<!-- Turbo-powered Country Filtering Script -->
+<script>
+document.addEventListener('turbo:load', function() {
+  // Historical Trends Table Filtering
+  const filterButtons = document.querySelectorAll('.filter-btn');
+  const countryColumns = document.querySelectorAll('.country-column');
+  
+  // Multi-select dropdown for table filtering
+  const tableCountryTrigger = document.getElementById('table-country-trigger');
+  const tableCountryDropdown = document.getElementById('table-country-dropdown');
+  const tableCountryDisplay = document.getElementById('table-country-display');
+  const tableCountrySearch = document.getElementById('table-country-search');
+  const tableCountryCheckboxes = document.querySelectorAll('.table-country-checkbox');
+  const tableSelectAll = document.getElementById('table-select-all');
+  const tableClearAll = document.getElementById('table-clear-all');
+  const tableApplyFilter = document.getElementById('table-apply-filter');
+  
+  // Toggle dropdown
+  tableCountryTrigger.addEventListener('click', function(e) {
+    e.stopPropagation();
+    tableCountryDropdown.classList.toggle('hidden');
+    if (!tableCountryDropdown.classList.contains('hidden')) {
+      tableCountrySearch.focus();
+    }
+  });
+  
+  // Close dropdown when clicking outside
+  document.addEventListener('click', function(e) {
+    if (!tableCountryTrigger.contains(e.target) && !tableCountryDropdown.contains(e.target)) {
+      tableCountryDropdown.classList.add('hidden');
+    }
+  });
+  
+  // Search functionality
+  tableCountrySearch.addEventListener('input', function() {
+    const searchTerm = this.value.toLowerCase();
+    document.querySelectorAll('.table-country-option').forEach(option => {
+      const countryName = option.dataset.name.toLowerCase();
+      if (countryName.includes(searchTerm)) {
+        option.style.display = '';
+      } else {
+        option.style.display = 'none';
+      }
+    });
+  });
+  
+  // Update display text
+  function updateTableDisplay() {
+    const checkedBoxes = Array.from(tableCountryCheckboxes).filter(cb => cb.checked);
+    if (checkedBoxes.length === 0) {
+      tableCountryDisplay.textContent = 'Select countries...';
+    } else if (checkedBoxes.length === 1) {
+      const option = checkedBoxes[0].closest('.table-country-option');
+      tableCountryDisplay.textContent = option.dataset.name;
+    } else {
+      tableCountryDisplay.textContent = `${checkedBoxes.length} countries selected`;
+    }
+  }
+  
+  // Update display on checkbox change
+  tableCountryCheckboxes.forEach(cb => {
+    cb.addEventListener('change', updateTableDisplay);
+  });
+  
+  // Select all functionality
+  tableSelectAll.addEventListener('click', function() {
+    const visibleOptions = Array.from(document.querySelectorAll('.table-country-option')).filter(opt => opt.style.display !== 'none');
+    visibleOptions.forEach(option => {
+      const checkbox = option.querySelector('.table-country-checkbox');
+      checkbox.checked = true;
+    });
+    updateTableDisplay();
+  });
+  
+  // Clear all functionality
+  tableClearAll.addEventListener('click', function() {
+    tableCountryCheckboxes.forEach(cb => cb.checked = false);
+    updateTableDisplay();
+  });
+  
+  // Apply filter
+  tableApplyFilter.addEventListener('click', function() {
+    const selectedCountries = Array.from(tableCountryCheckboxes)
+      .filter(cb => cb.checked)
+      .map(cb => cb.value);
+    
+    if (selectedCountries.length > 0) {
+      // Clear category filter buttons
+      filterButtons.forEach(btn => {
+        btn.classList.remove('active', 'bg-blue-600', 'text-white');
+        btn.classList.add('bg-gray-100', 'text-gray-700');
+      });
+      applyTableFilter('individual', selectedCountries);
+    } else {
+      // Show all if none selected
+      filterButtons.forEach(btn => {
+        btn.classList.remove('active', 'bg-blue-600', 'text-white');
+        btn.classList.add('bg-gray-100', 'text-gray-700');
+      });
+      filterButtons[0].classList.add('active', 'bg-blue-600', 'text-white');
+      filterButtons[0].classList.remove('bg-gray-100', 'text-gray-700');
+      applyTableFilter('all', null);
+    }
+    
+    tableCountryDropdown.classList.add('hidden');
+  });
+  
+  // Category filter buttons
+  filterButtons.forEach(button => {
+    button.addEventListener('click', function() {
+      const filter = this.dataset.filter;
+      
+      // Clear multi-select checkboxes
+      tableCountryCheckboxes.forEach(cb => cb.checked = false);
+      updateTableDisplay();
+      
+      // Update active button
+      filterButtons.forEach(btn => {
+        btn.classList.remove('active', 'bg-blue-600', 'text-white');
+        btn.classList.add('bg-gray-100', 'text-gray-700');
+      });
+      this.classList.add('active', 'bg-blue-600', 'text-white');
+      this.classList.remove('bg-gray-100', 'text-gray-700');
+      
+      // Filter columns
+      applyTableFilter(filter, null);
+    });
+  });
+  
+  // Table filtering logic
+  function applyTableFilter(filter, selectedCountries) {
+    countryColumns.forEach(column => {
+      if (filter === 'all') {
+        column.style.display = '';
+      } else if (filter === 'individual' && selectedCountries) {
+        // Show selected countries + always show aggregates
+        if (selectedCountries.includes(column.dataset.country) ||
+            column.dataset.category === 'aggregates' ||
+            column.dataset.country === 'european_union' ||
+            column.dataset.country === 'europe_central_asia') {
+          column.style.display = '';
+        } else {
+          column.style.display = 'none';
+        }
+      } else if (filter === 'aggregates') {
+        // Show only aggregates (EU, Europe & CA)
+        if (column.dataset.category === 'aggregates' || 
+            column.dataset.country === 'european_union' ||
+            column.dataset.country === 'europe_central_asia') {
+          column.style.display = '';
+        } else {
+          column.style.display = 'none';
+        }
+      } else {
+        // Show specific categories + always show aggregates for comparison
+        if (column.dataset.category === filter || 
+            column.dataset.category === 'aggregates' ||
+            column.dataset.country === 'european_union' ||
+            column.dataset.country === 'europe_central_asia') {
+          column.style.display = '';
+        } else {
+          column.style.display = 'none';
+        }
+      }
+    });
+  }
+  
+  // Growth Analysis Filtering
+  const growthFilterButtons = document.querySelectorAll('.growth-filter-btn');
+  const growthCards = document.querySelectorAll('.growth-card');
+  
+  // Multi-select dropdown for growth analysis
+  const growthCountryTrigger = document.getElementById('growth-country-trigger');
+  const growthCountryDropdown = document.getElementById('growth-country-dropdown');
+  const growthCountryDisplay = document.getElementById('growth-country-display');
+  const growthCountrySearch = document.getElementById('growth-country-search');
+  const growthCountryCheckboxes = document.querySelectorAll('.growth-country-checkbox');
+  const growthSelectAll = document.getElementById('growth-select-all');
+  const growthClearAll = document.getElementById('growth-clear-all');
+  const growthApplyFilter = document.getElementById('growth-apply-filter');
+  
+  // Toggle dropdown
+  growthCountryTrigger.addEventListener('click', function(e) {
+    e.stopPropagation();
+    growthCountryDropdown.classList.toggle('hidden');
+    if (!growthCountryDropdown.classList.contains('hidden')) {
+      growthCountrySearch.focus();
+    }
+  });
+  
+  // Close dropdown when clicking outside
+  document.addEventListener('click', function(e) {
+    if (!growthCountryTrigger.contains(e.target) && !growthCountryDropdown.contains(e.target)) {
+      growthCountryDropdown.classList.add('hidden');
+    }
+  });
+  
+  // Search functionality
+  growthCountrySearch.addEventListener('input', function() {
+    const searchTerm = this.value.toLowerCase();
+    document.querySelectorAll('.growth-country-option').forEach(option => {
+      const countryName = option.dataset.name.toLowerCase();
+      if (countryName.includes(searchTerm)) {
+        option.style.display = '';
+      } else {
+        option.style.display = 'none';
+      }
+    });
+  });
+  
+  // Update display text
+  function updateGrowthDisplay() {
+    const checkedBoxes = Array.from(growthCountryCheckboxes).filter(cb => cb.checked);
+    if (checkedBoxes.length === 0) {
+      growthCountryDisplay.textContent = 'Select countries...';
+    } else if (checkedBoxes.length === 1) {
+      const option = checkedBoxes[0].closest('.growth-country-option');
+      growthCountryDisplay.textContent = option.dataset.name;
+    } else {
+      growthCountryDisplay.textContent = `${checkedBoxes.length} countries selected`;
+    }
+  }
+  
+  // Update display on checkbox change
+  growthCountryCheckboxes.forEach(cb => {
+    cb.addEventListener('change', updateGrowthDisplay);
+  });
+  
+  // Select all functionality
+  growthSelectAll.addEventListener('click', function() {
+    const visibleOptions = Array.from(document.querySelectorAll('.growth-country-option')).filter(opt => opt.style.display !== 'none');
+    visibleOptions.forEach(option => {
+      const checkbox = option.querySelector('.growth-country-checkbox');
+      checkbox.checked = true;
+    });
+    updateGrowthDisplay();
+  });
+  
+  // Clear all functionality
+  growthClearAll.addEventListener('click', function() {
+    growthCountryCheckboxes.forEach(cb => cb.checked = false);
+    updateGrowthDisplay();
+  });
+  
+  // Apply filter
+  growthApplyFilter.addEventListener('click', function() {
+    const selectedCountries = Array.from(growthCountryCheckboxes)
+      .filter(cb => cb.checked)
+      .map(cb => cb.value);
+    
+    if (selectedCountries.length > 0) {
+      // Clear category filter buttons
+      growthFilterButtons.forEach(btn => {
+        btn.classList.remove('active', 'bg-emerald-600', 'text-white');
+        btn.classList.add('bg-gray-100', 'text-gray-700');
+      });
+      applyGrowthFilter('individual', selectedCountries);
+    } else {
+      // Show all if none selected
+      growthFilterButtons.forEach(btn => {
+        btn.classList.remove('active', 'bg-emerald-600', 'text-white');
+        btn.classList.add('bg-gray-100', 'text-gray-700');
+      });
+      growthFilterButtons[0].classList.add('active', 'bg-emerald-600', 'text-white');
+      growthFilterButtons[0].classList.remove('bg-gray-100', 'text-gray-700');
+      applyGrowthFilter('all', null);
+    }
+    
+    growthCountryDropdown.classList.add('hidden');
+  });
+  
+  // Category filter buttons for growth analysis
+  growthFilterButtons.forEach(button => {
+    button.addEventListener('click', function() {
+      const filter = this.dataset.growthFilter;
+      
+      // Clear multi-select checkboxes
+      growthCountryCheckboxes.forEach(cb => cb.checked = false);
+      updateGrowthDisplay();
+      
+      // Update active button
+      growthFilterButtons.forEach(btn => {
+        btn.classList.remove('active', 'bg-emerald-600', 'text-white');
+        btn.classList.add('bg-gray-100', 'text-gray-700');
+      });
+      this.classList.add('active', 'bg-emerald-600', 'text-white');
+      this.classList.remove('bg-gray-100', 'text-gray-700');
+      
+      // Apply filter
+      applyGrowthFilter(filter, null);
+    });
+  });
+  
+  // Growth analysis filtering logic
+  function applyGrowthFilter(filter, selectedCountries) {
+    growthCards.forEach(card => {
+      let shouldShow = false;
+      
+      if (filter === 'all') {
+        shouldShow = true;
+      } else if (filter === 'individual' && selectedCountries) {
+        // Show selected countries + always show aggregates
+        shouldShow = selectedCountries.includes(card.dataset.growthCountry) ||
+                    card.dataset.growthCategory === 'aggregates' ||
+                    card.dataset.growthCountry === 'european_union' ||
+                    card.dataset.growthCountry === 'europe_central_asia';
+      } else if (filter === 'aggregates') {
+        // Show only aggregates
+        shouldShow = card.dataset.growthCategory === 'aggregates' || 
+                    card.dataset.growthCountry === 'european_union' ||
+                    card.dataset.growthCountry === 'europe_central_asia';
+      } else {
+        // Show specific categories + always show aggregates for comparison
+        shouldShow = card.dataset.growthCategory === filter || 
+                    card.dataset.growthCategory === 'aggregates' ||
+                    card.dataset.growthCountry === 'european_union' ||
+                    card.dataset.growthCountry === 'europe_central_asia';
+      }
+      
+      // Apply smooth animations
+      if (shouldShow) {
+        card.style.display = '';
+        card.style.opacity = '1';
+        card.style.transform = 'scale(1)';
+      } else {
+        card.style.opacity = '0';
+        card.style.transform = 'scale(0.95)';
+        setTimeout(() => card.style.display = 'none', 200);
+      }
+    });
+  }
+});
+</script>
+
+<!-- Europe Calculation Methodology -->
+<%= render 'shared/europe_calculation_methodology', compact_view: true, bg_color: 'purple' %>

@@ -1,0 +1,144 @@
+<div class="max-w-5xl mx-auto">
+  <div class="mb-8">
+    <%= link_to statistics_path, class: "inline-flex items-center text-blue-600 hover:text-blue-800 font-semibold transition-all duration-200 hover:translate-x-1 group" do %>
+      <svg class="w-5 h-5 mr-2 group-hover:-translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+      </svg>
+      Back to Statistics
+    <% end %>
+  </div>
+  
+  <div class="relative backdrop-blur-sm bg-white/80 rounded-3xl shadow-xl border border-white/20 p-10 overflow-hidden">
+    <div class="absolute inset-0 bg-gradient-to-br from-blue-50/30 to-indigo-50/30 rounded-3xl"></div>
+    <div class="relative">
+      <div class="text-center mb-12">
+        <h1 class="text-4xl md:text-5xl font-bold bg-gradient-to-r from-slate-900 via-blue-900 to-indigo-900 bg-clip-text text-transparent mb-6"><%= @statistic.metric %></h1>
+        <div class="flex items-center justify-center space-x-4 text-sm">
+          <span class="bg-gradient-to-r from-slate-100 to-gray-100 text-slate-700 px-4 py-2 rounded-full font-medium shadow-sm">
+            <span class="capitalize">Statistics</span>
+          </span>
+          <span class="bg-gradient-to-r from-blue-500 to-indigo-600 text-white px-4 py-2 rounded-full font-semibold shadow-lg">
+            <%= @statistic.year %>
+          </span>
+        </div>
+      </div>
+
+      <% if @statistic.description.present? %>
+        <div class="mb-12 p-6 bg-gradient-to-r from-blue-50/50 to-indigo-50/50 rounded-2xl border border-blue-100/30 backdrop-blur-sm">
+          <p class="text-slate-700 leading-relaxed text-lg"><%= @statistic.description %></p>
+        </div>
+      <% end %>
+
+      <!-- Modern Comparison Chart -->
+      <div class="mb-12">
+        <h2 class="text-2xl md:text-3xl font-bold bg-gradient-to-r from-slate-900 to-slate-700 bg-clip-text text-transparent mb-8">Regional Comparison</h2>
+        
+        <div class="space-y-6">
+          <!-- Europe -->
+          <div class="relative p-4 bg-gradient-to-r from-blue-50/50 to-indigo-50/50 rounded-2xl border border-blue-100/30">
+            <div class="flex items-center justify-between mb-4">
+              <span class="font-bold text-slate-800 text-lg">🇪🇺 Europe</span>
+              <span class="font-bold text-blue-600 text-xl"><%= format_value_with_unit(@statistic.europe_value, @statistic.unit, decimals: 2) %></span>
+            </div>
+            <div class="w-full bg-white/80 rounded-full h-6 shadow-inner">
+              <% max_value = [@statistic.europe_value, @statistic.us_value, @statistic.india_value, @statistic.china_value].max %>
+              <% europe_percentage = (@statistic.europe_value / max_value * 100).round(1) %>
+              <div class="bg-gradient-to-r from-blue-500 to-indigo-600 h-6 rounded-full transition-all duration-1000 shadow-lg flex items-center justify-end pr-3" 
+                   style="width: <%= europe_percentage %>%">
+                <span class="text-white text-xs font-semibold"><%= europe_percentage %>%</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- United States -->
+          <div class="relative p-4 bg-white/50 rounded-2xl border border-gray-100/50 hover:bg-white/70 transition-colors">
+            <div class="flex items-center justify-between mb-4">
+              <span class="font-semibold text-slate-800 text-lg">🇺🇸 United States</span>
+              <span class="font-bold text-slate-700 text-xl"><%= format_value_with_unit(@statistic.us_value, @statistic.unit, decimals: 2) %></span>
+            </div>
+            <div class="w-full bg-gray-200 rounded-full h-6 shadow-inner">
+              <% us_percentage = (@statistic.us_value / max_value * 100).round(1) %>
+              <div class="bg-gradient-to-r from-red-400 to-red-500 h-6 rounded-full transition-all duration-1000 shadow-lg flex items-center justify-end pr-3" 
+                   style="width: <%= us_percentage %>%">
+                <span class="text-white text-xs font-semibold"><%= us_percentage %>%</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- India -->
+          <div class="relative p-4 bg-white/50 rounded-2xl border border-gray-100/50 hover:bg-white/70 transition-colors">
+            <div class="flex items-center justify-between mb-4">
+              <span class="font-semibold text-slate-800 text-lg">🇮🇳 India</span>
+              <span class="font-bold text-slate-700 text-xl"><%= format_value_with_unit(@statistic.india_value, @statistic.unit, decimals: 2) %></span>
+            </div>
+            <div class="w-full bg-gray-200 rounded-full h-6 shadow-inner">
+              <% india_percentage = (@statistic.india_value / max_value * 100).round(1) %>
+              <div class="bg-gradient-to-r from-orange-400 to-orange-500 h-6 rounded-full transition-all duration-1000 shadow-lg flex items-center justify-end pr-3" 
+                   style="width: <%= india_percentage %>%">
+                <span class="text-white text-xs font-semibold"><%= india_percentage %>%</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- China -->
+          <div class="relative p-4 bg-white/50 rounded-2xl border border-gray-100/50 hover:bg-white/70 transition-colors">
+            <div class="flex items-center justify-between mb-4">
+              <span class="font-semibold text-slate-800 text-lg">🇨🇳 China</span>
+              <span class="font-bold text-slate-700 text-xl"><%= format_value_with_unit(@statistic.china_value, @statistic.unit, decimals: 2) %></span>
+            </div>
+            <div class="w-full bg-gray-200 rounded-full h-6 shadow-inner">
+              <% china_percentage = (@statistic.china_value / max_value * 100).round(1) %>
+              <div class="bg-gradient-to-r from-yellow-400 to-yellow-500 h-6 rounded-full transition-all duration-1000 shadow-lg flex items-center justify-end pr-3" 
+                   style="width: <%= china_percentage %>%">
+                <span class="text-white text-xs font-semibold"><%= china_percentage %>%</span>
+              </div>
+            </div>
+          </div>
+      </div>
+    </div>
+
+      <!-- Modern Key Insights -->
+      <div class="bg-gradient-to-br from-blue-50/80 to-indigo-50/80 rounded-3xl p-8 mb-12 border border-blue-100/30 backdrop-blur-sm">
+        <h3 class="text-2xl font-bold text-slate-800 mb-6">Key Insights</h3>
+        <div class="grid md:grid-cols-2 gap-6">
+          <div class="p-4 bg-white/60 rounded-2xl border border-white/40">
+            <span class="font-semibold text-slate-700 block mb-2">Europe vs US:</span>
+            <% diff_us = ((@statistic.europe_value - @statistic.us_value) / @statistic.us_value * 100).round(1) %>
+            <span class="text-2xl font-bold <%= diff_us >= 0 ? 'text-emerald-600' : 'text-red-500' %>">
+              <%= diff_us >= 0 ? '+' : '' %><%= diff_us %>%
+            </span>
+          </div>
+          <div class="p-4 bg-white/60 rounded-2xl border border-white/40">
+            <span class="font-semibold text-slate-700 block mb-2">Europe vs India:</span>
+            <% diff_india = ((@statistic.europe_value - @statistic.india_value) / @statistic.india_value * 100).round(1) %>
+            <span class="text-2xl font-bold <%= diff_india >= 0 ? 'text-emerald-600' : 'text-red-500' %>">
+              <%= diff_india >= 0 ? '+' : '' %><%= diff_india %>%
+            </span>
+          </div>
+          <div class="p-4 bg-white/60 rounded-2xl border border-white/40">
+            <span class="font-semibold text-slate-700 block mb-2">Europe vs China:</span>
+            <% diff_china = ((@statistic.europe_value - @statistic.china_value) / @statistic.china_value * 100).round(1) %>
+            <span class="text-2xl font-bold <%= diff_china >= 0 ? 'text-emerald-600' : 'text-red-500' %>">
+              <%= diff_china >= 0 ? '+' : '' %><%= diff_china %>%
+            </span>
+          </div>
+          <div class="p-4 bg-white/60 rounded-2xl border border-white/40">
+            <span class="font-semibold text-slate-700 block mb-2">Best Performer:</span>
+            <% values = { 'Europe' => @statistic.europe_value, 'US' => @statistic.us_value, 'India' => @statistic.india_value, 'China' => @statistic.china_value } %>
+            <% best = values.max_by { |k, v| v }.first %>
+            <span class="text-2xl font-bold text-blue-600"><%= best %></span>
+          </div>
+      </div>
+    </div>
+
+        <% if @statistic.source.present? %>
+          <div class="border-t border-gray-200/50 pt-8 text-center">
+            <p class="text-slate-600">
+              <span class="font-semibold">Data Source:</span> <%= @statistic.source %>
+            </p>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>

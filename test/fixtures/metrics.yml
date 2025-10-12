@@ -1,0 +1,240 @@
+# Fixtures for comprehensive testing of European metrics system
+
+# Population data fixtures
+europe_population_2023:
+  country: europe
+  metric_name: population
+  metric_value: 740000000
+  year: 2023
+  unit: people
+  source: Calculated from OWID data
+  description: European population from 48 countries (adjusted for transcontinental countries)
+
+europe_population_2024:
+  country: europe
+  metric_name: population
+  metric_value: 745100000
+  year: 2024
+  unit: people
+  source: Calculated from OWID data
+  description: European population from 48 countries (adjusted for transcontinental countries)
+
+usa_population_2023:
+  country: usa
+  metric_name: population
+  metric_value: 341000000
+  year: 2023
+  unit: people
+  source: Our World in Data
+  description: United States population
+
+usa_population_2024:
+  country: usa
+  metric_name: population
+  metric_value: 343500000
+  year: 2024
+  unit: people
+  source: Our World in Data
+  description: United States population
+
+china_population_2023:
+  country: china
+  metric_name: population
+  metric_value: 1420000000
+  year: 2023
+  unit: people
+  source: Our World in Data
+  description: China population
+
+china_population_2024:
+  country: china
+  metric_name: population
+  metric_value: 1422600000
+  year: 2024
+  unit: people
+  source: Our World in Data
+  description: China population
+
+india_population_2023:
+  country: india
+  metric_name: population
+  metric_value: 1435000000
+  year: 2023
+  unit: people
+  source: Our World in Data
+  description: India population
+
+india_population_2024:
+  country: india
+  metric_name: population
+  metric_value: 1438100000
+  year: 2024
+  unit: people
+  source: Our World in Data
+  description: India population
+
+# GDP per capita PPP data fixtures
+europe_gdp_2023:
+  country: europe
+  metric_name: gdp_per_capita_ppp
+  metric_value: 48500.0
+  year: 2023
+  unit: international_dollars
+  source: Calculated from World Bank data
+  description: European GDP per capita PPP from 46 countries (adjusted for transcontinental countries)
+
+europe_gdp_2024:
+  country: europe
+  metric_name: gdp_per_capita_ppp
+  metric_value: 48957.26
+  year: 2024
+  unit: international_dollars
+  source: Calculated from World Bank data
+  description: European GDP per capita PPP from 46 countries (adjusted for transcontinental countries)
+
+usa_gdp_2023:
+  country: usa
+  metric_name: gdp_per_capita_ppp
+  metric_value: 74000.0
+  year: 2023
+  unit: international_dollars
+  source: World Bank
+  description: United States GDP per capita PPP
+
+usa_gdp_2024:
+  country: usa
+  metric_name: gdp_per_capita_ppp
+  metric_value: 75492.0
+  year: 2024
+  unit: international_dollars
+  source: World Bank
+  description: United States GDP per capita PPP
+
+china_gdp_2023:
+  country: china
+  metric_name: gdp_per_capita_ppp
+  metric_value: 23000.0
+  year: 2023
+  unit: international_dollars
+  source: World Bank
+  description: China GDP per capita PPP
+
+china_gdp_2024:
+  country: china
+  metric_name: gdp_per_capita_ppp
+  metric_value: 23846.0
+  year: 2024
+  unit: international_dollars
+  source: World Bank
+  description: China GDP per capita PPP
+
+india_gdp_2023:
+  country: india
+  metric_name: gdp_per_capita_ppp
+  metric_value: 9500.0
+  year: 2023
+  unit: international_dollars
+  source: World Bank
+  description: India GDP per capita PPP
+
+india_gdp_2024:
+  country: india
+  metric_name: gdp_per_capita_ppp
+  metric_value: 9817.0
+  year: 2024
+  unit: international_dollars
+  source: World Bank
+  description: India GDP per capita PPP
+
+# Individual European country samples for testing
+germany_population_2024:
+  country: germany
+  metric_name: population
+  metric_value: 84500000
+  year: 2024
+  unit: people
+  source: Our World in Data
+  description: Germany population
+
+germany_gdp_2024:
+  country: germany
+  metric_name: gdp_per_capita_ppp
+  metric_value: 63722.0
+  year: 2024
+  unit: international_dollars
+  source: World Bank
+  description: Germany GDP per capita PPP
+
+france_population_2024:
+  country: france
+  metric_name: population
+  metric_value: 68500000
+  year: 2024
+  unit: people
+  source: Our World in Data
+  description: France population
+
+france_gdp_2024:
+  country: france
+  metric_name: gdp_per_capita_ppp
+  metric_value: 58765.0
+  year: 2024
+  unit: international_dollars
+  source: World Bank
+  description: France GDP per capita PPP
+
+# Transcontinental country for testing adjustments
+russia_population_2024:
+  country: russia
+  metric_name: population
+  metric_value: 144400000
+  year: 2024
+  unit: people
+  source: Our World in Data
+  description: Russia population
+
+russia_gdp_2024:
+  country: russia
+  metric_name: gdp_per_capita_ppp
+  metric_value: 41705.0
+  year: 2024
+  unit: international_dollars
+  source: World Bank
+  description: Russia GDP per capita PPP
+
+turkey_population_2024:
+  country: turkey
+  metric_name: population
+  metric_value: 85300000
+  year: 2024
+  unit: people
+  source: Our World in Data
+  description: Turkey population
+
+turkey_gdp_2024:
+  country: turkey
+  metric_name: gdp_per_capita_ppp
+  metric_value: 35294.0
+  year: 2024
+  unit: international_dollars
+  source: World Bank
+  description: Turkey GDP per capita PPP
+
+# Test life expectancy for modular system testing
+europe_life_expectancy_2024:
+  country: europe
+  metric_name: life_expectancy
+  metric_value: 78.5
+  year: 2024
+  unit: years
+  source: Calculated from WHO data
+  description: European life expectancy
+
+usa_life_expectancy_2024:
+  country: usa
+  metric_name: life_expectancy
+  metric_value: 76.4
+  year: 2024
+  unit: years
+  source: WHO
+  description: United States life expectancy
