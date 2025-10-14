@@ -11,8 +11,13 @@ Rails.application.config.after_initialize do
   # Wait for database to be ready
   begin
     ActiveRecord::Base.connection.verify!
-  rescue
-    Rails.logger.info "Database not ready, skipping OWID auto-import"
+    # Check if metrics table exists
+    unless ActiveRecord::Base.connection.table_exists?(:metrics)
+      Rails.logger.info "Metrics table not yet created, skipping OWID auto-import"
+      next
+    end
+  rescue => e
+    Rails.logger.info "Database not ready (#{e.message}), skipping OWID auto-import"
     next
   end
 
