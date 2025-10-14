@@ -3,14 +3,14 @@ namespace :data do
   task initialize: :environment do
     puts "🚀 Starting initial data population..."
     puts "=" * 60
-    puts "This will take approximately 2-3 minutes."
+    puts "This will take approximately 3-4 minutes."
     puts "=" * 60
     
     start_time = Time.current
     errors = []
     
     # Step 1: Population data (REQUIRED FIRST)
-    puts "\n📊 Step 1/7: Fetching population data..."
+    puts "\n📊 Step 1/9: Fetching population data..."
     puts "   → This is required for weighted calculations"
     begin
       Rake::Task['data:fetch_population'].invoke
@@ -22,7 +22,7 @@ namespace :data do
     end
     
     # Step 2: GDP data
-    puts "\n💰 Step 2/7: Fetching GDP data..."
+    puts "\n💰 Step 2/9: Fetching GDP data..."
     begin
       Rake::Task['gdp_data:fetch'].invoke
       puts "   ✅ GDP data loaded"
@@ -33,7 +33,7 @@ namespace :data do
     end
     
     # Step 3: Development metrics
-    puts "\n📈 Step 3/7: Fetching development metrics..."
+    puts "\n📈 Step 3/9: Fetching development metrics..."
     begin
       Rake::Task['data:fetch_development'].invoke
       puts "   ✅ Development metrics loaded"
@@ -43,8 +43,19 @@ namespace :data do
       puts "   ❌ #{error_msg}"
     end
     
-    # Step 4: Calculate Europe population aggregate
-    puts "\n🇪🇺 Step 4/7: Calculating Europe population aggregate..."
+    # Step 4: Health and social metrics
+    puts "\n🏥 Step 4/9: Fetching health and social metrics..."
+    begin
+      Rake::Task['health_social_data:fetch_all'].invoke
+      puts "   ✅ Health and social metrics loaded"
+    rescue => e
+      error_msg = "Health/social metrics fetch failed: #{e.message}"
+      errors << error_msg
+      puts "   ❌ #{error_msg}"
+    end
+    
+    # Step 5: Calculate Europe population aggregate
+    puts "\n🇪🇺 Step 5/9: Calculating Europe population aggregate..."
     begin
       Rake::Task['data:calculate_europe_population'].invoke
       puts "   ✅ Europe population aggregate calculated"
@@ -54,8 +65,8 @@ namespace :data do
       puts "   ❌ #{error_msg}"
     end
     
-    # Step 5: Calculate Europe GDP aggregate
-    puts "\n💶 Step 5/7: Calculating Europe GDP aggregate..."
+    # Step 6: Calculate Europe GDP aggregate
+    puts "\n💶 Step 6/9: Calculating Europe GDP aggregate..."
     begin
       Rake::Task['gdp_data:calculate_europe'].invoke
       puts "   ✅ Europe GDP aggregate calculated"
@@ -65,8 +76,8 @@ namespace :data do
       puts "   ❌ #{error_msg}"
     end
     
-    # Step 6: Normalize units
-    puts "\n🔧 Step 6/7: Normalizing units..."
+    # Step 7: Normalize units
+    puts "\n🔧 Step 7/9: Normalizing units..."
     begin
       Rake::Task['data:normalize_units'].invoke
       puts "   ✅ Units normalized"
@@ -76,13 +87,29 @@ namespace :data do
       puts "   ❌ #{error_msg}"
     end
     
-    # Step 7: Enrich descriptions
-    puts "\n📝 Step 7/7: Enriching descriptions..."
+    # Step 8: Enrich descriptions
+    puts "\n📝 Step 8/9: Enriching descriptions..."
     begin
       Rake::Task['data:enrich_aggregate_descriptions'].invoke
       puts "   ✅ Descriptions enriched"
     rescue => e
       error_msg = "Description enrichment failed: #{e.message}"
+      errors << error_msg
+      puts "   ❌ #{error_msg}"
+    end
+    
+    # Step 9: Verification
+    puts "\n✅ Step 9/9: Final verification..."
+    begin
+      total_metrics = Metric.count
+      health_exp_count = Metric.where(metric_name: 'health_expenditure_gdp_percent').count
+      life_sat_count = Metric.where(metric_name: 'life_satisfaction').count
+      puts "   → Total metrics: #{total_metrics}"
+      puts "   → Health expenditure records: #{health_exp_count}"
+      puts "   → Life satisfaction records: #{life_sat_count}"
+      puts "   ✅ Verification complete"
+    rescue => e
+      error_msg = "Verification failed: #{e.message}"
       errors << error_msg
       puts "   ❌ #{error_msg}"
     end
@@ -168,10 +195,28 @@ namespace :data do
       errors << "Development metrics: #{e.message}"
     end
     
+    # Health and social metrics
+    print "   • Health and social metrics... "
+    begin
+      Rake::Task['health_social_data:fetch_all'].reenable
+      Rake::Task['health_social_data:fetch_all'].invoke
+      puts "✅"
+    rescue => e
+      puts "❌"
+      errors << "Health/social metrics: #{e.message}"
+    end
+    
     # Step 2: Recalculate all Europe aggregates
     puts "\n🇪🇺 Step 2/4: Recalculating Europe aggregates..."
     
-    metrics_to_aggregate = ['population', 'gdp_per_capita_ppp', 'child_mortality_rate', 'electricity_access']
+    metrics_to_aggregate = [
+      'population',
+      'gdp_per_capita_ppp',
+      'child_mortality_rate',
+      'electricity_access',
+      'health_expenditure_gdp_percent',
+      'life_satisfaction'
+    ]
     
     metrics_to_aggregate.each do |metric_name|
       print "   • #{metric_name.humanize}... "

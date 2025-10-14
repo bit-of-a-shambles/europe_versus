@@ -28,18 +28,24 @@ This single command will:
    - Child mortality rates
    - Electricity access percentages
 
-4. **Calculate European Aggregates**
+4. **Fetch Health & Social Metrics**
+   - Health expenditure as % of GDP
+   - Life satisfaction scores (Cantril Ladder)
+
+5. **Calculate European Aggregates**
    - Population-weighted averages for Europe
    - Population-weighted averages for EU-27
    - Proper handling of transcontinental countries
 
-5. **Normalize Units**
+6. **Normalize Units**
    - Ensures consistent units across all metrics
    - `%` for percentages
    - `people` for population
    - `international_dollars` for GDP
+   - `% of GDP` for health expenditure
+   - `score (0-10)` for life satisfaction
 
-6. **Enrich Descriptions**
+7. **Enrich Descriptions**
    - Adds detailed, human-readable descriptions
    - Explains calculation methodology
    - Notes about population weighting
@@ -49,27 +55,35 @@ This single command will:
 ```
 🚀 Starting initial data population...
 ============================================================
-This will take approximately 2-3 minutes.
+This will take approximately 3-4 minutes.
 ============================================================
 
-📊 Step 1/7: Fetching population data...
+📊 Step 1/9: Fetching population data...
    ✅ Population data loaded
 
-💰 Step 2/7: Fetching GDP data...
+💰 Step 2/9: Fetching GDP data...
    ✅ GDP data loaded
+
+📈 Step 3/9: Fetching development metrics...
+   ✅ Development metrics loaded
+
+🏥 Step 4/9: Fetching health and social metrics...
+   ✅ Health and social metrics loaded
 
 [... continues through all steps ...]
 
 ✅ INITIALIZATION COMPLETE!
 ============================================================
-⏱️  Time taken: 156.32 seconds
+⏱️  Time taken: 212.45 seconds
 
 📊 Data Summary:
    • Population records: 1,089
    • GDP records: 3,204
    • Child mortality records: 458
    • Electricity access records: 612
-   • Total metrics: 5,363
+   • Health expenditure records: 828
+   • Life satisfaction records: 467
+   • Total metrics: 6,658
    • Countries covered: 52
 
 🎉 Your application is ready to use!
@@ -135,6 +149,12 @@ bin/rails data:population_stats
 # GDP latest values
 bin/rails gdp_data:show_latest
 
+# Health expenditure latest values
+bin/rails health_social_data:show_health_expenditure
+
+# Life satisfaction latest values
+bin/rails health_social_data:show_life_satisfaction
+
 # Europe population summary
 bin/rails data:europe_population_summary
 
@@ -173,6 +193,13 @@ bin/rails gdp_data:fetch
 
 # Development metrics only
 bin/rails data:fetch_development
+
+# Health and social metrics only
+bin/rails health_social_data:fetch_all
+
+# Individual health/social metrics
+bin/rails health_social_data:fetch_health_expenditure
+bin/rails health_social_data:fetch_life_satisfaction
 
 # All data sources
 bin/rails data:fetch_all
@@ -337,6 +364,8 @@ All data is sourced from reputable international organizations:
 - **GDP**: World Bank via Our World in Data
 - **Child Mortality**: UN IGME via Our World in Data
 - **Electricity Access**: World Bank via Our World in Data
+- **Health Expenditure**: World Bank / WHO via Our World in Data
+- **Life Satisfaction**: Wellbeing Research Centre via Our World in Data (Cantril Ladder methodology)
 
 ### Required Files
 

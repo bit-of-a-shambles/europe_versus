@@ -9,7 +9,9 @@ namespace :data do
       'death_rate' => 'rate',
       'literacy_rate' => 'rate',
       'child_mortality_rate' => '%',
-      'electricity_access' => '%'
+      'electricity_access' => '%',
+      'health_expenditure_gdp_percent' => '% of GDP',
+      'life_satisfaction' => 'score (0-10)'
     }
 
     scope = Metric.where(country: ['europe', 'european_union'])

@@ -24,6 +24,10 @@ namespace :data do
                    "Population-weighted #{country_label} child mortality rate (deaths per 100 live births), using country populations as weights; adjusted for transcontinental populations."
                  when 'electricity_access'
                    "Population-weighted #{country_label} access to electricity (% of population), using country populations as weights; adjusted for transcontinental populations."
+                 when 'health_expenditure_gdp_percent'
+                   "Population-weighted #{country_label} health expenditure as a percentage of GDP, using country populations as weights; adjusted for transcontinental populations."
+                 when 'life_satisfaction'
+                   "Population-weighted #{country_label} life satisfaction score on the Cantril Ladder (0-10 scale), using country populations as weights; adjusted for transcontinental populations."
                  else
                    nil
                  end

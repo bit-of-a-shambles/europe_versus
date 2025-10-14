@@ -138,4 +138,105 @@ class HealthSocialDataService
     Rails.logger.info "HealthSocialDataService internet result: #{result.inspect}"
     result
   end
+
+  # Fetch and store health expenditure as % of GDP (full historical data)
+  def self.fetch_and_store_health_expenditure_gdp
+    puts "Fetching health expenditure as % of GDP data..."
+    
+    result = OurWorldInDataService.fetch_chart_data(
+      'total-healthcare-expenditure-gdp',
+      start_year: 2000,
+      end_year: 2024
+    )
+    
+    return result if result[:error]
+    
+    store_metric_data(result, 'health_expenditure_gdp_percent')
+    calculate_aggregates('health_expenditure_gdp_percent')
+    
+    puts "✅ Health expenditure data stored"
+    result
+  end
+
+  # Fetch and store life satisfaction/happiness data (full historical data)
+  def self.fetch_and_store_life_satisfaction
+    puts "Fetching life satisfaction (happiness) data..."
+    
+    result = OurWorldInDataService.fetch_chart_data(
+      'happiness-cantril-ladder',
+      start_year: 2010,
+      end_year: 2024
+    )
+    
+    return result if result[:error]
+    
+    store_metric_data(result, 'life_satisfaction')
+    calculate_aggregates('life_satisfaction')
+    
+    puts "✅ Life satisfaction data stored"
+    result
+  end
+
+  private
+
+  def self.store_metric_data(result, metric_name)
+    stored_count = 0
+    
+    result[:countries].each do |country_key, country_data|
+      country_data[:data].each do |year, value|
+        # Skip if value is nil or empty
+        next if value.nil? || value.to_s.strip.empty?
+        
+        # Convert to float and skip if invalid
+        numeric_value = value.to_f
+        next if numeric_value.nan? || numeric_value.infinite?
+        
+        # Use .presence to handle empty strings
+        unit_value = result.dig(:metadata, :unit).presence || determine_unit(metric_name)
+        next if unit_value.blank?
+        
+        # Use upsert-style operation
+        metric = Metric.find_or_initialize_by(
+          country: country_key,
+          metric_name: metric_name,
+          year: year
+        )
+        
+        metric.assign_attributes(
+          metric_value: numeric_value,
+          unit: unit_value,
+          source: result.dig(:metadata, :source) || 'Our World in Data',
+          description: result.dig(:metadata, :description)
+        )
+        
+        metric.save!
+        stored_count += 1
+      end
+    end
+    
+    puts "   → Stored #{stored_count} records across #{result[:countries].size} countries"
+  end
+
+  def self.calculate_aggregates(metric_name)
+    puts "   → Calculating Europe aggregate for #{metric_name}..."
+    EuropeanMetricsService.calculate_europe_aggregate(metric_name)
+    
+    puts "   → Calculating EU-27 aggregate for #{metric_name}..."
+    EuropeanMetricsService.calculate_group_aggregate(
+      metric_name,
+      country_keys: EuropeanMetricsService::EU27_COUNTRIES,
+      target_key: 'european_union'
+    )
+  end
+
+  def self.determine_unit(metric_name)
+    case metric_name
+    when 'health_expenditure_gdp_percent'
+      '% of GDP'
+    when 'life_satisfaction'
+      'score (0-10)'
+    else
+      'unknown'
+    end
+  end
 end
