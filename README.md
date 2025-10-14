@@ -81,7 +81,7 @@ app/
 
 ## 📊 Data Categories
 
-The application currently includes statistics across four main categories:
+The application includes statistics across four main categories, with data sourced from Our World in Data and other reputable sources:
 
 ### 🏦 Economy
 - GDP per Capita (PPP)
@@ -90,6 +90,8 @@ The application currently includes statistics across four main categories:
 
 ### 👥 Social
 - Life Expectancy
+- Life Satisfaction (Cantril Ladder)
+- Health Expenditure (% of GDP)
 - Education Index
 - Social Progress Index
 
@@ -97,10 +99,44 @@ The application currently includes statistics across four main categories:
 - CO2 Emissions per Capita
 - Renewable Energy Share
 - Environmental Performance Index
+- Electricity Access
 
 ### 💡 Innovation
 - Global Innovation Index
 - R&D Spending (% of GDP)
+
+## 📥 Adding New Metrics
+
+**Zero-terminal workflow!** Just edit a YAML file and deploy.
+
+1. **Add to `config/owid_metrics.yml`:**
+   ```yaml
+   renewable_energy:
+     owid_slug: renewable-energy-consumption
+     start_year: 1990
+     end_year: 2024
+     unit: "terawatt-hours"
+     description: "Renewable energy consumption"
+     aggregation_method: population_weighted
+     enabled: true
+   ```
+
+2. **Commit and push:**
+   ```bash
+   git add config/owid_metrics.yml
+   git commit -m "Add renewable energy metric"
+   git push
+   ```
+
+3. **Deploy** → The app automatically imports new metrics on startup! ✅
+
+See [ADDING_METRICS_GUIDE.md](ADDING_METRICS_GUIDE.md) for complete instructions.
+
+**How it works:**
+- On startup, the app checks `config/owid_metrics.yml`
+- New metrics (not yet in database) are automatically imported
+- Data is fetched from OWID and Europe/EU-27 aggregates are calculated
+- No manual terminal commands needed in production
 
 ## 🛠️ Development
 
@@ -247,7 +283,7 @@ All contributed data goes through a review process:
 
 ## 🙏 Current Data Sources
 
-All statistics are currently sourced from reputable international organizations:
+All statistics are sourced from reputable international organizations:
 
 **Economic Data:**
 - Our World in Data (aggregating World Bank, Eurostat, OECD, IMF data)
@@ -256,11 +292,14 @@ All statistics are currently sourced from reputable international organizations:
 - Organisation for Economic Co-operation and Development (OECD)
 
 **Social Indicators:**
+- Our World in Data - Life Satisfaction (Cantril Ladder)
+- Our World in Data - Health Expenditure
 - World Health Organization (WHO)
 - United Nations Development Programme (UNDP)
 - Social Progress Imperative
 
 **Environmental Data:**
+- Our World in Data - Electricity Access, Child Mortality
 - International Energy Agency (IEA)
 - Yale Environmental Performance Index
 - Global Carbon Atlas
@@ -268,6 +307,37 @@ All statistics are currently sourced from reputable international organizations:
 **Innovation Metrics:**
 - World Intellectual Property Organization (WIPO)
 - Cornell University, INSEAD, WIPO - Global Innovation Index
+
+## 🛠️ For Developers
+
+### Testing
+```bash
+# Run all tests
+bin/rails test
+
+# Run specific test file
+bin/rails test test/services/owid_metric_importer_test.rb
+```
+
+### OWID Metrics Management
+```bash
+# List all configured metrics
+bin/rails owid:list
+
+# Import a single metric
+bin/rails "owid:import[metric_name]"
+
+# Import all metrics
+bin/rails owid:import_all
+
+# Show statistics for a metric
+bin/rails "owid:stats[metric_name]"
+
+# Generate config template for new metric
+bin/rails "owid:scaffold[metric_name,owid-slug]"
+```
+
+See [ADDING_METRICS_GUIDE.md](ADDING_METRICS_GUIDE.md) for detailed instructions.
 
 ## � Reporting Issues
 

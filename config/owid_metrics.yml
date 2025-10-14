@@ -1,0 +1,67 @@
+# OWID Metrics Configuration
+# 
+# Add any metric from Our World in Data here.
+# The app will automatically import data on startup/deploy.
+#
+# Format:
+#   metric_name:
+#     owid_slug: the-slug-from-owid-url
+#     start_year: 1990
+#     end_year: 2024
+#     unit: "%" or "score (0-10)" etc.
+#     description: "Human readable description"
+#     category: economy | social | development | health | environment | innovation
+#     aggregation_method: population_weighted  # or sum, average
+#     enabled: true  # set to false to disable without removing
+#
+# To find slugs: Visit https://ourworldindata.org/charts
+# Example URL: https://ourworldindata.org/grapher/renewable-energy-consumption
+# Slug is: renewable-energy-consumption
+#
+# Categories:
+#   - economy: GDP, income, employment, trade
+#   - social: Population, demographics, quality of life
+#   - development: Infrastructure, education, basic services
+#   - health: Healthcare, disease, mortality
+#   - environment: Climate, emissions, energy, resources
+#   - innovation: R&D, technology, patents
+
+health_expenditure_gdp_percent:
+  owid_slug: total-healthcare-expenditure-gdp
+  start_year: 2000
+  end_year: 2024
+  unit: "% of GDP"
+  description: "Health expenditure as a percentage of GDP"
+  category: health
+  aggregation_method: population_weighted
+  enabled: true
+
+life_satisfaction:
+  owid_slug: happiness-cantril-ladder
+  start_year: 2010
+  end_year: 2024
+  unit: "score (0-10)"
+  description: "Life satisfaction score on the Cantril Ladder"
+  category: social
+  aggregation_method: population_weighted
+  enabled: true
+
+child_mortality_rate:
+  owid_slug: child-mortality
+  start_year: 1990
+  end_year: 2024
+  unit: "%"
+  description: "Child mortality rate (deaths per 100 live births)"
+  category: development
+  aggregation_method: population_weighted
+  enabled: true
+
+electricity_access:
+  owid_slug: share-of-the-population-with-access-to-electricity
+  start_year: 1990
+  end_year: 2024
+  unit: "%"
+  description: "Access to electricity (% of population)"
+  category: development
+  aggregation_method: population_weighted
+  enabled: true

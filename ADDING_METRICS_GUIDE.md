@@ -1,342 +1,246 @@
-# 📋 FOOLPROOF GUIDE: Adding New Metrics from OWID
+# Adding New Metrics - The Zero-Terminal Way
 
-## ✅ System Verification
-Run this first to ensure the system is ready:
-```bash
-bin/rails runner tmp/test_metrics_system.rb
+**You don't need to run anything!** Just edit a YAML file, commit, and deploy. The app automatically imports new metrics on startup.
+
+**Important:** The `OwidMetricImporter` handles **ALL** Our World in Data metrics. You never need to create new service classes - just edit the YAML configuration.
+
+## 🎯 The Simplest Method (Recommended)
+
+### Step 1: Find the OWID Slug
+
+Visit [Our World in Data](https://ourworldindata.org/charts) and find your metric.
+
+Example URL: `https://ourworldindata.org/grapher/renewable-energy-consumption`  
+**Slug:** `renewable-energy-consumption`
+
+### Step 2: Edit config/owid_metrics.yml
+
+Add your metric to the YAML file:
+
+```yaml
+renewable_energy:
+  owid_slug: renewable-energy-consumption
+  start_year: 1990
+  end_year: 2024
+  unit: "terawatt-hours"
+  description: "Renewable energy consumption"
+  category: environment  # Where it appears: economy, social, development, health, environment, innovation
+  aggregation_method: population_weighted
+  enabled: true
 ```
 
-## 🎯 Step-by-Step Guide for Adding a New Metric
+**Available Categories:**
+- `economy` - GDP, income, employment, trade
+- `social` - Population, demographics, quality of life
+- `development` - Infrastructure, education, basic services
+- `health` - Healthcare, disease, mortality
+- `environment` - Climate, emissions, energy, resources
+- `innovation` - R&D, technology, patents
 
-### Example: Adding "Life Expectancy"
-
----
-
-### **STEP 1: Find the OWID Chart**
-
-1. Go to https://ourworldindata.org/
-2. Search for your metric (e.g., "life expectancy")
-3. Find the chart URL, e.g., `https://ourworldindata.org/grapher/life-expectancy`
-4. **Extract the chart slug**: `life-expectancy` (everything after `/grapher/`)
-
-**Important:** The chart slug is used in TWO places:
-- API data fetching
-- Iframe display
-
----
-
-### **STEP 2: Add Metadata to EuropeanMetricsService**
-
-File: `app/services/european_metrics_service.rb`
-
-Add a new case in the `get_metric_metadata` method:
-
-```ruby
-when 'life_expectancy'
-  {
-    title: 'Life Expectancy',
-    description: 'Average number of years a newborn would live',
-    unit: 'years',
-    format: 'decimal',        # currency, decimal, integer, or percentage
-    decimals: 1,              # Number of decimal places (for decimal format)
-    higher_is_better: true,   # true = higher is good, false = lower is good, nil = neutral
-    source: 'Our World in Data - UN Population Division'
-  }
-```
-
-**Format Options:**
-- `currency` - Adds $ and thousand separators (e.g., $50,000)
-- `decimal` - Shows decimal places (e.g., 72.5)
-- `integer` - Whole numbers with separators (e.g., 1,234,567)
-- `percentage` - Adds % sign (e.g., 12.5%)
-
-**Higher is Better:**
-- `true` → Positive growth = GREEN (GDP, life expectancy, electricity access)
-- `false` → Negative growth = GREEN (mortality, unemployment, CO2 emissions)
-- `nil` → Growth = GRAY (neutral, like population)
-
----
-
-### **STEP 3: Add Route**
-
-File: `config/routes.rb`
-
-Add in the statistics section:
-
-```ruby
-get '/statistics/life-expectancy', to: 'statistics#chart', as: 'life_expectancy'
-```
-
-**Naming Convention:**
-- Route slug: kebab-case (e.g., `life-expectancy`)
-- Database column: snake_case (e.g., `life_expectancy`)
-- URL-friendly alias: Use `as:` parameter
-
----
-
-### **STEP 4: Add Controller Case**
-
-File: `app/controllers/statistics_controller.rb`
-
-Add in the `chart` method:
-
-```ruby
-elsif chart_name == 'life-expectancy'
-  # Use local life expectancy data from our database
-  @chart_data = build_metric_chart_data('life_expectancy', 'Life Expectancy', 'years')
-  @chart_name = 'life-expectancy'  # OWID chart slug for iframe
-```
-
-**Important:** 
-- `chart_name` is the URL slug (kebab-case)
-- First parameter to `build_metric_chart_data` is the database column name (snake_case)
-- `@chart_name` MUST match the OWID chart slug exactly
-
----
-
-### **STEP 5: Create Service Method (Optional but Recommended)**
-
-File: `app/services/development_data_service.rb` (or create a new service)
-
-```ruby
-def self.fetch_and_store_life_expectancy
-  Rails.logger.info "Fetching life expectancy data from OWID..."
-  result = fetch_chart_data('life-expectancy', start_year: 2000, end_year: 2024)
-  
-  return result if result[:error]
-  
-  store_metric_data(result, 'life_expectancy')
-  calculate_and_store_europe_aggregate('life_expectancy')
-  Rails.logger.info "Successfully stored life expectancy data"
-  result
-end
-```
-
-**Or use the generic OurWorldInDataService:**
-
-```ruby
-# Fetch data
-result = OurWorldInDataService.fetch_chart_data('life-expectancy', start_year: 2000, end_year: 2024)
-
-# Store in database
-result[:countries].each do |country_key, country_data|
-  country_data[:data].each do |year, value|
-    Metric.create!(
-      country: country_key,
-      metric_name: 'life_expectancy',
-      metric_value: value,
-      year: year,
-      unit: 'years',
-      source: 'Our World in Data'
-    )
-  end
-end
-```
-
----
-
-### **STEP 6: Fetch and Store Data**
-
-Run in terminal:
+### Step 3: Commit and Deploy
 
 ```bash
-# Option A: If you created a service method
-bin/rails runner "DevelopmentDataService.fetch_and_store_life_expectancy"
+git add config/owid_metrics.yml
+git commit -m "Add renewable energy metric"
+git push
+```
 
-# Option B: Manual fetch
-bin/rails runner "
-  result = OurWorldInDataService.fetch_chart_data('life-expectancy', start_year: 2000, end_year: 2024)
-  # Then store the data (see Step 5)
-"
+**That's it!** The app will:
+- ✅ Detect the new metric on startup
+- ✅ Automatically fetch data from OWID
+- ✅ Calculate Europe & EU-27 aggregates
+- ✅ Store everything in the database
+- ✅ Display in the correct category section
+
+**No terminal commands. No service classes. No manual imports.** Just YAML → Git → Deploy.
+
+---
+
+## 🏗️ Service Architecture (For Understanding)
+
+The application uses a **unified approach** for all OWID metrics:
+
+### Active Services (4 Total)
+
+1. **`OwidMetricImporter`** ⭐ 
+   - Handles **ALL** Our World in Data metrics
+   - Configured via `config/owid_metrics.yml`
+   - No need to create new services!
+
+2. **`PopulationDataService`**
+   - Fetches population data
+   - Used for weighted calculations
+
+3. **`EuropeanMetricsService`**
+   - Calculates aggregates
+   - Population-weighted averages
+
+4. **`OurWorldInDataService`**
+   - Low-level API wrapper
+   - Used by OwidMetricImporter
+
+### ⚠️ Legacy Services (DO NOT USE for new metrics)
+
+These services still exist but are **deprecated**:
+- ~~`DevelopmentDataService`~~ → Use `OwidMetricImporter`
+- ~~`EnergyDataService`~~ → Use `OwidMetricImporter`
+- ~~`HealthSocialDataService`~~ → Use `OwidMetricImporter`
+- ~~`GdpDataService`~~ → Use `OwidMetricImporter`
+
+They exist only for backward compatibility. **All new metrics should use the YAML config approach.**
+
+---
+
+## 🔧 Configuration Options
+
+In `config/owid_metrics.yml`:
+
+**Required Fields:**
+- `owid_slug` - The slug from the OWID URL
+- `start_year` - First year to import (e.g., 1990)
+- `end_year` - Last year to import (e.g., 2024)
+- `unit` - Unit of measurement (e.g., "%", "score (0-10)", "kg")
+- `description` - Human-readable description
+- `category` - Section where metric appears (economy, social, development, health, environment, innovation)
+- `aggregation_method` - How to calculate Europe aggregate
+
+**Categories** (determines where metric shows in statistics page):
+- `economy` - GDP, income, employment, trade
+- `social` - Population, demographics, quality of life  
+- `development` - Infrastructure, education, basic services
+- `health` - Healthcare, disease, mortality
+- `environment` - Climate, emissions, energy, resources
+- `innovation` - R&D, technology, patents
+
+**Aggregation Methods:**
+- `population_weighted` - Weighted by population (most common)
+- `sum` - Simple sum across countries
+- `average` - Simple average
+
+**Optional Fields:**
+- `enabled` - Set to `false` to temporarily disable (default: `true`)
+
+---
+
+## 🚀 Local Development
+
+In development, auto-import is disabled by default to speed up startup.
+
+To enable auto-import locally:
+```bash
+OWID_AUTO_IMPORT=1 bin/rails server
+```
+
+Or manually import after editing the YAML:
+```bash
+bin/rails owid:import_all
 ```
 
 ---
 
-### **STEP 7: Calculate Europe Aggregate**
+## 📋 Manual Terminal Commands (Optional)
+
+If you prefer terminal commands, these still work:
 
 ```bash
-bin/rails runner "DevelopmentDataService.calculate_and_store_europe_aggregate('life_expectancy')"
-```
+# Quick one-liner to test a metric
+bin/rails 'owid:quick[renewable-energy-consumption]'
 
-**This calculates the average for all 27 EU countries across all years!**
+# Import specific metric
+bin/rails "owid:import[metric_name]"
+
+# Import all configured metrics
+bin/rails owid:import_all
+
+# List all metrics
+bin/rails owid:list
+
+# Show stats for a metric
+bin/rails "owid:stats[metric_name]"
+```
 
 ---
 
-### **STEP 8: Verify Everything Works**
+## 📊 Current Metrics
 
+Run `bin/rails owid:list` or check `config/owid_metrics.yml` to see all configured metrics.
+
+---
+
+## 💡 Example: Adding CO2 Emissions
+
+**1. Find the slug:**  
+Visit https://ourworldindata.org/grapher/co2-emissions-per-capita  
+Slug: `co2-emissions-per-capita`
+
+**2. Edit config/owid_metrics.yml:**
+```yaml
+co2_emissions:
+  owid_slug: co2-emissions-per-capita
+  start_year: 1990
+  end_year: 2024
+  unit: "tonnes per capita"
+  description: "CO2 emissions per capita"
+  category: environment
+  aggregation_method: population_weighted
+  enabled: true
+```
+
+**3. Commit and push:**
 ```bash
-# Check data was imported
-bin/rails runner "puts Metric.where(metric_name: 'life_expectancy').count"
+git add config/owid_metrics.yml
+git commit -m "Add CO2 emissions per capita metric"
+git push
+```
 
-# Check Europe aggregate exists
-bin/rails runner "puts Metric.where(metric_name: 'life_expectancy', country: 'europe').count"
+**4. Deploy completes** → Data automatically imported ✅
 
-# Check latest values
-bin/rails runner "
-  latest = Metric.where(metric_name: 'life_expectancy', country: 'europe').order(year: :desc).first
-  puts \"Latest Europe life expectancy: #{latest.metric_value.round(1)} years (#{latest.year})\"
-"
+---
 
-# Visit the page
-# http://localhost:3001/statistics/life-expectancy
+## 🔄 Updating Existing Metrics
+
+To update a metric (e.g., extend year range):
+
+1. Edit the metric in `config/owid_metrics.yml`
+2. Commit and push
+3. On next deploy, run: `bin/rails owid:import_all`
+
+The importer will update existing records and add new ones.
+
+---
+
+## 🚫 Temporarily Disabling Metrics
+
+Set `enabled: false` to disable without deleting:
+
+```yaml
+old_metric:
+  enabled: false  # Will be skipped
+  owid_slug: some-old-metric
+  # ... rest of config
 ```
 
 ---
 
-## 🔍 Testing Checklist
+## 🆘 Troubleshooting
 
-- [ ] Metadata has correct `format`, `decimals`, and `higher_is_better`
-- [ ] Route uses kebab-case (e.g., `/statistics/life-expectancy`)
-- [ ] Controller case matches route slug
-- [ ] `@chart_name` matches OWID chart slug
-- [ ] Data imported successfully (check record count)
-- [ ] Europe aggregate calculated and stored
-- [ ] Page loads without errors
-- [ ] Table shows data with correct formatting (decimals, currency, etc.)
-- [ ] Growth analysis colors are correct (green for improvement)
-- [ ] OWID iframe displays the correct chart
+**Metric not importing?**
+- Check the OWID slug is correct
+- Verify the metric exists at https://ourworldindata.org/grapher/YOUR-SLUG
+- Check logs for error messages
 
----
-
-## 🚨 Common Pitfalls to Avoid
-
-### 1. **Mismatched Chart Slugs**
-❌ BAD:
-```ruby
-@chart_name = 'electricity-access'  # Wrong! OWID chart is different
-```
-✅ GOOD:
-```ruby
-@chart_name = 'share-of-the-population-with-access-to-electricity'
-```
-
-### 2. **Wrong Format Type**
-❌ BAD: Using `format: 'integer'` for values like 0.37%
-✅ GOOD: Using `format: 'decimal'` with `decimals: 1`
-
-### 3. **Incorrect Directionality**
-❌ BAD: `higher_is_better: true` for child mortality (lower is better!)
-✅ GOOD: `higher_is_better: false` for child mortality
-
-### 4. **Forgetting Europe Aggregate**
-❌ BAD: Importing data but not calculating Europe aggregate
-✅ GOOD: Always run `calculate_and_store_europe_aggregate` after import
-
-### 5. **Case Sensitivity Issues**
-- Routes: `kebab-case` (`life-expectancy`)
-- Database: `snake_case` (`life_expectancy`)
-- URLs: `kebab-case` (`/statistics/life-expectancy`)
-
----
-
-## 📊 Recommended Next Metrics to Add
-
-### Easy Wins (Similar to Child Mortality):
-1. **Unemployment Rate** (`unemployment-rate`)
-   - Format: decimal, decimals: 1, higher_is_better: false
-   
-2. **CO2 Emissions per Capita** (`co-emissions-per-capita`)
-   - Format: decimal, decimals: 1, higher_is_better: false
-   
-3. **Life Expectancy** (`life-expectancy`)
-   - Format: decimal, decimals: 1, higher_is_better: true
-
-### Medium Complexity:
-4. **Educational Attainment** - May need custom aggregation
-5. **Healthcare Expenditure** - Currency format, needs PPP adjustment
-6. **Renewable Energy Share** - Percentage format
-
----
-
-## 🎯 Quick Reference: Metric Templates
-
-### Template for "Lower is Better" Metrics (Mortality, Unemployment, CO2)
-```ruby
-when 'metric_name'
-  {
-    title: 'Metric Title',
-    description: 'Description',
-    unit: '%',
-    format: 'decimal',
-    decimals: 1,
-    higher_is_better: false,  # ⚠️ Lower is better!
-    source: 'Our World in Data - Source'
-  }
-```
-
-### Template for "Higher is Better" Metrics (GDP, Life Expectancy, Education)
-```ruby
-when 'metric_name'
-  {
-    title: 'Metric Title',
-    description: 'Description',
-    unit: 'unit',
-    format: 'decimal',
-    decimals: 1,
-    higher_is_better: true,  # ✅ Higher is better
-    source: 'Our World in Data - Source'
-  }
-```
-
----
-
-## 🔄 Complete Example: Adding CO2 Emissions
-
+**Want to test locally first?**
 ```bash
-# 1. OWID Chart: https://ourworldindata.org/grapher/co-emissions-per-capita
-# Chart slug: co-emissions-per-capita
-
-# 2. Add metadata (european_metrics_service.rb)
-when 'co2_emissions_per_capita'
-  {
-    title: 'CO2 Emissions per Capita',
-    description: 'Annual CO2 emissions per person',
-    unit: 'tonnes',
-    format: 'decimal',
-    decimals: 1,
-    higher_is_better: false,  # Lower emissions is better!
-    source: 'Our World in Data - GCP'
-  }
-
-# 3. Add route (routes.rb)
-get '/statistics/co2-emissions-per-capita', to: 'statistics#chart', as: 'co2_emissions'
-
-# 4. Add controller case (statistics_controller.rb)
-elsif chart_name == 'co2-emissions-per-capita'
-  @chart_data = build_metric_chart_data('co2_emissions_per_capita', 'CO2 Emissions per Capita', 'tonnes')
-  @chart_name = 'co-emissions-per-capita'
-
-# 5. Fetch data
-bin/rails runner "
-  result = OurWorldInDataService.fetch_chart_data('co-emissions-per-capita', start_year: 2000, end_year: 2024)
-  # Store data...
-"
-
-# 6. Calculate Europe aggregate
-bin/rails runner "DevelopmentDataService.calculate_and_store_europe_aggregate('co2_emissions_per_capita')"
-
-# 7. Test
-# Visit: http://localhost:3001/statistics/co2-emissions-per-capita
+OWID_AUTO_IMPORT=1 bin/rails server
+# Or manually: bin/rails "owid:import[your_metric]"
 ```
 
----
-
-## ✅ Final System Check
-
-Run this after adding each new metric:
-
+**Need to reimport?**
 ```bash
-bin/rails runner tmp/test_metrics_system.rb
+# Delete old data
+rails console
+Metric.where(metric_name: 'your_metric').delete_all
+
+# Reimport
+bin/rails "owid:import[your_metric]"
 ```
-
-This verifies:
-- Metadata is configured correctly
-- Data is in database
-- Europe aggregates exist
-- Chart building works
-- Formatting will be correct
-- Colors will be appropriate
-
----
-
-**The system is now 100% modular and ready for any OWID metric!** 🎉

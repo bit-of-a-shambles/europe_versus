@@ -44,7 +44,7 @@
             <%= link_to "Home", root_path, class: "px-4 py-2 rounded-full text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-all duration-200 font-medium" %>
             <%= link_to "Statistics", statistics_path, class: "px-4 py-2 rounded-full text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-all duration-200 font-medium" %>
             <%= link_to "Methodology", methodology_path, class: "px-4 py-2 rounded-full text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-all duration-200 font-medium" %>
-            <%= link_to "Contribute", contribute_path, class: "px-4 py-2 rounded-full bg-gradient-to-r from-green-500 to-emerald-500 text-white hover:from-green-600 hover:to-emerald-600 transition-all duration-200 font-medium shadow-lg hover:shadow-xl" %>
+            <%= link_to "Contribute", root_path(anchor: "contribute"), class: "px-4 py-2 rounded-full bg-gradient-to-r from-green-500 to-emerald-500 text-white hover:from-green-600 hover:to-emerald-600 transition-all duration-200 font-medium shadow-lg hover:shadow-xl" %>
           </nav>
           
           <button class="md:hidden p-2 rounded-xl hover:bg-gray-100 transition-colors" data-controller="mobile-menu" data-action="click->mobile-menu#toggle">
@@ -58,7 +58,7 @@
           <%= link_to "Home", root_path, class: "block py-3 px-4 rounded-lg text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-all duration-200 font-medium" %>
           <%= link_to "Statistics", statistics_path, class: "block py-3 px-4 rounded-lg text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-all duration-200 font-medium" %>
           <%= link_to "Methodology", methodology_path, class: "block py-3 px-4 rounded-lg text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-all duration-200 font-medium" %>
-          <%= link_to "Contribute", contribute_path, class: "block py-3 px-4 rounded-lg bg-gradient-to-r from-green-500 to-emerald-500 text-white font-medium shadow-lg" %>
+          <%= link_to "Contribute", root_path(anchor: "contribute"), class: "block py-3 px-4 rounded-lg bg-gradient-to-r from-green-500 to-emerald-500 text-white font-medium shadow-lg" %>
         </nav>
       </div>
     </header>

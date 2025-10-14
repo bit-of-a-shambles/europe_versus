@@ -20,24 +20,20 @@ This single command will:
    - Eastern Europe & Balkans
    - USA, China, India for comparison
 
-2. **Fetch GDP Data**
-   - GDP per capita PPP (constant 2021 international dollars)
-   - Reads from `public/gdp-per-capita-worldbank.csv`
-
-3. **Fetch Development Metrics**
+2. **Fetch All Metrics** (via OwidMetricImporter)
+   - GDP per capita PPP
    - Child mortality rates
    - Electricity access percentages
-
-4. **Fetch Health & Social Metrics**
    - Health expenditure as % of GDP
    - Life satisfaction scores (Cantril Ladder)
+   - Any other metrics configured in `config/owid_metrics.yml`
 
-5. **Calculate European Aggregates**
+3. **Calculate European Aggregates**
    - Population-weighted averages for Europe
    - Population-weighted averages for EU-27
    - Proper handling of transcontinental countries
 
-6. **Normalize Units**
+4. **Normalize Units**
    - Ensures consistent units across all metrics
    - `%` for percentages
    - `people` for population
@@ -45,10 +41,16 @@ This single command will:
    - `% of GDP` for health expenditure
    - `score (0-10)` for life satisfaction
 
-7. **Enrich Descriptions**
+5. **Enrich Descriptions**
    - Adds detailed, human-readable descriptions
    - Explains calculation methodology
    - Notes about population weighting
+
+6. **Verify Data Quality**
+   - Checks that all expected records were created
+   - Validates Europe and EU-27 aggregates
+
+**Note:** All OWID metrics use the unified `OwidMetricImporter` system. Simply add metrics to `config/owid_metrics.yml` - no need to create separate service classes. See [ADDING_METRICS_GUIDE.md](ADDING_METRICS_GUIDE.md) for details.
 
 ### Expected Output
 
@@ -58,19 +60,13 @@ This single command will:
 This will take approximately 3-4 minutes.
 ============================================================
 
-📊 Step 1/9: Fetching population data...
+📊 Step 1/6: Fetching population data...
    ✅ Population data loaded
 
-💰 Step 2/9: Fetching GDP data...
-   ✅ GDP data loaded
+� Step 2/6: Fetching OWID metrics...
+   ✅ All OWID metrics loaded
 
-📈 Step 3/9: Fetching development metrics...
-   ✅ Development metrics loaded
-
-🏥 Step 4/9: Fetching health and social metrics...
-   ✅ Health and social metrics loaded
-
-[... continues through all steps ...]
+🧮 Step 3/6: Calculating European aggregates...
 
 ✅ INITIALIZATION COMPLETE!
 ============================================================
@@ -93,7 +89,27 @@ This will take approximately 3-4 minutes.
 
 ## 🔄 Adding New Statistics
 
-When you add a new statistic to the application:
+### Automatic Method (Production - Recommended)
+
+**Just edit config/owid_metrics.yml and deploy!**
+
+1. Edit `config/owid_metrics.yml` and add your metric
+2. Commit and push to your repo
+3. Deploy
+
+The app will automatically detect and import the new metric on startup. No manual commands needed!
+
+See [ADDING_METRICS_GUIDE.md](ADDING_METRICS_GUIDE.md) for detailed instructions.
+
+### Manual Method (Development)
+
+For OWID metrics, edit `config/owid_metrics.yml` first, then:
+
+```bash
+bin/rails owid:import_all
+```
+
+For custom data sources or refreshing all data:
 
 ```bash
 bin/rails data:update
@@ -103,8 +119,7 @@ bin/rails data:update
 
 1. **Refreshes All Data Sources**
    - Re-fetches population data
-   - Re-fetches GDP data
-   - Re-fetches development metrics
+   - Re-fetches all OWID metrics from config
    - Adds any new metrics you've configured
 
 2. **Recalculates All Aggregates**
@@ -126,13 +141,13 @@ bin/rails data:update
 ### Example Workflow
 
 ```bash
-# 1. Add new metric configuration to your service
-# 2. Create fetch task if needed
-# 3. Run update to fetch and calculate everything
-bin/rails data:update
+# 1. Edit config/owid_metrics.yml to add your metric
+# 2. Run import to fetch the new data
+bin/rails owid:import_all
 
-# 4. Verify the new data
-bin/rails data:population_stats  # or other verification tasks
+# 3. Verify the new data
+bin/rails console
+> Metric.where(metric_name: 'your_metric_name').count
 ```
 
 ---
@@ -188,18 +203,8 @@ If you need to run specific tasks individually:
 # Population only
 bin/rails data:fetch_population
 
-# GDP only
-bin/rails gdp_data:fetch
-
-# Development metrics only
-bin/rails data:fetch_development
-
-# Health and social metrics only
-bin/rails health_social_data:fetch_all
-
-# Individual health/social metrics
-bin/rails health_social_data:fetch_health_expenditure
-bin/rails health_social_data:fetch_life_satisfaction
+# All OWID metrics (from config/owid_metrics.yml)
+bin/rails owid:import_all
 
 # All data sources
 bin/rails data:fetch_all
@@ -225,15 +230,69 @@ bin/rails data:enrich_aggregate_descriptions
 
 ### Cleanup
 ```bash
-# Clear all GDP data (use with caution!)
-bin/rails gdp_data:clear
+# Clear all data for a specific metric
+bin/rails console
+> Metric.where(metric_name: 'gdp_per_capita_ppp').delete_all
 ```
 
 ---
 
-## 🛠️ Adding a New Statistic
+## 🛠️ Service Architecture
 
-### Step 1: Create or Update Service
+The application uses a simplified, modular architecture:
+
+### Core Services (4 Total)
+
+1. **`OwidMetricImporter`** - Universal OWID metric handler
+   - Reads configuration from `config/owid_metrics.yml`
+   - Fetches data from Our World in Data
+   - Stores data in database
+   - Calculates aggregates
+   - **Use this for ALL OWID metrics** - no need to create new services
+
+2. **`PopulationDataService`** - Population data handler
+   - Fetches population data from OWID
+   - Used by other services for weighted calculations
+   - Handles European aggregate calculations
+
+3. **`EuropeanMetricsService`** - Aggregation engine
+   - Calculates Europe and EU-27 aggregates
+   - Population-weighted averages
+   - Simple sums for absolute metrics
+   - Used by all other services
+
+4. **`OurWorldInDataService`** - Low-level API wrapper
+   - CSV data fetching from OWID
+   - JSON metadata parsing
+   - Used by OwidMetricImporter and PopulationDataService
+
+### Legacy Services (Being Phased Out)
+
+The following services are **deprecated** and should not be used for new metrics:
+- `DevelopmentDataService` → Use `OwidMetricImporter` instead
+- `EnergyDataService` → Use `OwidMetricImporter` instead
+- `HealthSocialDataService` → Use `OwidMetricImporter` instead
+- `GdpDataService` → Use `OwidMetricImporter` instead
+
+These exist only for backward compatibility with old rake tasks.
+
+### Adding New Metrics
+
+**DO NOT** create new service classes. Instead:
+
+1. Edit `config/owid_metrics.yml`
+2. Add your metric configuration
+3. Commit and deploy (auto-imports on startup)
+
+See [ADDING_METRICS_GUIDE.md](ADDING_METRICS_GUIDE.md) for detailed instructions.
+
+---
+
+## 🛠️ Adding a Custom Metric (Non-OWID)
+
+If you need to add a metric from a source OTHER than Our World in Data:
+
+### Step 1: Create a Dedicated Service (Only if Not OWID)
 
 Example for a new metric called "life_expectancy":
 
@@ -360,18 +419,22 @@ bin/rails console
 
 All data is sourced from reputable international organizations:
 
-- **Population**: Our World in Data (UN estimates)
-- **GDP**: World Bank via Our World in Data
-- **Child Mortality**: UN IGME via Our World in Data
-- **Electricity Access**: World Bank via Our World in Data
-- **Health Expenditure**: World Bank / WHO via Our World in Data
-- **Life Satisfaction**: Wellbeing Research Centre via Our World in Data (Cantril Ladder methodology)
+- **All OWID Metrics**: Our World in Data (various sources)
+  - Population: UN estimates
+  - GDP: World Bank
+  - Child Mortality: UN IGME
+  - Electricity Access: World Bank
+  - Health Expenditure: World Bank / WHO
+  - Life Satisfaction: Wellbeing Research Centre (Cantril Ladder)
+  - And any other metrics configured in `config/owid_metrics.yml`
+
+**Note**: The `OwidMetricImporter` handles all Our World in Data metrics. You don't need to know the specific source - just configure the metric in the YAML file.
 
 ### Required Files
 
-Ensure these files exist in production:
+The application automatically fetches most data from APIs. No CSV files required unless using legacy GDP import:
 
-- `public/gdp-per-capita-worldbank.csv` - GDP data file
+- ~~`public/gdp-per-capita-worldbank.csv`~~ - No longer needed (GDP now imported via OwidMetricImporter)
 
 ---
 
@@ -396,9 +459,9 @@ Ensure these files exist in production:
 - Check Rails logs for specific error messages
 
 ### "GDP fetch failed"
-- Ensure `public/gdp-per-capita-worldbank.csv` exists
-- Verify CSV file format is correct
-- Check file permissions
+- GDP is now imported via `OwidMetricImporter`
+- Check that `gdp_per_capita_ppp` is enabled in `config/owid_metrics.yml`
+- Run `bin/rails owid:import_all` to fetch
 
 ### "Europe aggregate calculation failed"
 - Ensure population data exists first
@@ -412,10 +475,10 @@ Ensure these files exist in production:
 
 ### Data looks incorrect
 ```bash
-# Clear and re-fetch specific metric
-bin/rails gdp_data:clear
-bin/rails gdp_data:fetch
-bin/rails data:update
+# Clear and re-fetch specific metric using OwidMetricImporter
+bin/rails console
+> Metric.where(metric_name: 'gdp_per_capita_ppp').delete_all
+> OwidMetricImporter.import_metric('gdp_per_capita_ppp')
 ```
 
 ---

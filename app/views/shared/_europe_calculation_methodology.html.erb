@@ -84,7 +84,7 @@
             <% if show_current_values %>
               <% 
                 begin
-                  gdp_data = GdpDataService.latest_gdp_for_countries(['europe'])
+                  gdp_data = EuropeanMetricsService.latest_metric_for_countries('gdp_per_capita_ppp', ['europe'])
                   if gdp_data && gdp_data['europe']
               %>
                 <div class="mt-4 p-3 <%= card_bg %> rounded-xl border <%= card_border %>">
