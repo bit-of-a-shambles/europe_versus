@@ -8,6 +8,10 @@ Rails.application.config.after_initialize do
 
   next unless auto_import
 
+  # Skip during migrations or when SKIP_OWID_AUTO_IMPORT is set
+  # This prevents database locks during data initialization
+  next if ENV["SKIP_OWID_AUTO_IMPORT"].present?
+
   # Wait for database to be ready
   begin
     ActiveRecord::Base.connection.verify!
@@ -22,8 +26,12 @@ Rails.application.config.after_initialize do
   end
 
   # Import metrics in background to not block startup
+  # Add delay to ensure other initialization is complete
   Thread.new do
     begin
+      # Wait a bit to ensure migrations/seeds are done
+      sleep 5
+
       Rails.logger.info "🌍 Checking for new OWID metrics..."
 
       # Get all configured metrics

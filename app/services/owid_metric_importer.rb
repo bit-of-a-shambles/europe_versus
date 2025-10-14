@@ -179,11 +179,18 @@ class OwidMetricImporter
 
     def store_metric_data(result, metric_name, config, verbose)
       stored_count = 0
+      skipped_count = 0
 
       result[:countries].each do |country_key, country_data|
         country_data[:data].each do |year, value|
           # Skip if value is nil or empty
           next if value.nil? || value.to_s.strip.empty?
+
+          # Skip years before 1900 (matches Metric model validation)
+          if year < 1900
+            skipped_count += 1
+            next
+          end
 
           # Convert to float and skip if invalid
           numeric_value = value.to_f
@@ -207,12 +214,19 @@ class OwidMetricImporter
             description: config[:description] || result.dig(:metadata, :description)
           )
 
-          metric.save!
-          stored_count += 1
+          begin
+            metric.save!
+            stored_count += 1
+          rescue ActiveRecord::RecordInvalid => e
+            puts "   ⚠️  Failed to save #{country_key} #{year}: #{e.message}" if verbose
+          end
         end
       end
 
-      puts "   → Stored #{stored_count} records across #{result[:countries].size} countries" if verbose
+      if verbose
+        puts "   → Stored #{stored_count} records across #{result[:countries].size} countries"
+        puts "   → Skipped #{skipped_count} pre-1900 records" if skipped_count > 0
+      end
       stored_count
     end
 
