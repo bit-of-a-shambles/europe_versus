@@ -24,7 +24,7 @@ namespace :data do
     # Step 2: GDP data
     puts "\n💰 Step 2/9: Fetching GDP data..."
     begin
-      OwidMetricImporter.import_category(["gdp_per_capita_ppp"], verbose: false)
+      OwidMetricImporter.import_category([ "gdp_per_capita_ppp" ], verbose: false)
       puts "   ✅ GDP data loaded"
     rescue => e
       error_msg = "GDP fetch failed: #{e.message}"
@@ -71,7 +71,7 @@ namespace :data do
     puts "\n💶 Step 6/9: Calculating Europe GDP aggregate..."
     begin
       EuropeanMetricsService.calculate_europe_aggregate(
-        metric_name: "gdp_per_capita_ppp",
+        "gdp_per_capita_ppp",
         start_year: 1990,
         end_year: 2024
       )
@@ -80,6 +80,23 @@ namespace :data do
       error_msg = "Europe GDP calculation failed: #{e.message}"
       errors << error_msg
       puts "   ❌ #{error_msg}"
+    end
+
+    # Step 6.5: Calculate EU-27 aggregates
+    puts "\n🇪🇺 Step 6.5/9: Calculating EU-27 aggregates..."
+    [ "population", "gdp_per_capita_ppp", "child_mortality_rate", "electricity_access" ].each do |metric_name|
+      begin
+        print "   • #{metric_name.humanize}... "
+        EuropeanMetricsService.calculate_group_aggregate(
+          metric_name,
+          country_keys: EuropeanMetricsService::EU27_COUNTRIES,
+          target_key: "european_union"
+        )
+        puts "✅"
+      rescue => e
+        puts "❌"
+        errors << "EU-27 #{metric_name}: #{e.message}"
+      end
     end
 
     # Step 7: Normalize units
@@ -182,7 +199,7 @@ namespace :data do
     # GDP
     print "   • GDP data... "
     begin
-      OwidMetricImporter.import_category(["gdp_per_capita_ppp"], verbose: false)
+      OwidMetricImporter.import_category([ "gdp_per_capita_ppp" ], verbose: false)
       puts "✅"
     rescue => e
       puts "❌"
