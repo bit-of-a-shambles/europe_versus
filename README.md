@@ -1,5 +1,7 @@
 # EuropeVersus 🇪🇺
 
+![Test Coverage](https://img.shields.io/badge/coverage-28.2%25-red)
+
 An **open source** Rails 8 web application that provides evidence-based comparisons between European statistics and those of the United States, India, and China. This project aims to counter negative narratives about Europe by presenting factual data in an accessible, visual format.
 
 ## 🎯 Mission
@@ -23,61 +25,6 @@ EuropeVersus promotes data-driven understanding of European performance across m
 - **Database**: SQLite
 - **Deployment**: Docker-ready with Kamal configuration
 
-## 🚀 Quick Start
-
-### Prerequisites
-
-- Ruby 3.3.0 or higher
-- Rails 8
-
-### Installation
-
-1. **Clone the repository**
-   ```bash
-   git clone <repository-url>
-   cd europeversus
-   ```
-
-2. **Install dependencies**
-   ```bash
-   bundle install
-   ```
-
-3. **Setup the database**
-   ```bash
-   bin/rails db:setup
-   ```
-
-4. **Start the development server**
-   ```bash
-   bin/dev
-   ```
-
-5. **Visit the application**
-   Open [http://localhost:3000](http://localhost:3000) in your browser
-
-## 📁 Project Structure
-
-```
-app/
-├── controllers/
-│   ├── application_controller.rb
-│   ├── home_controller.rb          # Homepage with overview
-│   └── statistics_controller.rb    # Statistics listing and details
-├── models/
-│   └── statistic.rb               # Data model for comparisons
-├── views/
-│   ├── layouts/
-│   │   └── application.html.erb   # Main layout with navigation
-│   ├── home/
-│   │   └── index.html.erb         # Homepage with key stats preview
-│   └── statistics/
-│       ├── index.html.erb         # All statistics by category
-│       └── show.html.erb          # Individual statistic details
-└── javascript/
-    └── controllers/
-        └── mobile_menu_controller.js  # Stimulus controller for mobile nav
-```
 
 ## 📊 Data Categories
 
@@ -130,7 +77,7 @@ The application includes statistics across four main categories, with data sourc
 
 3. **Deploy** → The app automatically imports new metrics on startup! ✅
 
-See [ADDING_METRICS_GUIDE.md](ADDING_METRICS_GUIDE.md) for complete instructions.
+See [ADDING_METRICS_GUIDE.md](ADDING_METRICS_GUIDE.md) for complete instructions. For detailed setup and development information, see [DATA_SETUP.md](DATA_SETUP.md).
 
 **How it works:**
 - On startup, the app checks `config/owid_metrics.yml`
@@ -138,48 +85,6 @@ See [ADDING_METRICS_GUIDE.md](ADDING_METRICS_GUIDE.md) for complete instructions
 - Data is fetched from OWID and Europe/EU-27 aggregates are calculated
 - No manual terminal commands needed in production
 
-## 🛠️ Development
-
-### Running Tests
-```bash
-bin/rails test
-```
-
-### Database Commands
-```bash
-# Create and migrate database
-bin/rails db:create db:migrate
-
-# Seed with sample data
-bin/rails db:seed
-
-# Reset database
-bin/rails db:reset
-```
-
-### Asset Compilation
-```bash
-# Build Tailwind CSS
-bin/rails tailwindcss:build
-
-# Watch for changes (in development)
-bin/rails tailwindcss:watch
-```
-
-## 🚢 Deployment
-
-The application is configured for deployment with Kamal and includes:
-
-- Docker configuration
-- GitHub Actions CI/CD pipeline
-- SSL/TLS ready
-- Environment-specific configurations
-
-### Deploy with Kamal
-```bash
-kamal setup
-kamal deploy
-```
 
 ## 🤝 Contributing
 
@@ -206,25 +111,6 @@ We're actively seeking contributors to expand our statistical database. Here's h
 - Politically biased organizations
 - Commercial entities without transparent methodology
 
-#### 📝 How to Submit Data
-
-**Option 1: Use the Web Interface (Recommended)**
-1. Visit the application at `/contribute`
-2. Fill out the data submission form
-3. Include all required source information
-4. Your submission will be reviewed by maintainers
-
-**Option 2: GitHub Issue**
-1. Open a new issue with the "Data Contribution" template
-2. Provide the statistic details and source information
-3. Maintainers will review and add the data
-
-**Option 3: Pull Request**
-1. Fork the repository
-2. Add data to `db/seeds.rb` following the existing format
-3. Include source verification in your PR description
-4. Submit for review
-
 #### ✅ Data Contribution Checklist
 
 Before submitting data, ensure:
@@ -237,20 +123,15 @@ Before submitting data, ensure:
 - [ ] Source URL is provided and accessible
 - [ ] Data has been double-checked for accuracy
 
-### 🛠️ Code Contributions
+### 🛠️ Test Coverage
 
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
+**Current Test Coverage:** 28.2% (304/1078 lines covered)
 
 ### 🌐 Translation Contributions
 
 Help make EuropeVersus accessible to more people:
 - Translate the interface to other European languages
-- Ensure cultural sensitivity in data presentation
-- Add localized number formatting
+- Add localised number formatting
 
 ### 📖 Documentation
 
@@ -261,9 +142,9 @@ Help make EuropeVersus accessible to more people:
 
 ## 📄 License
 
-This project is open source and available under the [GNU License](LICENSE).
+This project is open source and available under the [GNU Public License](LICENSE).
 
-## � Data Quality & Review Process
+## Data Quality & Review Process
 
 ### Moderation System
 
@@ -283,59 +164,7 @@ All contributed data goes through a review process:
 
 ## 🙏 Current Data Sources
 
-All statistics are sourced from reputable international organizations:
-
-**Economic Data:**
-- Our World in Data (aggregating World Bank, Eurostat, OECD, IMF data)
-- World Bank - World Development Indicators
-- International Monetary Fund (IMF) - World Economic Outlook
-- Organisation for Economic Co-operation and Development (OECD)
-
-**Social Indicators:**
-- Our World in Data - Life Satisfaction (Cantril Ladder)
-- Our World in Data - Health Expenditure
-- World Health Organization (WHO)
-- United Nations Development Programme (UNDP)
-- Social Progress Imperative
-
-**Environmental Data:**
-- Our World in Data - Electricity Access, Child Mortality
-- International Energy Agency (IEA)
-- Yale Environmental Performance Index
-- Global Carbon Atlas
-
-**Innovation Metrics:**
-- World Intellectual Property Organization (WIPO)
-- Cornell University, INSEAD, WIPO - Global Innovation Index
-
-## 🛠️ For Developers
-
-### Testing
-```bash
-# Run all tests
-bin/rails test
-
-# Run specific test file
-bin/rails test test/services/owid_metric_importer_test.rb
-```
-
-### OWID Metrics Management
-```bash
-# List all configured metrics
-bin/rails owid:list
-
-# Import a single metric
-bin/rails "owid:import[metric_name]"
-
-# Import all metrics
-bin/rails owid:import_all
-
-# Show statistics for a metric
-bin/rails "owid:stats[metric_name]"
-
-# Generate config template for new metric
-bin/rails "owid:scaffold[metric_name,owid-slug]"
-```
+All statistics are currently sourced from Our World in Data.
 
 See [ADDING_METRICS_GUIDE.md](ADDING_METRICS_GUIDE.md) for detailed instructions.
 
@@ -356,7 +185,7 @@ Found incorrect data or questionable sources?
 
 ## 📄 License
 
-This project is open source and available under the [GNU License](LICENSE).
+This project is open source and available under the [GNU Public License](LICENSE).
 
 ---
 
