@@ -59,6 +59,10 @@ namespace :data do
     # Step 5: Calculate Europe population aggregate
     puts "\n🇪🇺 Step 5/9: Calculating Europe population aggregate..."
     begin
+      # Delete old Europe population records to ensure fresh calculation
+      old_count = Metric.where(metric_name: "population", country: "europe").delete_all
+      puts "   → Deleted #{old_count} old Europe population records" if old_count > 0
+      
       Rake::Task["data:calculate_europe_population"].invoke
       puts "   ✅ Europe population aggregate calculated"
     rescue => e
@@ -70,6 +74,10 @@ namespace :data do
     # Step 6: Calculate Europe GDP aggregate
     puts "\n💶 Step 6/9: Calculating Europe GDP aggregate..."
     begin
+      # Delete old Europe GDP records to ensure fresh calculation
+      old_count = Metric.where(metric_name: "gdp_per_capita_ppp", country: "europe").delete_all
+      puts "   → Deleted #{old_count} old Europe GDP records" if old_count > 0
+      
       EuropeanMetricsService.calculate_europe_aggregate(
         "gdp_per_capita_ppp",
         start_year: 1990,
@@ -87,6 +95,9 @@ namespace :data do
     [ "population", "gdp_per_capita_ppp", "child_mortality_rate", "electricity_access" ].each do |metric_name|
       begin
         print "   • #{metric_name.humanize}... "
+        # Delete old EU-27 records to ensure fresh calculation
+        Metric.where(metric_name: metric_name, country: "european_union").delete_all
+        
         EuropeanMetricsService.calculate_group_aggregate(
           metric_name,
           country_keys: EuropeanMetricsService::EU27_COUNTRIES,
@@ -243,6 +254,9 @@ namespace :data do
     metrics_to_aggregate.each do |metric_name|
       print "   • #{metric_name.humanize}... "
       begin
+        # Delete old Europe records to ensure fresh calculation
+        Metric.where(metric_name: metric_name, country: "europe").delete_all
+        
         EuropeanMetricsService.calculate_europe_aggregate(metric_name)
         puts "✅"
       rescue => e
@@ -257,6 +271,9 @@ namespace :data do
     metrics_to_aggregate.each do |metric_name|
       print "   • #{metric_name.humanize}... "
       begin
+        # Delete old EU-27 records to ensure fresh calculation
+        Metric.where(metric_name: metric_name, country: "european_union").delete_all
+        
         EuropeanMetricsService.calculate_group_aggregate(
           metric_name,
           country_keys: EuropeanMetricsService::EU27_COUNTRIES,
