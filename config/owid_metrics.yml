@@ -65,3 +65,13 @@ electricity_access:
   category: development
   aggregation_method: population_weighted
   enabled: true
+
+gdp_per_capita_ppp:
+  owid_slug: gdp-per-capita-worldbank
+  start_year: 1990
+  end_year: 2024
+  unit: "international $"
+  description: "GDP per capita (PPP, constant 2017 international $)"
+  category: economy
+  aggregation_method: population_weighted
+  enabled: true

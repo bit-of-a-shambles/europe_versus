@@ -24,7 +24,7 @@ namespace :data do
     # Step 2: GDP data
     puts "\n💰 Step 2/9: Fetching GDP data..."
     begin
-      Rake::Task["gdp_data:fetch"].invoke
+      OwidMetricImporter.import_category(["gdp_per_capita_ppp"], verbose: false)
       puts "   ✅ GDP data loaded"
     rescue => e
       error_msg = "GDP fetch failed: #{e.message}"
@@ -70,7 +70,11 @@ namespace :data do
     # Step 6: Calculate Europe GDP aggregate
     puts "\n💶 Step 6/9: Calculating Europe GDP aggregate..."
     begin
-      Rake::Task["gdp_data:calculate_europe"].invoke
+      EuropeanMetricsService.calculate_europe_aggregate(
+        metric_name: "gdp_per_capita_ppp",
+        start_year: 1990,
+        end_year: 2024
+      )
       puts "   ✅ Europe GDP aggregate calculated"
     rescue => e
       error_msg = "Europe GDP calculation failed: #{e.message}"
@@ -178,8 +182,7 @@ namespace :data do
     # GDP
     print "   • GDP data... "
     begin
-      Rake::Task["gdp_data:fetch"].reenable
-      Rake::Task["gdp_data:fetch"].invoke
+      OwidMetricImporter.import_category(["gdp_per_capita_ppp"], verbose: false)
       puts "✅"
     rescue => e
       puts "❌"
