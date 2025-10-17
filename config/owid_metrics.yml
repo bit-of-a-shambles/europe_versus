@@ -38,7 +38,7 @@ health_expenditure_gdp_percent:
 
 life_satisfaction:
   owid_slug: happiness-cantril-ladder
-  start_year: 2010
+  start_year: 2005
   end_year: 2024
   unit: "score (0-10)"
   description: "Life satisfaction score on the Cantril Ladder"
@@ -73,5 +73,55 @@ gdp_per_capita_ppp:
   unit: "international $"
   description: "GDP per capita (PPP, constant 2017 international $)"
   category: economy
+  aggregation_method: population_weighted
+  enabled: true
+
+healthy_life_expectancy:
+  owid_slug: healthy-life-expectancy-at-birth
+  start_year: 1990
+  end_year: 2024
+  unit: "years"
+  description: "Healthy life expectancy at birth"
+  category: health
+  aggregation_method: population_weighted
+  enabled: true
+
+fertility_rate:
+  owid_slug: children-born-per-woman
+  start_year: 1990
+  end_year: 2024
+  unit: "births per woman"
+  description: "Fertility rate (children born per woman)"
+  category: social
+  aggregation_method: population_weighted
+  enabled: true
+
+labor_productivity_per_hour:
+  owid_slug: labor-productivity-per-hour-pennworldtable
+  start_year: 1990
+  end_year: 2024
+  unit: "output per hour (2017 $)"
+  description: "Labor productivity per hour worked"
+  category: economy
+  aggregation_method: population_weighted
+  enabled: true
+
+median_income_daily:
+  owid_slug: daily-median-income
+  start_year: 1990
+  end_year: 2024
+  unit: "$ per day"
+  description: "Daily median income (PPP-adjusted)"
+  category: economy
+  aggregation_method: population_weighted
+  enabled: true
+
+poorest_10_percent_income:
+  owid_slug: daily-income-or-consumption-of-the-poorest-10-marimekko
+  start_year: 1990
+  end_year: 2024
+  unit: "$ per day"
+  description: "Daily income or consumption of the poorest 10%"
+  category: social
   aggregation_method: population_weighted
   enabled: true
