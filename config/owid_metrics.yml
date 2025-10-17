@@ -125,3 +125,73 @@ poorest_10_percent_income:
   category: social
   aggregation_method: population_weighted
   enabled: true
+
+researchers_per_million:
+  owid_slug: researchers-in-rd-per-million-people
+  start_year: 1990
+  end_year: 2024
+  unit: "per million people"
+  description: "Researchers in R&D per million people"
+  category: innovation
+  aggregation_method: population_weighted
+  enabled: true
+
+research_spending_gdp:
+  owid_slug: research-spending-gdp
+  start_year: 1990
+  end_year: 2024
+  unit: "% of GDP"
+  description: "Research and development spending as % of GDP"
+  category: innovation
+  aggregation_method: population_weighted
+  enabled: true
+
+scientific_journal_articles:
+  owid_slug: scientific-and-technical-journal-articles
+  start_year: 1990
+  end_year: 2024
+  unit: "articles"
+  description: "Scientific and technical journal articles published"
+  category: innovation
+  aggregation_method: sum
+  enabled: true
+
+medical_rcts_published:
+  owid_slug: total-number-of-rcts-published-in-high-ranked-medical-journals
+  start_year: 1990
+  end_year: 2024
+  unit: "trials"
+  description: "Randomized controlled trials published in high-ranked medical journals"
+  category: health
+  aggregation_method: sum
+  enabled: true
+
+public_transport_access:
+  owid_slug: share-with-convenient-access-to-public-transport
+  start_year: 2000
+  end_year: 2024
+  unit: "%"
+  description: "Share of population with convenient access to public transport"
+  category: development
+  aggregation_method: population_weighted
+  enabled: true
+
+state_capacity_index:
+  owid_slug: state-capacity-index
+  start_year: 1990
+  end_year: 2024
+  unit: "index"
+  description: "State capacity index (government effectiveness)"
+  category: social
+  aggregation_method: population_weighted
+  enabled: true
+
+functioning_government_index:
+  owid_slug: functioning-government-index-eiu
+  start_year: 2006
+  end_year: 2024
+  unit: "score (0-10)"
+  description: "Functioning of government index (Economist Intelligence Unit)"
+  category: social
+  aggregation_method: population_weighted
+  enabled: true
