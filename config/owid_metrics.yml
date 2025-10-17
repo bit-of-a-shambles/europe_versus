@@ -195,3 +195,43 @@ functioning_government_index:
   category: social
   aggregation_method: population_weighted
   enabled: true
+
+low_carbon_energy_share:
+  owid_slug: low-carbon-share-energy
+  start_year: 1990
+  end_year: 2024
+  unit: "%"
+  description: "Share of energy from low-carbon sources (nuclear and renewables)"
+  category: environment
+  aggregation_method: population_weighted
+  enabled: true
+
+homicide_rate:
+  owid_slug: homicide-rate-unodc
+  start_year: 1990
+  end_year: 2024
+  unit: "per 100,000 people"
+  description: "Homicide rate (intentional homicides per 100,000 people)"
+  category: social
+  aggregation_method: population_weighted
+  enabled: true
+
+pisa_math_performance:
+  owid_slug: pisa-mean-performance-on-the-mathematics-scale-by-sex
+  start_year: 2000
+  end_year: 2024
+  unit: "score"
+  description: "PISA mean performance on mathematics scale"
+  category: development
+  aggregation_method: population_weighted
+  enabled: true
+
+pisa_reading_performance:
+  owid_slug: pisa-mean-performance-on-the-reading-scale-by-sex
+  start_year: 2000
+  end_year: 2024
+  unit: "score"
+  description: "PISA mean performance on reading scale"
+  category: development
+  aggregation_method: population_weighted
+  enabled: true
