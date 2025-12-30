@@ -62,7 +62,7 @@ labor_productivity_per_hour:
   start_year: 2000
   end_year: 2025
   unit: "2021 PPP $ per hour"
-  description: "Output per hour worked (GDP constant 2021 international $ at PPP) - ILO Modelled Estimates"
+  description: "GDP generated per hour worked, measured in constant 2021 international dollars adjusted for purchasing power parity. This captures how efficiently an economy converts labor time into economic output, accounting for price differences between countries."
   category: economy
   aggregation_method: population_weighted
   enabled: true
@@ -74,7 +74,7 @@ labor_productivity_per_worker:
   start_year: 2000
   end_year: 2025
   unit: "2015 USD per worker"
-  description: "Output per worker (GDP constant 2015 US$) - ILO Modelled Estimates"
+  description: "GDP generated per employed person, measured in constant 2015 US dollars. This measures economic output per worker regardless of hours worked, reflecting both productivity and working patterns."
   category: economy
   aggregation_method: population_weighted
   enabled: true
@@ -89,7 +89,7 @@ gdp_per_capita_ppp:
   start_year: 1990
   end_year: 2024
   unit: "international $"
-  description: "GDP per capita (PPP, constant 2017 international $)"
+  description: "Gross domestic product per person, adjusted for price differences between countries using purchasing power parity (PPP). Expressed in constant 2017 international dollars to allow comparisons across time and between countries."
   category: economy
   aggregation_method: population_weighted
   enabled: true
@@ -100,7 +100,7 @@ median_income_daily:
   start_year: 1990
   end_year: 2024
   unit: "$ per day"
-  description: "Daily median income (PPP-adjusted)"
+  description: "The daily income level that divides the population in half—50% earn more and 50% earn less. Adjusted for purchasing power parity to account for price differences between countries, providing a measure of typical living standards."
   category: economy
   aggregation_method: population_weighted
   enabled: true
@@ -115,7 +115,7 @@ health_expenditure_gdp_percent:
   start_year: 2000
   end_year: 2024
   unit: "% of GDP"
-  description: "Health expenditure as a percentage of GDP"
+  description: "Total spending on healthcare—including both public and private expenditure—as a share of the economy. This includes hospital care, physician services, medicines, and preventive care."
   category: health
   aggregation_method: population_weighted
   enabled: true
@@ -126,7 +126,7 @@ healthy_life_expectancy:
   start_year: 1990
   end_year: 2024
   unit: "years"
-  description: "Healthy life expectancy at birth"
+  description: "Average number of years a newborn can expect to live in full health, accounting for years lived with illness or disability. Unlike standard life expectancy, this measures quality-adjusted years of life."
   category: health
   aggregation_method: population_weighted
   enabled: true
@@ -137,7 +137,7 @@ medical_rcts_published:
   start_year: 1990
   end_year: 2024
   unit: "trials"
-  description: "Randomized controlled trials published in high-ranked medical journals"
+  description: "Cumulative number of randomized controlled trials (RCTs) published in high-ranked medical journals. RCTs are the gold standard for medical research, providing the strongest evidence for treatment effectiveness. Counted by country of the first author's institution."
   category: health
   aggregation_method: sum
   enabled: true
@@ -152,7 +152,7 @@ life_satisfaction:
   start_year: 2005
   end_year: 2024
   unit: "score (0-10)"
-  description: "Life satisfaction score on the Cantril Ladder"
+  description: "Average of survey responses asking people to rate their current life on a scale from 0 to 10, where 0 represents the worst possible life and 10 represents the best possible life they can imagine (Cantril Self-Anchoring Scale)."
   category: social
   aggregation_method: population_weighted
   enabled: true
@@ -163,7 +163,7 @@ fertility_rate:
   start_year: 1990
   end_year: 2024
   unit: "births per woman"
-  description: "Fertility rate (children born per woman)"
+  description: "Average number of children a woman would have over her lifetime if current age-specific fertility rates remained constant. A rate of 2.1 is considered the replacement level needed to maintain population without migration."
   category: social
   aggregation_method: population_weighted
   enabled: true
@@ -174,7 +174,7 @@ poorest_10_percent_income:
   start_year: 1990
   end_year: 2024
   unit: "$ per day"
-  description: "Daily income or consumption of the poorest 10%"
+  description: "Average daily income or consumption of the poorest 10% of the population, adjusted for purchasing power parity. This measures absolute living standards at the bottom of the income distribution."
   category: social
   aggregation_method: population_weighted
   enabled: true
@@ -185,7 +185,7 @@ state_capacity_index:
   start_year: 1990
   end_year: 2024
   unit: "index"
-  description: "State capacity index (government effectiveness)"
+  description: "Composite measure of a government's ability to implement policies, collect taxes, enforce laws, and provide public services. Higher values indicate greater state effectiveness and institutional quality."
   category: social
   aggregation_method: population_weighted
   enabled: true
@@ -196,7 +196,7 @@ functioning_government_index:
   start_year: 2006
   end_year: 2024
   unit: "score (0-10)"
-  description: "Functioning of government index (Economist Intelligence Unit)"
+  description: "Assessment of how well elected governments can implement policies without undue influence, covering executive accountability, legislative effectiveness, and independence from military or foreign interference. From the Economist Intelligence Unit's Democracy Index."
   category: social
   aggregation_method: population_weighted
   enabled: true
@@ -207,7 +207,7 @@ homicide_rate:
   start_year: 1990
   end_year: 2024
   unit: "per 100,000 people"
-  description: "Homicide rate (intentional homicides per 100,000 people)"
+  description: "Annual number of intentional homicides per 100,000 population, as recorded by the UN Office on Drugs and Crime. Includes murder and manslaughter but excludes deaths from armed conflict, legal intervention, and self-defense."
   category: social
   aggregation_method: population_weighted
   enabled: true
@@ -222,7 +222,7 @@ child_mortality_rate:
   start_year: 1990
   end_year: 2024
   unit: "%"
-  description: "Child mortality rate (deaths per 100 live births)"
+  description: "Probability of dying between birth and age 5, expressed as deaths per 100 live births. This is a key indicator of child health, healthcare access, nutrition, and overall development."
   category: development
   aggregation_method: population_weighted
   enabled: true
@@ -233,7 +233,7 @@ electricity_access:
   start_year: 1990
   end_year: 2024
   unit: "%"
-  description: "Access to electricity (% of population)"
+  description: "Percentage of the population with access to electricity in their home, whether from the national grid, mini-grids, or standalone systems. A fundamental measure of basic infrastructure and development."
   category: development
   aggregation_method: population_weighted
   enabled: true
@@ -244,7 +244,7 @@ public_transport_access:
   start_year: 2000
   end_year: 2024
   unit: "%"
-  description: "Share of population with convenient access to public transport"
+  description: "Percentage of the population living within convenient walking distance (typically 500m for bus stops, 1km for rail stations) of public transport services operating with reasonable frequency."
   category: development
   aggregation_method: population_weighted
   enabled: true
@@ -255,7 +255,7 @@ pisa_math_performance:
   start_year: 2000
   end_year: 2024
   unit: "score"
-  description: "PISA mean performance on mathematics scale"
+  description: "Average score of 15-year-old students on the OECD's PISA mathematics assessment. The test measures mathematical literacy—the ability to use mathematics in real-world contexts. OECD average is set at 500 with a standard deviation of 100."
   category: development
   aggregation_method: population_weighted
   enabled: true
@@ -266,7 +266,7 @@ pisa_reading_performance:
   start_year: 2000
   end_year: 2024
   unit: "score"
-  description: "PISA mean performance on reading scale"
+  description: "Average score of 15-year-old students on the OECD's PISA reading assessment. The test measures reading literacy—the ability to understand, use, and reflect on written texts. OECD average is set at 500 with a standard deviation of 100."
   category: development
   aggregation_method: population_weighted
   enabled: true
@@ -281,7 +281,7 @@ researchers_per_million:
   start_year: 1990
   end_year: 2024
   unit: "per million people"
-  description: "Researchers in R&D per million people"
+  description: "Full-time equivalent researchers engaged in research and development per million inhabitants. Includes professionals creating new knowledge, products, processes, methods, and systems, as well as those managing R&D projects."
   category: innovation
   aggregation_method: population_weighted
   enabled: true
@@ -292,7 +292,7 @@ research_spending_gdp:
   start_year: 1990
   end_year: 2024
   unit: "% of GDP"
-  description: "Research and development spending as % of GDP"
+  description: "Total domestic expenditure on research and development (R&D) as a share of GDP. Includes spending by businesses, government, universities, and non-profits on basic research, applied research, and experimental development."
   category: innovation
   aggregation_method: population_weighted
   enabled: true
@@ -303,7 +303,7 @@ scientific_journal_articles:
   start_year: 1990
   end_year: 2024
   unit: "articles"
-  description: "Scientific and technical journal articles published"
+  description: "Number of scientific and technical journal articles published annually in peer-reviewed journals indexed by Clarivate Analytics. Covers physics, biology, chemistry, mathematics, clinical medicine, engineering, and earth/space sciences."
   category: innovation
   aggregation_method: sum
   enabled: true
@@ -318,7 +318,7 @@ low_carbon_energy_share:
   start_year: 1990
   end_year: 2024
   unit: "%"
-  description: "Share of energy from low-carbon sources (nuclear and renewables)"
+  description: "Percentage of primary energy consumption from low-carbon sources, including nuclear power and all renewable energy (hydro, solar, wind, geothermal, biomass). A key indicator of energy transition and decarbonization progress."
   category: environment
   aggregation_method: population_weighted
   enabled: true
