@@ -1,0 +1,278 @@
+<%# Interactive Chart Component %>
+
+<% 
+  chart_data ||= {}
+  title ||= chart_data.dig(:metadata, :title) || 'Data Trend'
+  unit ||= chart_data.dig(:metadata, :unit) || ''
+  metric_name ||= 'chart'
+  source ||= chart_data.dig(:metadata, :source) || 'Our World in Data'
+  
+  # Available countries from data
+  available_countries = chart_data[:countries]&.keys || []
+  years = chart_data[:years]&.sort || []
+  
+  # Official country groupings - using proper EU/EEA/Eurozone classifications
+  country_groups = {
+    'Aggregates' => [
+      { key: 'europe', flag: '🇪🇺', name: 'Europe', category: 'aggregates' },
+      { key: 'european_union', flag: '🇪🇺', name: 'EU-27', category: 'aggregates' }
+    ],
+    'Global' => [
+      { key: 'usa', flag: '🇺🇸', name: 'USA', category: 'global' },
+      { key: 'china', flag: '🇨🇳', name: 'China', category: 'global' },
+      { key: 'india', flag: '🇮🇳', name: 'India', category: 'global' }
+    ],
+    'Eurozone' => [
+      # The 20 countries using the Euro (as of 2024)
+      { key: 'germany', flag: '🇩🇪', name: 'Germany', category: 'eurozone' },
+      { key: 'france', flag: '🇫🇷', name: 'France', category: 'eurozone' },
+      { key: 'italy', flag: '🇮🇹', name: 'Italy', category: 'eurozone' },
+      { key: 'spain', flag: '🇪🇸', name: 'Spain', category: 'eurozone' },
+      { key: 'netherlands', flag: '🇳🇱', name: 'Netherlands', category: 'eurozone' },
+      { key: 'belgium', flag: '🇧🇪', name: 'Belgium', category: 'eurozone' },
+      { key: 'austria', flag: '🇦🇹', name: 'Austria', category: 'eurozone' },
+      { key: 'ireland', flag: '🇮🇪', name: 'Ireland', category: 'eurozone' },
+      { key: 'portugal', flag: '🇵🇹', name: 'Portugal', category: 'eurozone' },
+      { key: 'greece', flag: '🇬🇷', name: 'Greece', category: 'eurozone' },
+      { key: 'finland', flag: '🇫🇮', name: 'Finland', category: 'eurozone' },
+      { key: 'slovakia', flag: '🇸🇰', name: 'Slovakia', category: 'eurozone' },
+      { key: 'slovenia', flag: '🇸🇮', name: 'Slovenia', category: 'eurozone' },
+      { key: 'estonia', flag: '🇪🇪', name: 'Estonia', category: 'eurozone' },
+      { key: 'latvia', flag: '🇱🇻', name: 'Latvia', category: 'eurozone' },
+      { key: 'lithuania', flag: '🇱🇹', name: 'Lithuania', category: 'eurozone' },
+      { key: 'luxembourg', flag: '🇱🇺', name: 'Luxembourg', category: 'eurozone' },
+      { key: 'malta', flag: '🇲🇹', name: 'Malta', category: 'eurozone' },
+      { key: 'cyprus', flag: '🇨🇾', name: 'Cyprus', category: 'eurozone' },
+      { key: 'croatia', flag: '🇭🇷', name: 'Croatia', category: 'eurozone' }
+    ],
+    'Non-Euro EU' => [
+      # EU members not using the Euro
+      { key: 'poland', flag: '🇵🇱', name: 'Poland', category: 'non-euro-eu' },
+      { key: 'sweden', flag: '🇸🇪', name: 'Sweden', category: 'non-euro-eu' },
+      { key: 'denmark', flag: '🇩🇰', name: 'Denmark', category: 'non-euro-eu' },
+      { key: 'czechia', flag: '🇨🇿', name: 'Czechia', category: 'non-euro-eu' },
+      { key: 'czech_republic', flag: '🇨🇿', name: 'Czechia', category: 'non-euro-eu' },
+      { key: 'hungary', flag: '🇭🇺', name: 'Hungary', category: 'non-euro-eu' },
+      { key: 'romania', flag: '🇷🇴', name: 'Romania', category: 'non-euro-eu' },
+      { key: 'bulgaria', flag: '🇧🇬', name: 'Bulgaria', category: 'non-euro-eu' }
+    ],
+    'Non-EU Europe' => [
+      # European countries not in the EU (includes EEA and others)
+      { key: 'united_kingdom', flag: '🇬🇧', name: 'UK', category: 'non-eu' },
+      { key: 'switzerland', flag: '🇨🇭', name: 'Switzerland', category: 'non-eu' },
+      { key: 'norway', flag: '🇳🇴', name: 'Norway', category: 'non-eu' },
+      { key: 'iceland', flag: '🇮🇸', name: 'Iceland', category: 'non-eu' }
+    ]
+  }
+  
+  # Filter country groups to only show countries with data
+  filtered_groups = country_groups.transform_values do |countries|
+    countries.select { |c| available_countries.include?(c[:key]) }
+  end.reject { |_, countries| countries.empty? }
+  
+  # Count total available countries
+  total_countries = filtered_groups.values.flatten.size
+%>
+
+<div class="py-12 border-b-2 border-black" 
+     data-controller="chart"
+     data-chart-data-value="<%= chart_data.to_json %>"
+     data-chart-title-value="<%= title %>"
+     data-chart-unit-value="<%= unit %>"
+     data-chart-metric-name-value="<%= metric_name %>">
+  
+  <!-- Chart Header -->
+  <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 mb-6">
+    <h2 class="font-mono text-sm uppercase tracking-brutal">Interactive Trend</h2>
+    
+    <!-- Export Buttons -->
+    <div class="flex gap-2">
+      <button data-chart-target="exportBtn" 
+              data-action="click->chart#exportImage"
+              class="font-mono text-xs uppercase tracking-brutal px-4 py-2 border-2 border-black bg-white hover:bg-black hover:text-white transition-colors flex items-center gap-2">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
+        </svg>
+        Download PNG
+      </button>
+      <button data-action="click->chart#copyToClipboard"
+              class="font-mono text-xs uppercase tracking-brutal px-4 py-2 border-2 border-black bg-white hover:bg-black hover:text-white transition-colors flex items-center gap-2">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"></path>
+        </svg>
+        Copy
+      </button>
+    </div>
+  </div>
+
+  <!-- Chart Container (for export) -->
+  <div data-chart-target="container" class="border-2 border-black bg-white">
+    <!-- Chart Title Bar -->
+    <div class="border-b-2 border-black px-6 py-4 bg-[#F5F5F5]">
+      <div class="flex items-center justify-between">
+        <div>
+          <h3 class="font-mono text-lg font-bold uppercase"><%= title %></h3>
+          <p class="font-mono text-xs text-black/60 mt-1">Source: EuropeVersus.com • <%= source %></p>
+        </div>
+        <div class="font-mono text-xs text-black/60">
+          europeversus.com
+        </div>
+      </div>
+    </div>
+    
+    <!-- Chart Canvas -->
+    <div class="p-6">
+      <div class="relative" style="height: 400px;">
+        <canvas data-chart-target="canvas"></canvas>
+      </div>
+      
+      <!-- Custom Legend -->
+      <div data-chart-target="legend" class="flex flex-wrap gap-2 mt-4 pt-4 border-t border-black/20">
+        <!-- Populated by JavaScript -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Controls Panel -->
+  <div class="mt-6 border-2 border-black bg-white">
+    <!-- Mode Toggle -->
+    <div class="border-b-2 border-black px-6 py-4">
+      <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+        <span class="font-mono text-xs uppercase tracking-brutal font-bold">Display Mode</span>
+        <div class="flex">
+          <button data-chart-target="modeToggle"
+                  data-mode="absolute"
+                  data-action="click->chart#toggleMode"
+                  class="font-mono text-xs uppercase tracking-brutal px-4 py-2 border-2 border-black border-r-0 bg-black text-white hover:bg-[#0066FF] hover:border-[#0066FF] transition-colors">
+            Absolute Values
+          </button>
+          <button data-chart-target="modeToggle"
+                  data-mode="relative"
+                  data-action="click->chart#toggleMode"
+                  class="font-mono text-xs uppercase tracking-brutal px-4 py-2 border-2 border-black bg-white hover:bg-black hover:text-white transition-colors">
+            % Change from Start
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Year Range -->
+    <div class="border-b-2 border-black px-6 py-4">
+      <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+        <span class="font-mono text-xs uppercase tracking-brutal font-bold">Year Range</span>
+        <div class="flex items-center gap-4">
+          <div class="flex items-center gap-2">
+            <label class="font-mono text-xs text-black/60">From</label>
+            <select data-chart-target="yearStart" 
+                    data-action="change->chart#updateYearRange"
+                    class="font-mono text-sm border-2 border-black px-3 py-1.5 bg-white">
+              <% years.each do |year| %>
+                <option value="<%= year %>" <%= year == years.first ? 'selected' : '' %>><%= year %></option>
+              <% end %>
+            </select>
+          </div>
+          <span class="font-mono text-black/40">→</span>
+          <div class="flex items-center gap-2">
+            <label class="font-mono text-xs text-black/60">To</label>
+            <select data-chart-target="yearEnd" 
+                    data-action="change->chart#updateYearRange"
+                    class="font-mono text-sm border-2 border-black px-3 py-1.5 bg-white">
+              <% years.each do |year| %>
+                <option value="<%= year %>" <%= year == years.last ? 'selected' : '' %>><%= year %></option>
+              <% end %>
+            </select>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Filter Controls - Official EU groupings -->
+    <div class="border-b-2 border-black px-6 py-4">
+      <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+        <span class="font-mono text-xs uppercase tracking-brutal font-bold">Filter</span>
+        <div class="flex flex-wrap gap-2">
+          <button data-group="all" 
+                  data-action="click->chart#selectRegionGroup"
+                  class="font-mono text-xs uppercase tracking-brutal px-4 py-2 border-2 border-black bg-white hover:bg-black hover:text-white transition-colors">
+            All
+          </button>
+          <button data-group="eu-27" 
+                  data-action="click->chart#selectRegionGroup"
+                  class="font-mono text-xs uppercase tracking-brutal px-4 py-2 border-2 border-black bg-white hover:bg-black hover:text-white transition-colors">
+            EU-27
+          </button>
+          <button data-group="eurozone" 
+                  data-action="click->chart#selectRegionGroup"
+                  class="font-mono text-xs uppercase tracking-brutal px-4 py-2 border-2 border-black bg-white hover:bg-black hover:text-white transition-colors">
+            Eurozone
+          </button>
+          <button data-group="non-euro-eu" 
+                  data-action="click->chart#selectRegionGroup"
+                  class="font-mono text-xs uppercase tracking-brutal px-4 py-2 border-2 border-black bg-white hover:bg-black hover:text-white transition-colors">
+            Non-€ EU
+          </button>
+          <button data-group="non-eu" 
+                  data-action="click->chart#selectRegionGroup"
+                  class="font-mono text-xs uppercase tracking-brutal px-4 py-2 border-2 border-black bg-white hover:bg-black hover:text-white transition-colors">
+            Non-EU
+          </button>
+          <button data-group="global" 
+                  data-action="click->chart#selectRegionGroup"
+                  class="font-mono text-xs uppercase tracking-brutal px-4 py-2 border-2 border-black bg-white hover:bg-black hover:text-white transition-colors">
+            Global
+          </button>
+          <button data-group="aggregates" 
+                  data-action="click->chart#selectRegionGroup"
+                  class="font-mono text-xs uppercase tracking-brutal px-4 py-2 border-2 border-black bg-white hover:bg-black hover:text-white transition-colors">
+            Aggregates
+          </button>
+          <button data-group="clear" 
+                  data-action="click->chart#selectRegionGroup"
+                  class="font-mono text-xs uppercase tracking-brutal px-4 py-2 border-2 border-black bg-white hover:bg-black hover:text-white transition-colors text-red-600">
+            Clear
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Country Selection - Collapsible Dropdown -->
+    <div class="px-6 py-4">
+      <details class="group">
+        <summary class="flex items-center justify-between cursor-pointer list-none">
+          <div class="flex items-center gap-3">
+            <span class="font-mono text-xs uppercase tracking-brutal font-bold">Select Countries/Regions</span>
+            <span data-chart-target="selectionCount" class="font-mono text-xs bg-[#0066FF] text-white px-2 py-0.5">4 selected</span>
+          </div>
+          <svg class="w-5 h-5 transition-transform group-open:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+          </svg>
+        </summary>
+        
+        <div class="mt-4 pt-4 border-t border-black/20">
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6">
+            <% filtered_groups.each do |group_name, countries| %>
+              <div>
+                <h4 class="font-mono text-xs uppercase tracking-brutal text-black/60 mb-3 pb-2 border-b border-black/20"><%= group_name %></h4>
+                <div class="space-y-1">
+                  <% countries.each do |country| %>
+                    <label class="flex items-center gap-2 cursor-pointer hover:bg-[#F5F5F5] px-2 py-1 -mx-2 transition-colors">
+                      <input type="checkbox" 
+                             data-chart-target="countryCheckbox"
+                             data-country="<%= country[:key] %>"
+                             data-category="<%= country[:category] %>"
+                             data-action="change->chart#toggleCountry"
+                             class="w-4 h-4 border-2 border-black accent-[#0066FF]"
+                             <%= ['europe', 'usa', 'china', 'india'].include?(country[:key]) ? 'checked' : '' %>>
+                      <span class="text-base"><%= country[:flag] %></span>
+                      <span class="font-mono text-xs"><%= country[:name] %></span>
+                    </label>
+                  <% end %>
+                </div>
+              </div>
+            <% end %>
+          </div>
+        </div>
+      </details>
+    </div>
+  </div>
+</div>

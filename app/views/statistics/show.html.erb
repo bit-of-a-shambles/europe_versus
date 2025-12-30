@@ -1,38 +1,36 @@
 <% 
-  # Define countries array for use throughout the template
+  # Define countries array using official EU classifications
   key_countries = [
-    # Major EU economies
-    { key: 'germany', flag: '🇩🇪', name: 'Germany', category: 'major-eu' },
-    { key: 'france', flag: '🇫🇷', name: 'France', category: 'major-eu' },
-    { key: 'italy', flag: '🇮🇹', name: 'Italy', category: 'major-eu' },
-    { key: 'spain', flag: '🇪🇸', name: 'Spain', category: 'major-eu' },
-    { key: 'netherlands', flag: '🇳🇱', name: 'Netherlands', category: 'major-eu' },
-    { key: 'poland', flag: '🇵🇱', name: 'Poland', category: 'major-eu' },
-    { key: 'sweden', flag: '🇸🇪', name: 'Sweden', category: 'major-eu' },
-    { key: 'denmark', flag: '🇩🇰', name: 'Denmark', category: 'major-eu' },
-    # More EU countries
-    { key: 'finland', flag: '🇫🇮', name: 'Finland', category: 'small-eu' },
-    { key: 'austria', flag: '🇦🇹', name: 'Austria', category: 'small-eu' },
-    { key: 'belgium', flag: '🇧🇪', name: 'Belgium', category: 'small-eu' },
-    { key: 'ireland', flag: '🇮🇪', name: 'Ireland', category: 'small-eu' },
-    { key: 'portugal', flag: '🇵🇹', name: 'Portugal', category: 'small-eu' },
-    { key: 'greece', flag: '🇬🇷', name: 'Greece', category: 'small-eu' },
-    { key: 'czech_republic', flag: '🇨🇿', name: 'Czechia', category: 'small-eu' },
-    { key: 'hungary', flag: '🇭🇺', name: 'Hungary', category: 'small-eu' },
-    # Central/Eastern EU countries
-    { key: 'romania', flag: '🇷🇴', name: 'Romania', category: 'small-eu' },
-    { key: 'croatia', flag: '🇭🇷', name: 'Croatia', category: 'small-eu' },
-    { key: 'bulgaria', flag: '🇧🇬', name: 'Bulgaria', category: 'small-eu' },
-    { key: 'slovakia', flag: '🇸🇰', name: 'Slovakia', category: 'small-eu' },
-    { key: 'slovenia', flag: '🇸🇮', name: 'Slovenia', category: 'small-eu' },
-    { key: 'estonia', flag: '🇪🇪', name: 'Estonia', category: 'small-eu' },
-    { key: 'latvia', flag: '🇱🇻', name: 'Latvia', category: 'small-eu' },
-    { key: 'lithuania', flag: '🇱🇹', name: 'Lithuania', category: 'small-eu' },
-    # Small EU countries
-    { key: 'luxembourg', flag: '🇱🇺', name: 'Luxembourg', category: 'small-eu' },
-    { key: 'malta', flag: '🇲🇹', name: 'Malta', category: 'small-eu' },
-    { key: 'cyprus', flag: '🇨🇾', name: 'Cyprus', category: 'small-eu' },
-    # Other European countries (non-EU)
+    # Eurozone countries (20 countries using the Euro)
+    { key: 'germany', flag: '🇩🇪', name: 'Germany', category: 'eurozone' },
+    { key: 'france', flag: '🇫🇷', name: 'France', category: 'eurozone' },
+    { key: 'italy', flag: '🇮🇹', name: 'Italy', category: 'eurozone' },
+    { key: 'spain', flag: '🇪🇸', name: 'Spain', category: 'eurozone' },
+    { key: 'netherlands', flag: '🇳🇱', name: 'Netherlands', category: 'eurozone' },
+    { key: 'belgium', flag: '🇧🇪', name: 'Belgium', category: 'eurozone' },
+    { key: 'austria', flag: '🇦🇹', name: 'Austria', category: 'eurozone' },
+    { key: 'ireland', flag: '🇮🇪', name: 'Ireland', category: 'eurozone' },
+    { key: 'portugal', flag: '🇵🇹', name: 'Portugal', category: 'eurozone' },
+    { key: 'greece', flag: '🇬🇷', name: 'Greece', category: 'eurozone' },
+    { key: 'finland', flag: '🇫🇮', name: 'Finland', category: 'eurozone' },
+    { key: 'slovakia', flag: '🇸🇰', name: 'Slovakia', category: 'eurozone' },
+    { key: 'slovenia', flag: '🇸🇮', name: 'Slovenia', category: 'eurozone' },
+    { key: 'estonia', flag: '🇪🇪', name: 'Estonia', category: 'eurozone' },
+    { key: 'latvia', flag: '🇱🇻', name: 'Latvia', category: 'eurozone' },
+    { key: 'lithuania', flag: '🇱🇹', name: 'Lithuania', category: 'eurozone' },
+    { key: 'luxembourg', flag: '🇱🇺', name: 'Luxembourg', category: 'eurozone' },
+    { key: 'malta', flag: '🇲🇹', name: 'Malta', category: 'eurozone' },
+    { key: 'cyprus', flag: '🇨🇾', name: 'Cyprus', category: 'eurozone' },
+    { key: 'croatia', flag: '🇭🇷', name: 'Croatia', category: 'eurozone' },
+    # Non-Euro EU members (7 EU countries not using the Euro)
+    { key: 'poland', flag: '🇵🇱', name: 'Poland', category: 'non-euro-eu' },
+    { key: 'sweden', flag: '🇸🇪', name: 'Sweden', category: 'non-euro-eu' },
+    { key: 'denmark', flag: '🇩🇰', name: 'Denmark', category: 'non-euro-eu' },
+    { key: 'czech_republic', flag: '🇨🇿', name: 'Czechia', category: 'non-euro-eu' },
+    { key: 'hungary', flag: '🇭🇺', name: 'Hungary', category: 'non-euro-eu' },
+    { key: 'romania', flag: '🇷🇴', name: 'Romania', category: 'non-euro-eu' },
+    { key: 'bulgaria', flag: '🇧🇬', name: 'Bulgaria', category: 'non-euro-eu' },
+    # Non-EU European countries
     { key: 'switzerland', flag: '🇨🇭', name: 'Switzerland', category: 'non-eu' },
     { key: 'norway', flag: '🇳🇴', name: 'Norway', category: 'non-eu' },
     { key: 'united_kingdom', flag: '🇬🇧', name: 'UK', category: 'non-eu' },
@@ -80,20 +78,13 @@
   </div>
 
   <!-- Interactive Chart -->
-  <% if @chart_name %>
-    <div class="py-12 border-b-2 border-black">
-      <h2 class="font-mono text-sm uppercase tracking-brutal mb-8">Interactive Trend</h2>
-      <div class="border-2 border-black bg-white overflow-hidden">
-        <div style="position:relative;padding-bottom:56.25%;height:0;overflow:hidden;">
-          <iframe
-            src="https://ourworldindata.org/grapher/<%= @chart_name %>?tab=chart&country=Germany~France~Italy~Spain~Netherlands~Poland~Sweden~Denmark~Finland~Austria~Belgium~Czechia~Estonia~Greece~Hungary~Ireland~Latvia~Lithuania~Luxembourg~Malta~Portugal~Slovakia~Slovenia~Bulgaria~Croatia~Romania~Cyprus~Norway~Switzerland~United+Kingdom~Iceland~European+Union+%2827%29~Europe+and+Central+Asia+%28WB%29~United+States~India~China&time=2000..2024&yScale=linear"
-            style="position:absolute;top:0;left:0;width:100%;height:100%;border:0;background:white;"
-            title="<%= @statistic&.metric || @chart_name&.humanize %>"
-            loading="lazy"
-          ></iframe>
-        </div>
-      </div>
-    </div>
+  <% if @chart_data && @chart_data[:years]&.any? %>
+    <%= render 'shared/chart', 
+        chart_data: @chart_data,
+        title: @statistic&.metric || @chart_name&.humanize,
+        unit: @chart_data.dig(:metadata, :unit) || @statistic&.unit,
+        metric_name: @metric_name,
+        source: @statistic&.source || @chart_data&.dig(:metadata, :source) %>
   <% end %>
 
   <!-- Regional Comparison Cards -->
@@ -153,11 +144,14 @@
         <button data-filter="all" class="filter-btn active font-mono text-xs uppercase tracking-brutal px-4 py-2 border-2 border-black bg-black text-white hover:bg-[#0066FF] hover:border-[#0066FF] transition-colors">
           All
         </button>
-        <button data-filter="major-eu" class="filter-btn font-mono text-xs uppercase tracking-brutal px-4 py-2 border-2 border-black bg-white hover:bg-black hover:text-white transition-colors">
-          Major EU
+        <button data-filter="eu-27" class="filter-btn font-mono text-xs uppercase tracking-brutal px-4 py-2 border-2 border-black bg-white hover:bg-black hover:text-white transition-colors">
+          EU-27
         </button>
-        <button data-filter="small-eu" class="filter-btn font-mono text-xs uppercase tracking-brutal px-4 py-2 border-2 border-black bg-white hover:bg-black hover:text-white transition-colors">
-          Small EU
+        <button data-filter="eurozone" class="filter-btn font-mono text-xs uppercase tracking-brutal px-4 py-2 border-2 border-black bg-white hover:bg-black hover:text-white transition-colors">
+          Eurozone
+        </button>
+        <button data-filter="non-euro-eu" class="filter-btn font-mono text-xs uppercase tracking-brutal px-4 py-2 border-2 border-black bg-white hover:bg-black hover:text-white transition-colors">
+          Non-€ EU
         </button>
         <button data-filter="non-eu" class="filter-btn font-mono text-xs uppercase tracking-brutal px-4 py-2 border-2 border-black bg-white hover:bg-black hover:text-white transition-colors">
           Non-EU
@@ -352,14 +346,21 @@ function initializeFilters() {
       this.classList.add('active', 'bg-black', 'text-white');
       this.classList.remove('bg-white');
       
-      // Filter columns
+      // Filter columns - EU-27 includes both eurozone and non-euro-eu
       countryColumns.forEach(column => {
         const category = column.dataset.category;
-        if (filter === 'all' || category === filter) {
-          column.style.display = '';
+        let shouldShow = false;
+        
+        if (filter === 'all') {
+          shouldShow = true;
+        } else if (filter === 'eu-27') {
+          // EU-27 = Eurozone + Non-Euro EU members
+          shouldShow = (category === 'eurozone' || category === 'non-euro-eu');
         } else {
-          column.style.display = 'none';
+          shouldShow = (category === filter);
         }
+        
+        column.style.display = shouldShow ? '' : 'none';
       });
     });
   });
