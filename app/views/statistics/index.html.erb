@@ -11,14 +11,22 @@
   </section>
 
   <!-- Category Quick Links -->
-  <div class="grid grid-cols-2 md:grid-cols-4 gap-0 border-b-2 border-black">
-    <% ['economy','development','environment','innovation'].each_with_index do |cat, index| %>
-      <%= link_to "#category-#{cat}", class: "block p-6 border-r-2 border-black #{'border-r-0' if index == 3} hover:bg-[#F5F5F5] transition-colors group" do %>
-        <span class="block font-mono text-3xl font-bold text-black/20 group-hover:text-[#0066FF] transition-colors mb-2">0<%= index + 1 %></span>
-        <span class="block font-mono text-sm uppercase tracking-brutal"><%= cat.humanize %></span>
-      <% end %>
-    <% end %>
-  </div>
+  <% if @statistics.any? %>
+    <% categories = @statistics.keys %>
+    <div class="flex items-center gap-6 py-6 border-b-2 border-black">
+      <span class="font-mono text-xs uppercase tracking-brutal text-black/60">Jump to</span>
+      <div class="flex flex-wrap gap-3">
+        <% categories.each_with_index do |cat, index| %>
+          <%= link_to "#category-#{cat}", class: "inline-flex items-center gap-2 px-4 py-2 border-2 border-black font-mono text-xs uppercase tracking-brutal hover:bg-black hover:text-white transition-colors" do %>
+            <span class="text-black/40">0<%= index + 1 %></span>
+            <span><%= cat.humanize %></span>
+          <% end %>
+        <% end %>
+      </div>
+      <div class="flex-1 h-px bg-black/20 hidden md:block"></div>
+      <span class="font-mono text-xs text-black/40 hidden md:block"><%= categories.size %> categories</span>
+    </div>
+  <% end %>
 
   <% if @statistics.any? %>
 

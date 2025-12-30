@@ -184,7 +184,6 @@
       <div class="mb-8">
         <div class="flex items-baseline gap-2 mb-2">
           <span class="font-mono text-xs uppercase tracking-brutal text-black/60">EU</span>
-          <span class="bg-[#FFCC00] px-2 py-0.5 font-mono text-xs font-bold">LOW</span>
         </div>
         <% if @child_mortality_data && @child_mortality_data[:countries] && @child_mortality_data[:countries][:europe] %>
           <div class="font-mono text-6xl font-bold text-[#0066FF] tracking-tight">
@@ -218,12 +217,12 @@
       <% end %>
     </div>
     
-    <!-- Electricity Access Card -->
+    <!-- Healthy Life Expectancy Card -->
     <div class="border-2 border-black border-t-0 border-l-0 p-8 bg-white">
       <div class="flex justify-between items-start mb-8">
-        <h3 class="font-mono text-sm uppercase tracking-brutal">Electricity Access</h3>
-        <% if @electricity_access_data && @electricity_access_data[:countries] && @electricity_access_data[:countries][:europe] %>
-          <span class="font-mono text-xs bg-black text-white px-2 py-1"><%= @electricity_access_data[:countries][:europe][:year] %></span>
+        <h3 class="font-mono text-sm uppercase tracking-brutal">Healthy Life Expectancy</h3>
+        <% if @healthy_life_expectancy_data && @healthy_life_expectancy_data[:countries] && @healthy_life_expectancy_data[:countries][:europe] %>
+          <span class="font-mono text-xs bg-black text-white px-2 py-1"><%= @healthy_life_expectancy_data[:countries][:europe][:year] %></span>
         <% end %>
       </div>
       
@@ -232,9 +231,9 @@
         <div class="flex items-baseline gap-2 mb-2">
           <span class="font-mono text-xs uppercase tracking-brutal text-black/60">EU</span>
         </div>
-        <% if @electricity_access_data && @electricity_access_data[:countries] && @electricity_access_data[:countries][:europe] %>
+        <% if @healthy_life_expectancy_data && @healthy_life_expectancy_data[:countries] && @healthy_life_expectancy_data[:countries][:europe] %>
           <div class="font-mono text-6xl font-bold text-[#0066FF] tracking-tight">
-            <%= @electricity_access_data[:countries][:europe][:value].round(1) %><span class="text-2xl">%</span>
+            <%= @healthy_life_expectancy_data[:countries][:europe][:value].round(1) %><span class="text-2xl"> yrs</span>
           </div>
         <% else %>
           <div class="font-mono text-6xl font-bold text-black/20 tracking-tight">—</div>
@@ -250,8 +249,8 @@
         ].each do |country| %>
           <div class="flex justify-between items-center font-mono">
             <span class="text-sm text-black/60"><%= country[:code] %></span>
-            <% if @electricity_access_data && @electricity_access_data[:countries] && @electricity_access_data[:countries][country[:key]] %>
-              <span class="text-lg"><%= @electricity_access_data[:countries][country[:key]][:value].round(1) %>%</span>
+            <% if @healthy_life_expectancy_data && @healthy_life_expectancy_data[:countries] && @healthy_life_expectancy_data[:countries][country[:key]] %>
+              <span class="text-lg"><%= @healthy_life_expectancy_data[:countries][country[:key]][:value].round(1) %> yrs</span>
             <% else %>
               <span class="text-lg text-black/30">—</span>
             <% end %>
@@ -259,7 +258,7 @@
         <% end %>
       </div>
       
-      <%= link_to "/statistics/electricity-access", class: "inline-block mt-8 font-mono text-sm underline underline-offset-4 hover:text-[#0066FF]" do %>
+      <%= link_to "/statistics/healthy-life-expectancy", class: "inline-block mt-8 font-mono text-sm underline underline-offset-4 hover:text-[#0066FF]" do %>
         DETAILS →
       <% end %>
     </div>

@@ -186,9 +186,10 @@
         </div>
         
         <% if @population_data[:european_countries] %>
-          <details class="mt-6">
-            <summary class="cursor-pointer font-mono text-sm uppercase tracking-brutal hover:text-[#0066FF] transition-colors">
-              ▼ View breakdown by country
+          <details class="mt-6 group">
+            <summary class="cursor-pointer font-mono text-sm uppercase tracking-brutal hover:text-[#0066FF] transition-colors list-none flex items-center gap-2">
+              <span class="group-open:rotate-90 transition-transform">▶</span>
+              View breakdown by country
             </summary>
             <div class="mt-4 grid md:grid-cols-3 gap-2 max-h-96 overflow-y-auto border-t-2 border-black pt-4">
               <% @population_data[:european_countries].sort.each do |country| %>
@@ -279,9 +280,10 @@
 
         <!-- Detailed Calculation -->
         <% if @gdp_data[:european_countries] && @population_data[:countries] %>
-          <details class="border-2 border-black">
-            <summary class="cursor-pointer p-4 font-mono text-sm uppercase tracking-brutal hover:bg-[#F5F5F5] transition-colors">
-              ▼ View detailed calculation (All <%= @european_countries.size %> Countries)
+          <details class="border-2 border-black group">
+            <summary class="cursor-pointer p-4 font-mono text-sm uppercase tracking-brutal hover:bg-[#F5F5F5] transition-colors list-none flex items-center gap-2">
+              <span class="group-open:rotate-90 transition-transform">▶</span>
+              View detailed calculation (All <%= @european_countries.size %> Countries)
             </summary>
             <div class="p-6 border-t-2 border-black bg-[#F5F5F5]">
               <% 
@@ -518,7 +520,7 @@
       <h2 class="text-4xl font-black tracking-tighter">DATA SOURCES</h2>
     </div>
     
-    <div class="grid md:grid-cols-2 gap-0">
+    <div class="grid md:grid-cols-3 gap-0">
       <div class="border-2 border-black p-8">
         <h3 class="font-mono text-sm uppercase tracking-brutal font-bold mb-6 pb-4 border-b border-black">Our World in Data</h3>
         <p class="text-black/60 mb-6">
@@ -527,6 +529,20 @@
         <a href="https://ourworldindata.org" target="_blank" rel="noopener" 
            class="inline-flex items-center gap-2 font-mono text-sm uppercase tracking-brutal underline underline-offset-4 hover:text-[#0066FF] transition-colors">
           ourworldindata.org
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
+          </svg>
+        </a>
+      </div>
+
+      <div class="border-2 border-black border-l-0 p-8">
+        <h3 class="font-mono text-sm uppercase tracking-brutal font-bold mb-6 pb-4 border-b border-black">International Labour Organization</h3>
+        <p class="text-black/60 mb-6">
+          UN agency for labour statistics. Source for employment, wages, and working conditions data.
+        </p>
+        <a href="https://ilostat.ilo.org" target="_blank" rel="noopener" 
+           class="inline-flex items-center gap-2 font-mono text-sm uppercase tracking-brutal underline underline-offset-4 hover:text-[#0066FF] transition-colors">
+          ilostat.ilo.org
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
           </svg>

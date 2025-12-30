@@ -62,3 +62,13 @@
 ::-webkit-scrollbar-thumb:hover {
   @apply bg-gray-400;
 }
+
+/* Hide default details/summary marker */
+summary::-webkit-details-marker {
+  display: none;
+}
+
+summary::marker {
+  display: none;
+  content: "";
+}

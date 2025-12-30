@@ -9,7 +9,7 @@ class HomeController < ApplicationController
     @gdp_data = fetch_latest_gdp_data
     @population_data = fetch_latest_population_data
     @child_mortality_data = fetch_latest_child_mortality_data
-    @electricity_access_data = fetch_latest_electricity_access_data
+    @healthy_life_expectancy_data = fetch_latest_healthy_life_expectancy_data
   end
 
   def methodology
@@ -108,17 +108,17 @@ class HomeController < ApplicationController
     { error: true }
   end
 
-  def fetch_latest_electricity_access_data
-    # Get latest electricity access data for key countries using EuropeanMetricsService
+  def fetch_latest_healthy_life_expectancy_data
+    # Get latest healthy life expectancy data for key countries using EuropeanMetricsService
     key_countries = [ "europe", "european_union", "usa", "india", "china" ]
-    latest_data = EuropeanMetricsService.latest_metric_for_countries("electricity_access", key_countries)
+    latest_data = EuropeanMetricsService.latest_metric_for_countries("healthy_life_expectancy", key_countries)
 
     {
       countries: normalize_metric_data(latest_data),
       year: latest_data.values.first&.dig(:year) || 2024
     }
   rescue StandardError => e
-    Rails.logger.error "Failed to fetch electricity access data: #{e.message}"
+    Rails.logger.error "Failed to fetch healthy life expectancy data: #{e.message}"
     { error: true }
   end
 
