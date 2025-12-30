@@ -28,7 +28,7 @@
             <% unless compact_view %>
               <li class="flex items-start gap-2">
                 <span class="text-[#0066FF] font-bold">—</span>
-                <span><strong class="text-black">Non-EU European:</strong> UK, Switzerland, Norway, Ukraine</span>
+                <span><strong class="text-black">Non-EU European:</strong> UK, Switzerland, Norway, Ukraine, etc.</span>
               </li>
               <li class="flex items-start gap-2">
                 <span class="text-[#0066FF] font-bold">—</span>
@@ -96,15 +96,17 @@
         <% if show_current_values %>
           <% 
             begin
+              gdp_data = EuropeanMetricsService.latest_metric_for_countries('gdp_per_capita_ppp', ['europe'])
               population_data = PopulationDataService.latest_population_for_countries(['europe'])
-              if population_data && population_data['europe']
+              if gdp_data && gdp_data['europe'] && population_data && population_data['europe']
+                total_gdp = (gdp_data['europe'][:value].to_f * population_data['europe'][:value].to_f / 1_000_000_000_000).round(1)
           %>
             <div class="mt-4 md:mt-6 pt-4 md:pt-6 border-t border-black">
-              <div class="font-mono text-[10px] md:text-xs uppercase tracking-brutal text-black/50 mb-1 md:mb-2">Example: Population</div>
+              <div class="font-mono text-[10px] md:text-xs uppercase tracking-brutal text-black/50 mb-1 md:mb-2">Example: Total GDP</div>
               <div class="font-mono text-2xl md:text-3xl font-bold text-[#0066FF]">
-                <%= number_with_delimiter(population_data['europe'][:value].to_i / 1_000_000) %>M
+                $<%= total_gdp %>T
               </div>
-              <div class="font-mono text-[10px] md:text-xs text-black/40"><%= population_data['europe'][:year] %></div>
+              <div class="font-mono text-[10px] md:text-xs text-black/40"><%= gdp_data['europe'][:year] %></div>
             </div>
           <% 
               end
@@ -115,7 +117,7 @@
       </div>
       
       <!-- Population-Weighted Average -->
-      <div class="border-2 border-black border-t-0 p-5 md:p-8 bg-white">
+      <div class="border-2 border-black border-t-0 md:border-l-0 p-5 md:p-8 bg-white">
         <div class="flex items-center gap-3 md:gap-4 mb-4 md:mb-6 pb-4 md:pb-6 border-b border-black">
           <span class="font-mono text-xs uppercase tracking-brutal bg-black text-white px-2 md:px-3 py-1">03</span>
           <h3 class="font-mono text-xs md:text-sm uppercase tracking-brutal font-bold">Population-Weighted</h3>

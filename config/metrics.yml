@@ -286,7 +286,7 @@ researchers_per_million:
   aggregation_method: population_weighted
   enabled: true
 
-research_spending_gdp:
+research_spending_as_a_share_of_gdp:
   source: owid
   owid_slug: research-spending-gdp
   start_year: 1990
