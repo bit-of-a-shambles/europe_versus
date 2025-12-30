@@ -231,16 +231,27 @@ class OwidMetricImporter
     end
 
     def calculate_aggregates(metric_name, config, verbose)
+      # Determine aggregation method from config (default: population_weighted)
+      aggregation_method = config[:aggregation_method] || :population_weighted
+
+      # Map 'sum' to 'simple_sum' for EuropeanMetricsService
+      method = case aggregation_method.to_sym
+      when :sum then :simple_sum
+      when :average then :population_weighted
+      else aggregation_method.to_sym
+      end
+
       # Calculate Europe aggregate
-      puts "   → Calculating Europe aggregate..." if verbose
-      EuropeanMetricsService.calculate_europe_aggregate(metric_name)
+      puts "   → Calculating Europe aggregate (method: #{method})..." if verbose
+      EuropeanMetricsService.calculate_europe_aggregate(metric_name, method: method)
 
       # Calculate EU-27 aggregate
       puts "   → Calculating EU-27 aggregate..." if verbose
       EuropeanMetricsService.calculate_group_aggregate(
         metric_name,
         country_keys: EuropeanMetricsService::EU27_COUNTRIES,
-        target_key: "european_union"
+        target_key: "european_union",
+        options: { method: method }
       )
     rescue => e
       puts "   ⚠️  Warning: Aggregate calculation failed: #{e.message}" if verbose

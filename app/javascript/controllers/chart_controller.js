@@ -266,12 +266,17 @@ export default class extends Controller {
       if (isAggregate && Object.keys(coverageData).length > 0) {
         segment = {
           borderDash: ctx => {
-            // Get the year for this segment (convert to string for object key lookup)
-            const index = ctx.p0DataIndex
-            const year = String(years[index])
-            const coverage = coverageData[year]
-            // Use dotted line if coverage is below threshold (70% population)
-            if (coverage !== undefined && coverage !== null && coverage < INCOMPLETE_THRESHOLD) {
+            // Get the years for this segment (p0 = start point, p1 = end point)
+            const startIndex = ctx.p0DataIndex
+            const endIndex = ctx.p1DataIndex
+            const startYear = String(years[startIndex])
+            const endYear = String(years[endIndex])
+            const startCoverage = coverageData[startYear]
+            const endCoverage = coverageData[endYear]
+            // Use dotted line if EITHER endpoint has coverage below threshold (70% population)
+            const startIncomplete = startCoverage !== undefined && startCoverage !== null && startCoverage < INCOMPLETE_THRESHOLD
+            const endIncomplete = endCoverage !== undefined && endCoverage !== null && endCoverage < INCOMPLETE_THRESHOLD
+            if (startIncomplete || endIncomplete) {
               return [5, 5] // Dotted line pattern
             }
             return undefined // Solid line
