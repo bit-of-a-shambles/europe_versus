@@ -302,7 +302,7 @@ class EuropeanMetricsService
           .first
   end
 
-  def self.store_europe_metric(metric_name, year, value, description = nil)
+  def self.store_europe_metric(metric_name, year, value, description = nil, source_unit: nil)
     # Delete existing record to avoid duplicates
     existing = Metric.for_metric(metric_name)
                     .for_country("europe")
@@ -310,21 +310,8 @@ class EuropeanMetricsService
                     .first
     existing&.destroy
 
-    # Determine appropriate unit based on metric type
-    unit = case metric_name
-    when "population"
-      "people"
-    when "gdp_per_capita_ppp"
-      "international_dollars"
-    when "life_expectancy"
-      "years"
-    when "birth_rate", "death_rate", "literacy_rate"
-      "rate"
-    when "child_mortality_rate", "electricity_access"
-      "%"
-    else
-      "units"
-    end
+    # Use provided source unit or look it up from existing data, or fall back to defaults
+    unit = source_unit || get_unit_for_metric(metric_name)
 
     # Create new Europe aggregate record
     Metric.create!(
@@ -351,10 +338,43 @@ class EuropeanMetricsService
     )
   end
 
+  # Get the unit for a metric from existing data or OWID config
+  def self.get_unit_for_metric(metric_name)
+    # First try to get unit from existing country data
+    sample_metric = Metric.where(metric_name: metric_name)
+                          .where.not(country: [ "europe", "european_union" ])
+                          .where.not(unit: [ nil, "", "units" ])
+                          .first
+    return sample_metric.unit if sample_metric&.unit.present?
+
+    # Fall back to OWID config if available
+    if defined?(OwidMetricImporter)
+      config = OwidMetricImporter.all_configs[metric_name]
+      return config[:unit] if config && config[:unit].present?
+    end
+
+    # Final fallback to hardcoded defaults
+    case metric_name
+    when "population"
+      "people"
+    when "gdp_per_capita_ppp"
+      "international $"
+    when "life_expectancy", "healthy_life_expectancy"
+      "years"
+    when "child_mortality_rate", "electricity_access"
+      "%"
+    else
+      "units"
+    end
+  end
+
   def self.handle_extrapolation(metric_name, european_countries, metric_years, population_years, common_years)
     metric_only_years = metric_years - common_years
     latest_pop_year = population_years.max
     stored_count = 0
+
+    # Minimum number of countries required for a valid aggregate (at least 10% of European countries)
+    min_countries_for_aggregate = (european_countries.size * 0.1).ceil.clamp(5, 20)
 
     if latest_pop_year && metric_only_years.any?
       puts "  Extrapolating for years #{metric_only_years.join(', ')} using #{latest_pop_year} population weights..."
@@ -377,11 +397,14 @@ class EuropeanMetricsService
           end
         end
 
-        if total_population > 0
+        # Only create aggregate if we have enough countries for a representative sample
+        if total_population > 0 && contributing_countries >= min_countries_for_aggregate
           europe_average = total_weighted_value / total_population
           description = "Population-weighted European average of #{metric_name.humanize} using #{latest_pop_year} population weights (extrapolated); adjusted for transcontinental populations; #{contributing_countries} contributing countries."
           store_europe_metric(metric_name, year, europe_average, description)
           stored_count += 1
+        elsif contributing_countries > 0 && contributing_countries < min_countries_for_aggregate
+          puts "    Skipping year #{year}: only #{contributing_countries} countries have data (minimum #{min_countries_for_aggregate} required)"
         end
       end
     end

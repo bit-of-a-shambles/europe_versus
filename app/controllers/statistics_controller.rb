@@ -45,8 +45,15 @@ class StatisticsController < ApplicationController
       # Use local life satisfaction data from our database
       @chart_data = build_metric_chart_data("life_satisfaction", "Life Satisfaction", "score (0-10)")
       @chart_name = "happiness-cantril-ladder"
+    elsif Metric.where(metric_name: @metric_name).exists?
+      # Use local data for any metric we have in our database
+      config = OwidMetricImporter.all_configs[@metric_name] if defined?(OwidMetricImporter)
+      title = config&.dig(:description) || @metric_name.humanize.titleize
+      unit = config&.dig(:unit) || Metric.where(metric_name: @metric_name).first&.unit || ""
+      @chart_data = build_metric_chart_data(@metric_name, title, unit)
+      @chart_name = config&.dig(:owid_slug) || chart_name
     else
-      # Use Our World in Data for other charts
+      # Use Our World in Data for charts not in our database
       @chart_data = OurWorldInDataService.fetch_chart_data(chart_name, start_year: 2000, end_year: 2024)
       @chart_name = chart_name
     end
@@ -57,8 +64,24 @@ class StatisticsController < ApplicationController
     Rails.logger.info "CHART DEBUG - Sample country data (europe): #{@chart_data&.dig(:countries, 'europe')&.inspect}"
     Rails.logger.info "CHART DEBUG - Sample country data (usa): #{@chart_data&.dig(:countries, 'usa')&.inspect}"
 
-    # Render the chart template (was previously named chart.html.erb)
-    render "chart"
+    # Build a statistic object for the show view
+    if @chart_data && !@chart_data[:error]
+      latest_year = @chart_data[:years]&.max
+      @statistic = OpenStruct.new(
+        metric: @chart_data.dig(:metadata, :title) || @chart_name.humanize,
+        description: @chart_data.dig(:metadata, :description),
+        year: latest_year,
+        unit: @chart_data.dig(:metadata, :unit),
+        source: @chart_data.dig(:metadata, :source),
+        europe_value: @chart_data.dig(:countries, "europe", :data, latest_year) || @chart_data.dig(:countries, "european_union", :data, latest_year),
+        us_value: @chart_data.dig(:countries, "usa", :data, latest_year),
+        india_value: @chart_data.dig(:countries, "india", :data, latest_year),
+        china_value: @chart_data.dig(:countries, "china", :data, latest_year)
+      )
+    end
+
+    # Render the show template which has the new Swiss Brutalist design
+    render "show"
   end
 
   private
@@ -185,17 +208,18 @@ class StatisticsController < ApplicationController
     europe_value = europe_record&.metric_value || 0
     europe_unit = europe_record&.unit || latest_metrics.first.unit
 
-    # Create simple struct for index view
+    # Create simple struct for index view - use nil for missing data, not 0
     OpenStruct.new(
       id: metric_name.tr("_", "-"), # Use hyphenated version for URLs
       metric: latest_metrics.first.metric_display_name,
-      europe_value: europe_value,
-      us_value: by_country["usa"]&.metric_value || 0,
-      india_value: by_country["india"]&.metric_value || 0,
-      china_value: by_country["china"]&.metric_value || 0,
+      europe_value: europe_record&.metric_value,
+      us_value: by_country["usa"]&.metric_value,
+      india_value: by_country["india"]&.metric_value,
+      china_value: by_country["china"]&.metric_value,
       unit: europe_unit,
       year: latest_metrics.first.year,
-      description: europe_record&.description || latest_metrics.first.description
+      description: europe_record&.description || latest_metrics.first.description,
+      source: europe_record&.source || latest_metrics.first.source
     )
   end
 end

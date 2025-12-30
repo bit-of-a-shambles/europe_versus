@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EuropeVersus — Brand Concept 2: Swiss Brutalist Data</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            'pure-black': '#000000',
+            'electric': '#0066FF',
+            'signal': '#FFCC00',
+            'surface': '#F5F5F5',
+          },
+          fontFamily: {
+            'sans': ['Inter', 'Helvetica Neue', 'Helvetica', 'Arial', 'sans-serif'],
+            'mono': ['"Space Mono"', 'monospace'],
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body {
+      font-family: 'Inter', 'Helvetica Neue', sans-serif;
+    }
+    .tracking-brutal {
+      letter-spacing: 0.15em;
+    }
+  </style>
+</head>
+<body class="bg-white text-pure-black min-h-screen">
+  
+  <!-- Header -->
+  <header class="bg-pure-black text-white">
+    <div class="max-w-7xl mx-auto">
+      <div class="flex items-center justify-between px-6 py-4">
+        <a href="#" class="font-mono font-bold text-xl tracking-tight">
+          EUROPEVERSUS
+        </a>
+        <nav class="hidden md:flex items-center gap-8">
+          <a href="#" class="text-sm font-medium tracking-brutal uppercase hover:underline underline-offset-4">Home</a>
+          <a href="#" class="text-sm font-medium tracking-brutal uppercase hover:underline underline-offset-4">Statistics</a>
+          <a href="#" class="text-sm font-medium tracking-brutal uppercase hover:underline underline-offset-4">Methodology</a>
+          <a href="#" class="text-sm font-medium tracking-brutal uppercase hover:underline underline-offset-4">About</a>
+        </nav>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+    <!-- Hero Section -->
+    <section class="border-b-2 border-pure-black">
+      <div class="max-w-7xl mx-auto px-6 py-20">
+        <div class="grid md:grid-cols-2 gap-12 items-end">
+          <div>
+            <h1 class="text-8xl md:text-[10rem] font-black leading-none tracking-tighter">
+              EUROPE<br>
+              <span class="text-electric">VERSUS</span>
+            </h1>
+          </div>
+          <div class="border-l-2 border-pure-black pl-8">
+            <p class="text-xl font-light leading-relaxed mb-8">
+              Comparative statistics for the EU, US, India, and China. 
+              Data from Our World in Data and official sources.
+            </p>
+            <div class="h-px bg-pure-black mb-8"></div>
+            <a href="#" class="inline-flex items-center gap-4 bg-pure-black text-white px-8 py-4 font-mono text-sm uppercase tracking-brutal hover:bg-electric transition-colors">
+              View Statistics
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
+              </svg>
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+    
+    <!-- Key Stats Banner -->
+    <section class="bg-surface border-b-2 border-pure-black">
+      <div class="max-w-7xl mx-auto px-6">
+        <div class="grid grid-cols-2 md:grid-cols-4">
+          <div class="py-8 pr-6 border-r-2 border-pure-black">
+            <div class="font-mono text-xs uppercase tracking-brutal text-pure-black/60 mb-2">GDP/CAPITA</div>
+            <div class="font-mono text-4xl font-bold text-electric">$56,471</div>
+          </div>
+          <div class="py-8 px-6 border-r-2 border-pure-black">
+            <div class="font-mono text-xs uppercase tracking-brutal text-pure-black/60 mb-2">LIFE EXPECTANCY</div>
+            <div class="font-mono text-4xl font-bold text-electric">81.2</div>
+          </div>
+          <div class="py-8 px-6 border-r-2 border-pure-black">
+            <div class="font-mono text-xs uppercase tracking-brutal text-pure-black/60 mb-2">CO₂/CAPITA</div>
+            <div class="font-mono text-4xl font-bold text-electric">5.7t</div>
+          </div>
+          <div class="py-8 pl-6">
+            <div class="font-mono text-xs uppercase tracking-brutal text-pure-black/60 mb-2">PATENTS</div>
+            <div class="font-mono text-4xl font-bold text-electric">175K</div>
+          </div>
+        </div>
+      </div>
+    </section>
+    
+    <!-- Main Content -->
+    <section class="max-w-7xl mx-auto px-6 py-16">
+      
+      <!-- Section Header -->
+      <div class="flex items-center gap-4 mb-12">
+        <h2 class="font-mono text-sm uppercase tracking-brutal">Comparative Data</h2>
+        <div class="flex-1 h-px bg-pure-black"></div>
+        <span class="font-mono text-sm text-pure-black/60">2023–2024</span>
+      </div>
+      
+      <!-- Statistics Grid -->
+      <div class="grid md:grid-cols-2 gap-0">
+        
+        <!-- GDP Card -->
+        <div class="border-2 border-pure-black p-8 bg-white">
+          <div class="flex justify-between items-start mb-8">
+            <h3 class="font-mono text-sm uppercase tracking-brutal">GDP per Capita (PPP)</h3>
+            <span class="font-mono text-xs bg-pure-black text-white px-2 py-1">2023</span>
+          </div>
+          
+          <!-- Europe (featured) -->
+          <div class="mb-8">
+            <div class="flex items-baseline gap-2 mb-2">
+              <span class="font-mono text-xs uppercase tracking-brutal text-pure-black/60">EU</span>
+            </div>
+            <div class="font-mono text-6xl font-bold text-electric tracking-tight">
+              $56,471
+            </div>
+          </div>
+          
+          <!-- Comparison -->
+          <div class="border-t-2 border-pure-black pt-6 space-y-4">
+            <div class="flex justify-between items-center font-mono">
+              <span class="text-sm text-pure-black/60">USA</span>
+              <span class="text-lg">$80,412</span>
+            </div>
+            <div class="flex justify-between items-center font-mono">
+              <span class="text-sm text-pure-black/60">CHN</span>
+              <span class="text-lg">$23,382</span>
+            </div>
+            <div class="flex justify-between items-center font-mono">
+              <span class="text-sm text-pure-black/60">IND</span>
+              <span class="text-lg">$8,379</span>
+            </div>
+          </div>
+          
+          <a href="#" class="inline-block mt-8 font-mono text-sm underline underline-offset-4 hover:text-electric">
+            DETAILS →
+          </a>
+        </div>
+        
+        <!-- Life Expectancy Card -->
+        <div class="border-2 border-pure-black border-l-0 p-8 bg-surface">
+          <div class="flex justify-between items-start mb-8">
+            <h3 class="font-mono text-sm uppercase tracking-brutal">Life Expectancy</h3>
+            <span class="font-mono text-xs bg-pure-black text-white px-2 py-1">2023</span>
+          </div>
+          
+          <!-- Europe (featured) -->
+          <div class="mb-8">
+            <div class="flex items-baseline gap-2 mb-2">
+              <span class="font-mono text-xs uppercase tracking-brutal text-pure-black/60">EU</span>
+              <span class="bg-signal px-2 py-0.5 font-mono text-xs font-bold">HIGHEST</span>
+            </div>
+            <div class="font-mono text-6xl font-bold text-electric tracking-tight">
+              81.2
+              <span class="text-2xl text-pure-black/60">YRS</span>
+            </div>
+          </div>
+          
+          <!-- Comparison -->
+          <div class="border-t-2 border-pure-black pt-6 space-y-4">
+            <div class="flex justify-between items-center font-mono">
+              <span class="text-sm text-pure-black/60">USA</span>
+              <span class="text-lg">77.5</span>
+            </div>
+            <div class="flex justify-between items-center font-mono">
+              <span class="text-sm text-pure-black/60">CHN</span>
+              <span class="text-lg">78.2</span>
+            </div>
+            <div class="flex justify-between items-center font-mono">
+              <span class="text-sm text-pure-black/60">IND</span>
+              <span class="text-lg">70.8</span>
+            </div>
+          </div>
+          
+          <a href="#" class="inline-block mt-8 font-mono text-sm underline underline-offset-4 hover:text-electric">
+            DETAILS →
+          </a>
+        </div>
+        
+        <!-- CO2 Card -->
+        <div class="border-2 border-pure-black border-t-0 p-8 bg-surface">
+          <div class="flex justify-between items-start mb-8">
+            <h3 class="font-mono text-sm uppercase tracking-brutal">CO₂ Emissions per Capita</h3>
+            <span class="font-mono text-xs bg-pure-black text-white px-2 py-1">2022</span>
+          </div>
+          
+          <!-- Europe (featured) -->
+          <div class="mb-8">
+            <div class="flex items-baseline gap-2 mb-2">
+              <span class="font-mono text-xs uppercase tracking-brutal text-pure-black/60">EU</span>
+              <span class="bg-signal px-2 py-0.5 font-mono text-xs font-bold">LOW</span>
+            </div>
+            <div class="font-mono text-6xl font-bold text-electric tracking-tight">
+              5.7
+              <span class="text-2xl text-pure-black/60">T</span>
+            </div>
+          </div>
+          
+          <!-- Comparison (visual bars) -->
+          <div class="border-t-2 border-pure-black pt-6 space-y-4">
+            <div>
+              <div class="flex justify-between items-center font-mono mb-1">
+                <span class="text-sm text-pure-black/60">USA</span>
+                <span class="text-lg">14.9t</span>
+              </div>
+              <div class="h-2 bg-pure-black/10">
+                <div class="h-2 bg-pure-black" style="width: 100%"></div>
+              </div>
+            </div>
+            <div>
+              <div class="flex justify-between items-center font-mono mb-1">
+                <span class="text-sm text-pure-black/60">CHN</span>
+                <span class="text-lg">8.0t</span>
+              </div>
+              <div class="h-2 bg-pure-black/10">
+                <div class="h-2 bg-pure-black" style="width: 54%"></div>
+              </div>
+            </div>
+            <div>
+              <div class="flex justify-between items-center font-mono mb-1">
+                <span class="text-sm text-electric">EU</span>
+                <span class="text-lg text-electric">5.7t</span>
+              </div>
+              <div class="h-2 bg-electric/20">
+                <div class="h-2 bg-electric" style="width: 38%"></div>
+              </div>
+            </div>
+          </div>
+          
+          <a href="#" class="inline-block mt-8 font-mono text-sm underline underline-offset-4 hover:text-electric">
+            DETAILS →
+          </a>
+        </div>
+        
+        <!-- Innovation Card -->
+        <div class="border-2 border-pure-black border-t-0 border-l-0 p-8 bg-white">
+          <div class="flex justify-between items-start mb-8">
+            <h3 class="font-mono text-sm uppercase tracking-brutal">Patent Applications</h3>
+            <span class="font-mono text-xs bg-pure-black text-white px-2 py-1">2023</span>
+          </div>
+          
+          <!-- Europe (featured) -->
+          <div class="mb-8">
+            <div class="flex items-baseline gap-2 mb-2">
+              <span class="font-mono text-xs uppercase tracking-brutal text-pure-black/60">EU</span>
+            </div>
+            <div class="font-mono text-6xl font-bold text-electric tracking-tight">
+              175,403
+            </div>
+          </div>
+          
+          <!-- Comparison -->
+          <div class="border-t-2 border-pure-black pt-6 space-y-4">
+            <div class="flex justify-between items-center font-mono">
+              <span class="text-sm text-pure-black/60">USA</span>
+              <span class="text-lg">505,539</span>
+            </div>
+            <div class="flex justify-between items-center font-mono">
+              <span class="text-sm text-pure-black/60">CHN</span>
+              <span class="text-lg">1,580,000</span>
+            </div>
+            <div class="flex justify-between items-center font-mono">
+              <span class="text-sm text-pure-black/60">IND</span>
+              <span class="text-lg">83,000</span>
+            </div>
+          </div>
+          
+          <a href="#" class="inline-block mt-8 font-mono text-sm underline underline-offset-4 hover:text-electric">
+            DETAILS →
+          </a>
+        </div>
+        
+      </div>
+      
+    </section>
+    
+    <!-- Categories -->
+    <section class="border-t-2 border-pure-black">
+      <div class="max-w-7xl mx-auto px-6 py-16">
+        <div class="flex items-center gap-4 mb-12">
+          <h2 class="font-mono text-sm uppercase tracking-brutal">Categories</h2>
+          <div class="flex-1 h-px bg-pure-black"></div>
+        </div>
+        
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-0">
+          <a href="#" class="group border-2 border-pure-black p-6 hover:bg-pure-black hover:text-white transition-colors">
+            <div class="font-mono text-4xl font-bold mb-4 group-hover:text-electric">01</div>
+            <h3 class="font-mono text-sm uppercase tracking-brutal">Economy</h3>
+            <p class="text-xs text-pure-black/60 group-hover:text-white/60 mt-2">GDP, Trade, Employment</p>
+          </a>
+          <a href="#" class="group border-2 border-pure-black border-l-0 p-6 hover:bg-pure-black hover:text-white transition-colors">
+            <div class="font-mono text-4xl font-bold mb-4 group-hover:text-electric">02</div>
+            <h3 class="font-mono text-sm uppercase tracking-brutal">Development</h3>
+            <p class="text-xs text-pure-black/60 group-hover:text-white/60 mt-2">Health, Education, Welfare</p>
+          </a>
+          <a href="#" class="group border-2 border-pure-black border-l-0 p-6 hover:bg-pure-black hover:text-white transition-colors">
+            <div class="font-mono text-4xl font-bold mb-4 group-hover:text-electric">03</div>
+            <h3 class="font-mono text-sm uppercase tracking-brutal">Environment</h3>
+            <p class="text-xs text-pure-black/60 group-hover:text-white/60 mt-2">Emissions, Energy, Climate</p>
+          </a>
+          <a href="#" class="group border-2 border-pure-black border-l-0 p-6 hover:bg-pure-black hover:text-white transition-colors">
+            <div class="font-mono text-4xl font-bold mb-4 group-hover:text-electric">04</div>
+            <h3 class="font-mono text-sm uppercase tracking-brutal">Innovation</h3>
+            <p class="text-xs text-pure-black/60 group-hover:text-white/60 mt-2">Research, Patents, Tech</p>
+          </a>
+        </div>
+      </div>
+    </section>
+    
+    <!-- Methodology Banner -->
+    <section class="bg-pure-black text-white">
+      <div class="max-w-7xl mx-auto px-6 py-12">
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-6">
+          <div>
+            <h3 class="font-mono text-sm uppercase tracking-brutal text-white/60 mb-2">Methodology</h3>
+            <p class="text-lg font-light">All data sourced from official statistics and reputable international organizations.</p>
+          </div>
+          <div class="flex gap-4 font-mono text-sm text-white/60">
+            <span>OWID</span>
+            <span>•</span>
+            <span>World Bank</span>
+            <span>•</span>
+            <span>OECD</span>
+            <span>•</span>
+            <span>Eurostat</span>
+          </div>
+        </div>
+      </div>
+    </section>
+    
+  </main>
+  
+  <!-- Footer -->
+  <footer class="border-t-2 border-pure-black">
+    <div class="max-w-7xl mx-auto px-6 py-8">
+      <div class="flex flex-col md:flex-row justify-between items-center gap-4">
+        <div class="font-mono text-sm">
+          <span class="font-bold">EUROPEVERSUS</span>
+          <span class="text-pure-black/60 ml-4">© 2025</span>
+        </div>
+        <div class="font-mono text-xs text-pure-black/60">
+          Built by <a href="https://x.com/calltheball_" class="underline hover:text-electric">@calltheball_</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>

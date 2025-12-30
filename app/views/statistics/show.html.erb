@@ -1,144 +1,360 @@
-<div class="max-w-5xl mx-auto">
-  <div class="mb-8">
-    <%= link_to statistics_path, class: "inline-flex items-center text-blue-600 hover:text-blue-800 font-semibold transition-all duration-200 hover:translate-x-1 group" do %>
-      <svg class="w-5 h-5 mr-2 group-hover:-translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+<% 
+  # Define countries array for use throughout the template
+  key_countries = [
+    # Major EU economies
+    { key: 'germany', flag: '🇩🇪', name: 'Germany', category: 'major-eu' },
+    { key: 'france', flag: '🇫🇷', name: 'France', category: 'major-eu' },
+    { key: 'italy', flag: '🇮🇹', name: 'Italy', category: 'major-eu' },
+    { key: 'spain', flag: '🇪🇸', name: 'Spain', category: 'major-eu' },
+    { key: 'netherlands', flag: '🇳🇱', name: 'Netherlands', category: 'major-eu' },
+    { key: 'poland', flag: '🇵🇱', name: 'Poland', category: 'major-eu' },
+    { key: 'sweden', flag: '🇸🇪', name: 'Sweden', category: 'major-eu' },
+    { key: 'denmark', flag: '🇩🇰', name: 'Denmark', category: 'major-eu' },
+    # More EU countries
+    { key: 'finland', flag: '🇫🇮', name: 'Finland', category: 'small-eu' },
+    { key: 'austria', flag: '🇦🇹', name: 'Austria', category: 'small-eu' },
+    { key: 'belgium', flag: '🇧🇪', name: 'Belgium', category: 'small-eu' },
+    { key: 'ireland', flag: '🇮🇪', name: 'Ireland', category: 'small-eu' },
+    { key: 'portugal', flag: '🇵🇹', name: 'Portugal', category: 'small-eu' },
+    { key: 'greece', flag: '🇬🇷', name: 'Greece', category: 'small-eu' },
+    { key: 'czech_republic', flag: '🇨🇿', name: 'Czechia', category: 'small-eu' },
+    { key: 'hungary', flag: '🇭🇺', name: 'Hungary', category: 'small-eu' },
+    # Central/Eastern EU countries
+    { key: 'romania', flag: '🇷🇴', name: 'Romania', category: 'small-eu' },
+    { key: 'croatia', flag: '🇭🇷', name: 'Croatia', category: 'small-eu' },
+    { key: 'bulgaria', flag: '🇧🇬', name: 'Bulgaria', category: 'small-eu' },
+    { key: 'slovakia', flag: '🇸🇰', name: 'Slovakia', category: 'small-eu' },
+    { key: 'slovenia', flag: '🇸🇮', name: 'Slovenia', category: 'small-eu' },
+    { key: 'estonia', flag: '🇪🇪', name: 'Estonia', category: 'small-eu' },
+    { key: 'latvia', flag: '🇱🇻', name: 'Latvia', category: 'small-eu' },
+    { key: 'lithuania', flag: '🇱🇹', name: 'Lithuania', category: 'small-eu' },
+    # Small EU countries
+    { key: 'luxembourg', flag: '🇱🇺', name: 'Luxembourg', category: 'small-eu' },
+    { key: 'malta', flag: '🇲🇹', name: 'Malta', category: 'small-eu' },
+    { key: 'cyprus', flag: '🇨🇾', name: 'Cyprus', category: 'small-eu' },
+    # Other European countries (non-EU)
+    { key: 'switzerland', flag: '🇨🇭', name: 'Switzerland', category: 'non-eu' },
+    { key: 'norway', flag: '🇳🇴', name: 'Norway', category: 'non-eu' },
+    { key: 'united_kingdom', flag: '🇬🇧', name: 'UK', category: 'non-eu' },
+    { key: 'iceland', flag: '🇮🇸', name: 'Iceland', category: 'non-eu' },
+    # Regional aggregates
+    { key: 'europe', flag: '🇪🇺', name: 'Europe', category: 'aggregates' },
+    { key: 'european_union', flag: '🇪🇺', name: 'European Union', category: 'aggregates' },
+    # Global comparisons
+    { key: 'usa', flag: '🇺🇸', name: 'USA', category: 'global' },
+    { key: 'china', flag: '🇨🇳', name: 'China', category: 'global' },
+    { key: 'india', flag: '🇮🇳', name: 'India', category: 'global' }
+  ]
+%>
+
+<div class="max-w-7xl mx-auto px-6">
+  <!-- Navigation -->
+  <div class="py-8 border-b-2 border-black">
+    <%= link_to statistics_path, class: "inline-flex items-center font-mono text-sm uppercase tracking-brutal hover:text-[#0066FF] transition-colors group" do %>
+      <svg class="w-4 h-4 mr-3 group-hover:-translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
       </svg>
-      Back to Statistics
+      ← Back to Statistics
     <% end %>
   </div>
   
-  <div class="relative backdrop-blur-sm bg-white/80 rounded-3xl shadow-xl border border-white/20 p-10 overflow-hidden">
-    <div class="absolute inset-0 bg-gradient-to-br from-blue-50/30 to-indigo-50/30 rounded-3xl"></div>
-    <div class="relative">
-      <div class="text-center mb-12">
-        <h1 class="text-4xl md:text-5xl font-bold bg-gradient-to-r from-slate-900 via-blue-900 to-indigo-900 bg-clip-text text-transparent mb-6"><%= @statistic.metric %></h1>
-        <div class="flex items-center justify-center space-x-4 text-sm">
-          <span class="bg-gradient-to-r from-slate-100 to-gray-100 text-slate-700 px-4 py-2 rounded-full font-medium shadow-sm">
-            <span class="capitalize">Statistics</span>
-          </span>
-          <span class="bg-gradient-to-r from-blue-500 to-indigo-600 text-white px-4 py-2 rounded-full font-semibold shadow-lg">
-            <%= @statistic.year %>
-          </span>
+  <!-- Header -->
+  <div class="py-16 border-b-2 border-black">
+    <div class="flex items-center gap-4 mb-8">
+      <% if @statistic&.year %>
+        <span class="font-mono text-xs uppercase tracking-brutal bg-black text-white px-3 py-1">
+          <%= @statistic.year %>
+        </span>
+      <% end %>
+      <span class="font-mono text-xs uppercase tracking-brutal text-black/50">
+        Statistics
+      </span>
+    </div>
+    <h1 class="text-5xl md:text-7xl font-black tracking-tighter mb-8 uppercase"><%= @statistic&.metric || @chart_name&.humanize %></h1>
+    
+    <% if @statistic&.description.present? %>
+      <div class="border-l-2 border-[#0066FF] pl-6 max-w-2xl">
+        <p class="text-lg text-black/70 leading-relaxed"><%= @statistic.description %></p>
+      </div>
+    <% end %>
+  </div>
+
+  <!-- Interactive Chart -->
+  <% if @chart_name %>
+    <div class="py-12 border-b-2 border-black">
+      <h2 class="font-mono text-sm uppercase tracking-brutal mb-8">Interactive Trend</h2>
+      <div class="border-2 border-black bg-white overflow-hidden">
+        <div style="position:relative;padding-bottom:56.25%;height:0;overflow:hidden;">
+          <iframe
+            src="https://ourworldindata.org/grapher/<%= @chart_name %>?tab=chart&country=Germany~France~Italy~Spain~Netherlands~Poland~Sweden~Denmark~Finland~Austria~Belgium~Czechia~Estonia~Greece~Hungary~Ireland~Latvia~Lithuania~Luxembourg~Malta~Portugal~Slovakia~Slovenia~Bulgaria~Croatia~Romania~Cyprus~Norway~Switzerland~United+Kingdom~Iceland~European+Union+%2827%29~Europe+and+Central+Asia+%28WB%29~United+States~India~China&time=2000..2024&yScale=linear"
+            style="position:absolute;top:0;left:0;width:100%;height:100%;border:0;background:white;"
+            title="<%= @statistic&.metric || @chart_name&.humanize %>"
+            loading="lazy"
+          ></iframe>
         </div>
       </div>
+    </div>
+  <% end %>
 
-      <% if @statistic.description.present? %>
-        <div class="mb-12 p-6 bg-gradient-to-r from-blue-50/50 to-indigo-50/50 rounded-2xl border border-blue-100/30 backdrop-blur-sm">
-          <p class="text-slate-700 leading-relaxed text-lg"><%= @statistic.description %></p>
+  <!-- Regional Comparison Cards -->
+  <div class="py-12 border-b-2 border-black">
+    <h2 class="font-mono text-sm uppercase tracking-brutal mb-8">Regional Comparison</h2>
+    <div class="grid grid-cols-2 md:grid-cols-5 gap-0">
+      <% 
+        comparison_regions = [
+          { key: 'europe', flag: '🇪🇺', name: 'Europe', highlight: true },
+          { key: 'european_union', flag: '🇪🇺', name: 'EU-27', highlight: false },
+          { key: 'usa', flag: '🇺🇸', name: 'USA', highlight: false },
+          { key: 'india', flag: '🇮🇳', name: 'India', highlight: false },
+          { key: 'china', flag: '🇨🇳', name: 'China', highlight: false }
+        ]
+        latest_year = @chart_data[:years]&.max if @chart_data
+      %>
+      <% comparison_regions.each_with_index do |region, index| %>
+        <% 
+          country_data = @chart_data.dig(:countries, region[:key], :data) || {}
+          latest_country_year = country_data.keys.max
+          value = latest_country_year ? country_data[latest_country_year] : nil
+        %>
+        <div class="border-2 border-black p-6 <%= index > 0 ? 'border-l-0' : '' %> <%= region[:highlight] ? 'bg-[#0066FF] text-white' : '' %>">
+          <div class="flex items-center gap-3 mb-4">
+            <span class="text-2xl"><%= region[:flag] %></span>
+            <div>
+              <div class="font-mono text-sm font-bold"><%= region[:name] %></div>
+              <div class="font-mono text-xs <%= region[:highlight] ? 'text-white/60' : 'text-black/50' %>"><%= latest_country_year || '—' %></div>
+            </div>
+          </div>
+          <div class="font-mono text-2xl md:text-3xl font-bold">
+            <% if value %>
+              <%= format_value_with_unit(value, @chart_data&.dig(:metadata, :unit) || @statistic&.unit, decimals: 2) %>
+            <% else %>
+              <span class="<%= region[:highlight] ? 'text-white/50' : 'text-black/30' %>">—</span>
+            <% end %>
+          </div>
         </div>
       <% end %>
+    </div>
+  </div>
 
-      <!-- Modern Comparison Chart -->
-      <div class="mb-12">
-        <h2 class="text-2xl md:text-3xl font-bold bg-gradient-to-r from-slate-900 to-slate-700 bg-clip-text text-transparent mb-8">Regional Comparison</h2>
-        
-        <div class="space-y-6">
-          <!-- Europe -->
-          <div class="relative p-4 bg-gradient-to-r from-blue-50/50 to-indigo-50/50 rounded-2xl border border-blue-100/30">
-            <div class="flex items-center justify-between mb-4">
-              <span class="font-bold text-slate-800 text-lg">🇪🇺 Europe</span>
-              <span class="font-bold text-blue-600 text-xl"><%= format_value_with_unit(@statistic.europe_value, @statistic.unit, decimals: 2) %></span>
-            </div>
-            <div class="w-full bg-white/80 rounded-full h-6 shadow-inner">
-              <% max_value = [@statistic.europe_value, @statistic.us_value, @statistic.india_value, @statistic.china_value].max %>
-              <% europe_percentage = (@statistic.europe_value / max_value * 100).round(1) %>
-              <div class="bg-gradient-to-r from-blue-500 to-indigo-600 h-6 rounded-full transition-all duration-1000 shadow-lg flex items-center justify-end pr-3" 
-                   style="width: <%= europe_percentage %>%">
-                <span class="text-white text-xs font-semibold"><%= europe_percentage %>%</span>
-              </div>
-            </div>
-          </div>
-
-          <!-- United States -->
-          <div class="relative p-4 bg-white/50 rounded-2xl border border-gray-100/50 hover:bg-white/70 transition-colors">
-            <div class="flex items-center justify-between mb-4">
-              <span class="font-semibold text-slate-800 text-lg">🇺🇸 United States</span>
-              <span class="font-bold text-slate-700 text-xl"><%= format_value_with_unit(@statistic.us_value, @statistic.unit, decimals: 2) %></span>
-            </div>
-            <div class="w-full bg-gray-200 rounded-full h-6 shadow-inner">
-              <% us_percentage = (@statistic.us_value / max_value * 100).round(1) %>
-              <div class="bg-gradient-to-r from-red-400 to-red-500 h-6 rounded-full transition-all duration-1000 shadow-lg flex items-center justify-end pr-3" 
-                   style="width: <%= us_percentage %>%">
-                <span class="text-white text-xs font-semibold"><%= us_percentage %>%</span>
-              </div>
-            </div>
-          </div>
-
-          <!-- India -->
-          <div class="relative p-4 bg-white/50 rounded-2xl border border-gray-100/50 hover:bg-white/70 transition-colors">
-            <div class="flex items-center justify-between mb-4">
-              <span class="font-semibold text-slate-800 text-lg">🇮🇳 India</span>
-              <span class="font-bold text-slate-700 text-xl"><%= format_value_with_unit(@statistic.india_value, @statistic.unit, decimals: 2) %></span>
-            </div>
-            <div class="w-full bg-gray-200 rounded-full h-6 shadow-inner">
-              <% india_percentage = (@statistic.india_value / max_value * 100).round(1) %>
-              <div class="bg-gradient-to-r from-orange-400 to-orange-500 h-6 rounded-full transition-all duration-1000 shadow-lg flex items-center justify-end pr-3" 
-                   style="width: <%= india_percentage %>%">
-                <span class="text-white text-xs font-semibold"><%= india_percentage %>%</span>
-              </div>
-            </div>
-          </div>
-
-          <!-- China -->
-          <div class="relative p-4 bg-white/50 rounded-2xl border border-gray-100/50 hover:bg-white/70 transition-colors">
-            <div class="flex items-center justify-between mb-4">
-              <span class="font-semibold text-slate-800 text-lg">🇨🇳 China</span>
-              <span class="font-bold text-slate-700 text-xl"><%= format_value_with_unit(@statistic.china_value, @statistic.unit, decimals: 2) %></span>
-            </div>
-            <div class="w-full bg-gray-200 rounded-full h-6 shadow-inner">
-              <% china_percentage = (@statistic.china_value / max_value * 100).round(1) %>
-              <div class="bg-gradient-to-r from-yellow-400 to-yellow-500 h-6 rounded-full transition-all duration-1000 shadow-lg flex items-center justify-end pr-3" 
-                   style="width: <%= china_percentage %>%">
-                <span class="text-white text-xs font-semibold"><%= china_percentage %>%</span>
-              </div>
-            </div>
-          </div>
+  <!-- Historical Data Table with Filters -->
+  <div class="py-12 border-b-2 border-black">
+    <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between mb-8 pb-4 border-b border-black">
+      <h2 class="font-mono text-sm uppercase tracking-brutal mb-4 lg:mb-0">Historical Data</h2>
+      
+      <!-- Filter Controls -->
+      <div class="flex flex-wrap gap-2">
+        <button data-filter="all" class="filter-btn active font-mono text-xs uppercase tracking-brutal px-4 py-2 border-2 border-black bg-black text-white hover:bg-[#0066FF] hover:border-[#0066FF] transition-colors">
+          All
+        </button>
+        <button data-filter="major-eu" class="filter-btn font-mono text-xs uppercase tracking-brutal px-4 py-2 border-2 border-black bg-white hover:bg-black hover:text-white transition-colors">
+          Major EU
+        </button>
+        <button data-filter="small-eu" class="filter-btn font-mono text-xs uppercase tracking-brutal px-4 py-2 border-2 border-black bg-white hover:bg-black hover:text-white transition-colors">
+          Small EU
+        </button>
+        <button data-filter="non-eu" class="filter-btn font-mono text-xs uppercase tracking-brutal px-4 py-2 border-2 border-black bg-white hover:bg-black hover:text-white transition-colors">
+          Non-EU
+        </button>
+        <button data-filter="global" class="filter-btn font-mono text-xs uppercase tracking-brutal px-4 py-2 border-2 border-black bg-white hover:bg-black hover:text-white transition-colors">
+          Global
+        </button>
+        <button data-filter="aggregates" class="filter-btn font-mono text-xs uppercase tracking-brutal px-4 py-2 border-2 border-black bg-white hover:bg-black hover:text-white transition-colors">
+          Aggregates
+        </button>
       </div>
     </div>
-
-      <!-- Modern Key Insights -->
-      <div class="bg-gradient-to-br from-blue-50/80 to-indigo-50/80 rounded-3xl p-8 mb-12 border border-blue-100/30 backdrop-blur-sm">
-        <h3 class="text-2xl font-bold text-slate-800 mb-6">Key Insights</h3>
-        <div class="grid md:grid-cols-2 gap-6">
-          <div class="p-4 bg-white/60 rounded-2xl border border-white/40">
-            <span class="font-semibold text-slate-700 block mb-2">Europe vs US:</span>
-            <% diff_us = ((@statistic.europe_value - @statistic.us_value) / @statistic.us_value * 100).round(1) %>
-            <span class="text-2xl font-bold <%= diff_us >= 0 ? 'text-emerald-600' : 'text-red-500' %>">
-              <%= diff_us >= 0 ? '+' : '' %><%= diff_us %>%
-            </span>
-          </div>
-          <div class="p-4 bg-white/60 rounded-2xl border border-white/40">
-            <span class="font-semibold text-slate-700 block mb-2">Europe vs India:</span>
-            <% diff_india = ((@statistic.europe_value - @statistic.india_value) / @statistic.india_value * 100).round(1) %>
-            <span class="text-2xl font-bold <%= diff_india >= 0 ? 'text-emerald-600' : 'text-red-500' %>">
-              <%= diff_india >= 0 ? '+' : '' %><%= diff_india %>%
-            </span>
-          </div>
-          <div class="p-4 bg-white/60 rounded-2xl border border-white/40">
-            <span class="font-semibold text-slate-700 block mb-2">Europe vs China:</span>
-            <% diff_china = ((@statistic.europe_value - @statistic.china_value) / @statistic.china_value * 100).round(1) %>
-            <span class="text-2xl font-bold <%= diff_china >= 0 ? 'text-emerald-600' : 'text-red-500' %>">
-              <%= diff_china >= 0 ? '+' : '' %><%= diff_china %>%
-            </span>
-          </div>
-          <div class="p-4 bg-white/60 rounded-2xl border border-white/40">
-            <span class="font-semibold text-slate-700 block mb-2">Best Performer:</span>
-            <% values = { 'Europe' => @statistic.europe_value, 'US' => @statistic.us_value, 'India' => @statistic.india_value, 'China' => @statistic.china_value } %>
-            <% best = values.max_by { |k, v| v }.first %>
-            <span class="text-2xl font-bold text-blue-600"><%= best %></span>
-          </div>
+    
+    <% if @chart_data && @chart_data[:years]&.any? %>
+      <div class="overflow-x-auto border-2 border-black">
+        <table class="w-full">
+          <thead>
+            <tr class="border-b-2 border-black bg-[#F5F5F5]">
+              <th class="sticky left-0 z-10 bg-[#F5F5F5] text-left py-3 px-4 font-mono text-xs uppercase tracking-brutal border-r-2 border-black">Year</th>
+              <% key_countries.each do |country| %>
+                <th class="country-column text-right py-3 px-4 font-mono text-xs uppercase tracking-brutal whitespace-nowrap" 
+                    data-category="<%= country[:category] %>" 
+                    data-country="<%= country[:key] %>">
+                  <%= country[:flag] %> <%= country[:name] %>
+                </th>
+              <% end %>
+            </tr>
+          </thead>
+          <tbody>
+            <% @chart_data[:years].sort.reverse.first(15).each_with_index do |year, row_idx| %>
+              <tr class="border-b border-black/20 hover:bg-[#F5F5F5] transition-colors">
+                <td class="sticky left-0 z-10 bg-white py-3 px-4 font-mono text-sm font-bold border-r-2 border-black"><%= year %></td>
+                <% key_countries.each do |country| %>
+                  <% value = @chart_data.dig(:countries, country[:key], :data, year) %>
+                  <td class="country-column py-3 px-4 text-right font-mono text-sm" 
+                      data-category="<%= country[:category] %>" 
+                      data-country="<%= country[:key] %>">
+                    <% if value %>
+                      <span class="<%= country[:category] == 'aggregates' || country[:key] == 'europe' ? 'text-[#0066FF] font-bold' : '' %>">
+                        <%= format_value_with_unit(value, @chart_data&.dig(:metadata, :unit) || @statistic&.unit, decimals: 1) %>
+                      </span>
+                    <% else %>
+                      <span class="text-black/30">—</span>
+                    <% end %>
+                  </td>
+                <% end %>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
       </div>
+      
+      <% if @chart_data[:years].length > 15 %>
+        <div class="mt-4 font-mono text-xs text-black/50 text-center">
+          Showing latest 15 years. Total data spans <%= @chart_data[:years].length %> years 
+          (<%= @chart_data[:years].min %> – <%= @chart_data[:years].max %>)
+        </div>
+      <% end %>
+    <% end %>
+  </div>
+
+  <!-- Comparison Bars -->
+  <div class="py-12 border-b-2 border-black">
+    <h2 class="font-mono text-sm uppercase tracking-brutal mb-8 pb-4 border-b border-black">Visual Comparison</h2>
+    
+    <% 
+      # Get values from chart data for comparison bars
+      latest_year = @chart_data[:years]&.max if @chart_data
+      bar_regions = [
+        { key: 'europe', flag: '🇪🇺', name: 'Europe', color: 'bg-[#0066FF]', highlight: true },
+        { key: 'usa', flag: '🇺🇸', name: 'USA', color: 'bg-black' },
+        { key: 'india', flag: '🇮🇳', name: 'India', color: 'bg-black/70' },
+        { key: 'china', flag: '🇨🇳', name: 'China', color: 'bg-black/50' }
+      ]
+      bar_values = bar_regions.map { |r| 
+        val = @chart_data&.dig(:countries, r[:key], :data, latest_year)
+        { **r, value: val }
+      }.select { |r| r[:value].present? }
+      max_value = bar_values.map { |r| r[:value] }.max || 1
+    %>
+    
+    <div class="space-y-6">
+      <% bar_values.each do |region| %>
+        <div class="group">
+          <div class="flex items-center justify-between mb-3">
+            <span class="font-mono text-sm uppercase tracking-brutal <%= region[:highlight] ? 'font-bold' : '' %>">
+              <%= region[:flag] %> <%= region[:name] %>
+            </span>
+            <span class="font-mono text-lg font-bold <%= region[:highlight] ? 'text-[#0066FF]' : '' %>">
+              <%= format_value_with_unit(region[:value], @chart_data&.dig(:metadata, :unit) || @statistic&.unit, decimals: 2) %>
+            </span>
+          </div>
+          <div class="w-full h-10 bg-[#F5F5F5] border-2 border-black">
+            <% percentage = (region[:value] / max_value * 100).round(1) %>
+            <div class="<%= region[:color] %> h-full transition-all duration-700 flex items-center justify-end pr-4" 
+                 style="width: <%= percentage %>%">
+              <% if percentage > 15 %>
+                <span class="font-mono text-xs text-white font-bold"><%= percentage %>%</span>
+              <% end %>
+            </div>
+          </div>
+        </div>
+      <% end %>
     </div>
+  </div>
 
-        <% if @statistic.source.present? %>
-          <div class="border-t border-gray-200/50 pt-8 text-center">
-            <p class="text-slate-600">
-              <span class="font-semibold">Data Source:</span> <%= @statistic.source %>
-            </p>
+  <!-- Key Insights -->
+  <% if @statistic %>
+  <div class="py-12 border-b-2 border-black">
+    <h3 class="font-mono text-sm uppercase tracking-brutal mb-8 pb-4 border-b border-black">Key Insights</h3>
+    
+    <div class="grid grid-cols-2 lg:grid-cols-4 gap-0">
+      <% if @statistic.europe_value && @statistic.us_value && @statistic.us_value != 0 %>
+        <div class="border-2 border-black p-6">
+          <div class="font-mono text-xs uppercase tracking-brutal text-black/50 mb-4">EU vs USA</div>
+          <% diff_us = ((@statistic.europe_value - @statistic.us_value) / @statistic.us_value * 100).round(1) %>
+          <div class="font-mono text-3xl md:text-4xl font-bold <%= diff_us >= 0 ? 'text-[#0066FF]' : 'text-black' %>">
+            <%= diff_us >= 0 ? '+' : '' %><%= diff_us %>%
           </div>
-        <% end %>
-      </div>
+        </div>
+      <% end %>
+      
+      <% if @statistic.europe_value && @statistic.india_value && @statistic.india_value != 0 %>
+        <div class="border-2 border-black border-l-0 p-6">
+          <div class="font-mono text-xs uppercase tracking-brutal text-black/50 mb-4">EU vs IND</div>
+          <% diff_india = ((@statistic.europe_value - @statistic.india_value) / @statistic.india_value * 100).round(1) %>
+          <div class="font-mono text-3xl md:text-4xl font-bold <%= diff_india >= 0 ? 'text-[#0066FF]' : 'text-black' %>">
+            <%= diff_india >= 0 ? '+' : '' %><%= diff_india %>%
+          </div>
+        </div>
+      <% end %>
+      
+      <% if @statistic.europe_value && @statistic.china_value && @statistic.china_value != 0 %>
+        <div class="border-2 border-black border-l-0 p-6">
+          <div class="font-mono text-xs uppercase tracking-brutal text-black/50 mb-4">EU vs CHN</div>
+          <% diff_china = ((@statistic.europe_value - @statistic.china_value) / @statistic.china_value * 100).round(1) %>
+          <div class="font-mono text-3xl md:text-4xl font-bold <%= diff_china >= 0 ? 'text-[#0066FF]' : 'text-black' %>">
+            <%= diff_china >= 0 ? '+' : '' %><%= diff_china %>%
+          </div>
+        </div>
+      <% end %>
+      
+      <% 
+        values = { 'EU' => @statistic.europe_value, 'USA' => @statistic.us_value, 'IND' => @statistic.india_value, 'CHN' => @statistic.china_value }.compact
+        if values.any?
+          best = values.max_by { |k, v| v }.first
+      %>
+        <div class="border-2 border-black border-l-0 p-6">
+          <div class="font-mono text-xs uppercase tracking-brutal text-black/50 mb-4">Best Performer</div>
+          <div class="font-mono text-3xl md:text-4xl font-bold <%= best == 'EU' ? 'text-[#0066FF]' : 'text-black' %>"><%= best %></div>
+        </div>
+      <% end %>
+    </div>
+  </div>
+  <% end %>
+
+  <!-- Europe Calculation Methodology -->
+  <div class="py-12 border-b-2 border-black">
+    <%= render 'shared/europe_calculation_methodology', compact_view: true %>
+  </div>
+
+  <!-- Source -->
+  <div class="py-8">
+    <div class="flex items-center gap-4">
+      <span class="font-mono text-xs uppercase tracking-brutal text-black/50">Source</span>
+      <div class="flex-1 h-px bg-black/10"></div>
+      <span class="font-mono text-sm"><%= @statistic&.source || @chart_data&.dig(:metadata, :source) || 'Our World in Data' %></span>
     </div>
   </div>
 </div>
+
+<!-- Country Filter JavaScript -->
+<script>
+document.addEventListener('turbo:load', initializeFilters);
+document.addEventListener('DOMContentLoaded', initializeFilters);
+
+function initializeFilters() {
+  const filterButtons = document.querySelectorAll('.filter-btn');
+  const countryColumns = document.querySelectorAll('.country-column');
+  
+  if (!filterButtons.length) return;
+  
+  filterButtons.forEach(button => {
+    button.addEventListener('click', function() {
+      const filter = this.dataset.filter;
+      
+      // Update button states
+      filterButtons.forEach(btn => {
+        btn.classList.remove('active', 'bg-black', 'text-white');
+        btn.classList.add('bg-white');
+      });
+      this.classList.add('active', 'bg-black', 'text-white');
+      this.classList.remove('bg-white');
+      
+      // Filter columns
+      countryColumns.forEach(column => {
+        const category = column.dataset.category;
+        if (filter === 'all' || category === filter) {
+          column.style.display = '';
+        } else {
+          column.style.display = 'none';
+        }
+      });
+    });
+  });
+}
+</script>

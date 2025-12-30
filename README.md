@@ -4,21 +4,21 @@
 
 An **open source** Rails 8 web application that provides evidence-based comparisons between European statistics and those of the United States, India, and China. This project aims to counter negative narratives about Europe by presenting factual data in an accessible, visual format.
 
-## 🎯 Mission
+## Mission
 
 EuropeVersus promotes data-driven understanding of European performance across multiple dimensions. Too often, discussions about Europe focus on challenges without acknowledging the continent's remarkable achievements in quality of life, social progress, and sustainable development.
 
 **This is an open source, community-driven project.** We believe that accurate data should be freely accessible and continuously improved by contributors worldwide.
 
-## ✨ Features
+## Features
 
-- **📊 Comprehensive Statistics**: Compare Europe with the US, India, and China across economics, social indicators, environment, and innovation
-- **🎨 Beautiful Visualizations**: Clean, responsive design with interactive comparison charts
-- **📱 Mobile-First**: Optimized for all devices with Tailwind CSS
-- **⚡ Fast & Modern**: Built with Rails 8, Turbo, SQLite, and minimal JavaScript
-- **🔍 Evidence-Based**: All data sourced from official statistics and reputable international organizations
+- **Comprehensive Statistics**: Compare Europe with the US, India, and China across economics, social indicators, environment, and innovation
+- **Beautiful Visualizations**: Clean, responsive design with interactive comparison charts
+- **Mobile-First**: Optimized for all devices with Tailwind CSS
+- **Fast & Modern**: Built with Rails 8, Turbo, SQLite, and minimal JavaScript
+- **Evidence-Based**: All data sourced from official statistics and reputable international organizations
 
-## 🏗️ Tech Stack
+## Tech Stack
 
 - **Backend**: Ruby on Rails 8
 - **Frontend**: Tailwind CSS, Turbo, Stimulus
@@ -26,33 +26,33 @@ EuropeVersus promotes data-driven understanding of European performance across m
 - **Deployment**: Docker-ready with Kamal configuration
 
 
-## 📊 Data Categories
+## Data Categories
 
 The application includes statistics across four main categories, with data sourced from Our World in Data and other reputable sources:
 
-### 🏦 Economy
+### Economy
 - GDP per Capita (PPP)
 - GDP Growth Rate
 - Unemployment Rate
 
-### 👥 Social
+### Social
 - Life Expectancy
 - Life Satisfaction (Cantril Ladder)
 - Health Expenditure (% of GDP)
 - Education Index
 - Social Progress Index
 
-### 🌍 Environment
+### Environment
 - CO2 Emissions per Capita
 - Renewable Energy Share
 - Environmental Performance Index
 - Electricity Access
 
-### 💡 Innovation
+### Innovation
 - Global Innovation Index
 - R&D Spending (% of GDP)
 
-## 📥 Adding New Metrics
+## Adding New Metrics
 
 **Zero-terminal workflow!** Just edit a YAML file and deploy.
 
@@ -75,7 +75,7 @@ The application includes statistics across four main categories, with data sourc
    git push
    ```
 
-3. **Deploy** → The app automatically imports new metrics on startup! ✅
+3. **Deploy** → The app automatically imports new metrics on startup!
 
 See [ADDING_METRICS_GUIDE.md](ADDING_METRICS_GUIDE.md) for complete instructions. For detailed setup and development information, see [DATA_SETUP.md](DATA_SETUP.md).
 
@@ -86,32 +86,32 @@ See [ADDING_METRICS_GUIDE.md](ADDING_METRICS_GUIDE.md) for complete instructions
 - No manual terminal commands needed in production
 
 
-## 🤝 Contributing
+## Contributing
 
 **EuropeVersus is an open source project that thrives on community contributions!** We welcome data contributions, code improvements, translations, and documentation updates.
 
-### 📊 Contributing Data Points
+### Contributing Data Points
 
 We're actively seeking contributors to expand our statistical database. Here's how you can help:
 
-#### 🔍 Source Requirements
+#### Source Requirements
 
 **All data must come from reputable sources only:**
 
-✅ **Accepted Sources:**
+**Accepted Sources:**
 - Government statistical agencies (Eurostat, ONS, BLS, etc.)
 - International organizations (World Bank, IMF, OECD, UN, WHO, IEA)
 - Academic institutions with peer-reviewed research
 - Established NGOs with transparent methodologies (Transparency International, Freedom House)
 
-❌ **Not Accepted:**
+**Not Accepted:**
 - News articles or blog posts
 - Unverified social media content
 - Sources with unclear methodology
 - Politically biased organizations
 - Commercial entities without transparent methodology
 
-#### ✅ Data Contribution Checklist
+#### Data Contribution Checklist
 
 Before submitting data, ensure:
 
@@ -123,24 +123,24 @@ Before submitting data, ensure:
 - [ ] Source URL is provided and accessible
 - [ ] Data has been double-checked for accuracy
 
-### 🛠️ Test Coverage
+### Test Coverage
 
 **Current Test Coverage:** 28.2% (304/1078 lines covered)
 
-### 🌐 Translation Contributions
+### Translation Contributions
 
 Help make EuropeVersus accessible to more people:
 - Translate the interface to other European languages
 - Add localised number formatting
 
-### 📖 Documentation
+### Documentation
 
 - Improve this README
 - Add code comments
 - Create tutorials for contributors
 - Document data sources and methodologies
 
-## 📄 License
+## License
 
 This project is open source and available under the [GNU Public License](LICENSE).
 
@@ -162,7 +162,7 @@ All contributed data goes through a review process:
 - **Transparency**: Full source attribution and methodology description
 - **Accuracy**: Double-checked against original sources
 
-## 🙏 Current Data Sources
+## Current Data Sources
 
 All statistics are currently sourced from Our World in Data.
 
@@ -176,14 +176,14 @@ Found incorrect data or questionable sources?
 2. **Technical Issues**: Open a GitHub issue with the "Bug" template
 3. **Source Concerns**: Email maintainers with detailed concerns
 
-## 📧 Contact & Community
+## Contact & Community
 
 - **GitHub Issues**: For technical issues and feature requests
 - **Discussions**: Use GitHub Discussions for general questions
 - **Security**: Email security issues privately to maintainers
 - **Data Contributions**: Use the web interface or create an issue
 
-## 📄 License
+## License
 
 This project is open source and available under the [GNU Public License](LICENSE).
 
