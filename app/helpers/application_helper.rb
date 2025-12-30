@@ -41,7 +41,7 @@ module ApplicationHelper
     end
 
     # Handle currency/dollar units - show as $X,XXX for large values, $X.XX for small
-    if unit_str.include?("$") || unit_str.include?("dollar") || unit_str.include?("international")
+    if unit_str.include?("$") || unit_str.include?("dollar") || unit_str.include?("international") || unit_str.include?("usd") || unit_str.include?("ppp")
       if value.abs < 1000
         return "$#{number_with_precision(value, precision: decimals)}"
       else

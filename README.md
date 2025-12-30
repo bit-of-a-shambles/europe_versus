@@ -28,62 +28,119 @@ EuropeVersus promotes data-driven understanding of European performance across m
 
 ## Data Categories
 
-The application includes statistics across four main categories, with data sourced from Our World in Data and other reputable sources:
+The application includes statistics across multiple categories, with data sourced from Our World in Data (OWID), the International Labour Organization (ILO), and other reputable sources:
 
 ### Economy
 - GDP per Capita (PPP)
-- GDP Growth Rate
-- Unemployment Rate
+- Labor Productivity per Hour (ILO)
+- Labor Productivity per Worker (ILO)
+- Median Income Daily
+- Poorest 10% Income
 
 ### Social
-- Life Expectancy
-- Life Satisfaction (Cantril Ladder)
-- Health Expenditure (% of GDP)
-- Education Index
-- Social Progress Index
+- Population
+- Life Satisfaction
+- Fertility Rate
+- State Capacity Index
+- Functioning Government Index
+- Homicide Rate
+
+### Development
+- Child Mortality Rate
+- Access to Electricity
+- Public Transport Access
+- PISA Math Performance
+- PISA Reading Performance
 
 ### Environment
-- CO2 Emissions per Capita
-- Renewable Energy Share
-- Environmental Performance Index
-- Electricity Access
+- Low Carbon Energy Share
 
 ### Innovation
-- Global Innovation Index
-- R&D Spending (% of GDP)
+- Researchers per Million
+- Research Spending (% of GDP)
+- Scientific Journal Articles
 
-## Adding New Metrics
+### Health
+- Health Expenditure (% of GDP)
+- Healthy Life Expectancy
+- Medical RCTs Published
 
-**Zero-terminal workflow!** Just edit a YAML file and deploy.
+## Metrics Configuration System
 
-1. **Add to `config/owid_metrics.yml`:**
+The application uses a unified YAML configuration file (`config/metrics.yml`) that supports multiple data sources.
+
+### Supported Data Sources
+
+1. **OWID (Our World in Data)**: The primary source for most metrics
+2. **ILO (International Labour Organization)**: Labor productivity metrics
+
+### Adding New Metrics
+
+**Zero-terminal workflow!** Just edit the YAML file and deploy.
+
+1. **Add to `config/metrics.yml`:**
+
+   For OWID metrics:
    ```yaml
    renewable_energy:
+     source: owid
      owid_slug: renewable-energy-consumption
      start_year: 1990
      end_year: 2024
      unit: "terawatt-hours"
      description: "Renewable energy consumption"
+     category: environment
+     aggregation_method: population_weighted
+     enabled: true
+   ```
+
+   For ILO metrics:
+   ```yaml
+   labor_productivity_per_hour_ilo:
+     source: ilo
+     ilo_indicator: labor_productivity_per_hour
+     start_year: 2000
+     end_year: 2025
+     unit: "2021 PPP $ per hour"
+     description: "Output per hour worked"
+     category: economy
      aggregation_method: population_weighted
      enabled: true
    ```
 
 2. **Commit and push:**
    ```bash
-   git add config/owid_metrics.yml
+   git add config/metrics.yml
    git commit -m "Add renewable energy metric"
    git push
    ```
 
 3. **Deploy** → The app automatically imports new metrics on startup!
 
-See [ADDING_METRICS_GUIDE.md](ADDING_METRICS_GUIDE.md) for complete instructions. For detailed setup and development information, see [DATA_SETUP.md](DATA_SETUP.md).
-
 **How it works:**
-- On startup, the app checks `config/owid_metrics.yml`
+- On startup, the app checks `config/metrics.yml`
 - New metrics (not yet in database) are automatically imported
-- Data is fetched from OWID and Europe/EU-27 aggregates are calculated
+- Data is fetched from OWID or ILO depending on the source
+- Europe and EU-27 aggregates are calculated automatically
 - No manual terminal commands needed in production
+
+### Configuration Options
+
+| Field | Description | Required |
+|-------|-------------|----------|
+| `source` | Data source: `owid` or `ilo` | Yes |
+| `owid_slug` | OWID chart slug (for OWID sources) | For OWID |
+| `ilo_indicator` | ILO indicator ID (for ILO sources) | For ILO |
+| `start_year` | First year of data to import | Yes |
+| `end_year` | Last year of data to import | Yes |
+| `unit` | Display unit for the metric | Yes |
+| `description` | Human-readable description | Yes |
+| `category` | One of: economy, social, development, health, environment, innovation | Yes |
+| `aggregation_method` | How to calculate Europe aggregate: `population_weighted`, `sum`, or `average` | Yes |
+| `enabled` | Set to `false` to disable import | Yes |
+| `preferred` | Set to `true` to prioritize over similar metrics | No |
+
+See [ADDING_METRICS_GUIDE.md](ADDING_METRICS_GUIDE.md) for complete instructions.
 
 
 ## Contributing
@@ -164,9 +221,15 @@ All contributed data goes through a review process:
 
 ## Current Data Sources
 
-All statistics are currently sourced from Our World in Data.
+Statistics are sourced from multiple providers:
 
-See [ADDING_METRICS_GUIDE.md](ADDING_METRICS_GUIDE.md) for detailed instructions.
+- **Our World in Data (OWID)**: Primary source for most metrics - GDP, population, life satisfaction, child mortality, electricity access, and more
+- **International Labour Organization (ILO)**: Labor productivity metrics (per hour and per worker)
+- **World Bank**: Development indicators via OWID
+- **OECD**: PISA education scores via OWID
+- **World Health Organization**: Health metrics via OWID
+
+All metrics are configured in `config/metrics.yml`. See [ADDING_METRICS_GUIDE.md](ADDING_METRICS_GUIDE.md) for detailed instructions.
 
 ## � Reporting Issues
 

@@ -1,0 +1,324 @@
+# Metrics Configuration - Multi-Source Data Import System
+# 
+# This configuration supports importing data from multiple sources:
+#   - owid: Our World in Data (ourworldindata.org)
+#   - ilo: International Labour Organization (ilostat.ilo.org)
+#
+# ============================================================================
+# FORMAT:
+# ============================================================================
+#
+#   metric_name:
+#     source: owid | ilo
+#     
+#     # For OWID sources:
+#     owid_slug: the-slug-from-owid-url
+#     
+#     # For ILO sources:
+#     ilo_indicator: labor_productivity_per_hour | labor_productivity_per_worker
+#     
+#     # Common fields:
+#     start_year: 2000
+#     end_year: 2024
+#     unit: "$ per hour" or "%" etc.
+#     description: "Human readable description"
+#     category: economy | social | development | health | environment | innovation
+#     aggregation_method: population_weighted | sum | average
+#     enabled: true
+#
+# ============================================================================
+# FINDING DATA SOURCES:
+# ============================================================================
+#
+# OWID:
+#   Visit https://ourworldindata.org/charts
+#   Example URL: https://ourworldindata.org/grapher/gdp-per-capita-worldbank
+#   Slug is: gdp-per-capita-worldbank
+#
+# ILO:
+#   Available indicators (defined in IloDataService):
+#     - labor_productivity_per_hour: Output per hour (GDP constant 2021 PPP $)
+#     - labor_productivity_per_worker: Output per worker (GDP constant 2015 US$)
+#
+# ============================================================================
+# CATEGORIES:
+# ============================================================================
+#   - economy: GDP, income, employment, trade, productivity
+#   - social: Population, demographics, quality of life
+#   - development: Infrastructure, education, basic services
+#   - health: Healthcare, disease, mortality
+#   - environment: Climate, emissions, energy, resources
+#   - innovation: R&D, technology, patents
+#
+# ============================================================================
+
+# =============================================================================
+# ILO METRICS (International Labour Organization)
+# =============================================================================
+
+labor_productivity_per_hour:
+  source: ilo
+  ilo_indicator: labor_productivity_per_hour
+  start_year: 2000
+  end_year: 2025
+  unit: "2021 PPP $ per hour"
+  description: "Output per hour worked (GDP constant 2021 international $ at PPP) - ILO Modelled Estimates"
+  category: economy
+  aggregation_method: population_weighted
+  enabled: true
+  preferred: true  # Use this over OWID for labor productivity
+
+labor_productivity_per_worker:
+  source: ilo
+  ilo_indicator: labor_productivity_per_worker
+  start_year: 2000
+  end_year: 2025
+  unit: "2015 USD per worker"
+  description: "Output per worker (GDP constant 2015 US$) - ILO Modelled Estimates"
+  category: economy
+  aggregation_method: population_weighted
+  enabled: true
+
+# =============================================================================
+# OWID METRICS - ECONOMY
+# =============================================================================
+
+gdp_per_capita_ppp:
+  source: owid
+  owid_slug: gdp-per-capita-worldbank
+  start_year: 1990
+  end_year: 2024
+  unit: "international $"
+  description: "GDP per capita (PPP, constant 2017 international $)"
+  category: economy
+  aggregation_method: population_weighted
+  enabled: true
+
+median_income_daily:
+  source: owid
+  owid_slug: daily-median-income
+  start_year: 1990
+  end_year: 2024
+  unit: "$ per day"
+  description: "Daily median income (PPP-adjusted)"
+  category: economy
+  aggregation_method: population_weighted
+  enabled: true
+
+# =============================================================================
+# OWID METRICS - HEALTH
+# =============================================================================
+
+health_expenditure_gdp_percent:
+  source: owid
+  owid_slug: total-healthcare-expenditure-gdp
+  start_year: 2000
+  end_year: 2024
+  unit: "% of GDP"
+  description: "Health expenditure as a percentage of GDP"
+  category: health
+  aggregation_method: population_weighted
+  enabled: true
+
+healthy_life_expectancy:
+  source: owid
+  owid_slug: healthy-life-expectancy-at-birth
+  start_year: 1990
+  end_year: 2024
+  unit: "years"
+  description: "Healthy life expectancy at birth"
+  category: health
+  aggregation_method: population_weighted
+  enabled: true
+
+medical_rcts_published:
+  source: owid
+  owid_slug: total-number-of-rcts-published-in-high-ranked-medical-journals
+  start_year: 1990
+  end_year: 2024
+  unit: "trials"
+  description: "Randomized controlled trials published in high-ranked medical journals"
+  category: health
+  aggregation_method: sum
+  enabled: true
+
+# =============================================================================
+# OWID METRICS - SOCIAL
+# =============================================================================
+
+life_satisfaction:
+  source: owid
+  owid_slug: happiness-cantril-ladder
+  start_year: 2005
+  end_year: 2024
+  unit: "score (0-10)"
+  description: "Life satisfaction score on the Cantril Ladder"
+  category: social
+  aggregation_method: population_weighted
+  enabled: true
+
+fertility_rate:
+  source: owid
+  owid_slug: children-born-per-woman
+  start_year: 1990
+  end_year: 2024
+  unit: "births per woman"
+  description: "Fertility rate (children born per woman)"
+  category: social
+  aggregation_method: population_weighted
+  enabled: true
+
+poorest_10_percent_income:
+  source: owid
+  owid_slug: daily-income-or-consumption-of-the-poorest-10-marimekko
+  start_year: 1990
+  end_year: 2024
+  unit: "$ per day"
+  description: "Daily income or consumption of the poorest 10%"
+  category: social
+  aggregation_method: population_weighted
+  enabled: true
+
+state_capacity_index:
+  source: owid
+  owid_slug: state-capacity-index
+  start_year: 1990
+  end_year: 2024
+  unit: "index"
+  description: "State capacity index (government effectiveness)"
+  category: social
+  aggregation_method: population_weighted
+  enabled: true
+
+functioning_government_index:
+  source: owid
+  owid_slug: functioning-government-index-eiu
+  start_year: 2006
+  end_year: 2024
+  unit: "score (0-10)"
+  description: "Functioning of government index (Economist Intelligence Unit)"
+  category: social
+  aggregation_method: population_weighted
+  enabled: true
+
+homicide_rate:
+  source: owid
+  owid_slug: homicide-rate-unodc
+  start_year: 1990
+  end_year: 2024
+  unit: "per 100,000 people"
+  description: "Homicide rate (intentional homicides per 100,000 people)"
+  category: social
+  aggregation_method: population_weighted
+  enabled: true
+
+# =============================================================================
+# OWID METRICS - DEVELOPMENT
+# =============================================================================
+
+child_mortality_rate:
+  source: owid
+  owid_slug: child-mortality
+  start_year: 1990
+  end_year: 2024
+  unit: "%"
+  description: "Child mortality rate (deaths per 100 live births)"
+  category: development
+  aggregation_method: population_weighted
+  enabled: true
+
+electricity_access:
+  source: owid
+  owid_slug: share-of-the-population-with-access-to-electricity
+  start_year: 1990
+  end_year: 2024
+  unit: "%"
+  description: "Access to electricity (% of population)"
+  category: development
+  aggregation_method: population_weighted
+  enabled: true
+
+public_transport_access:
+  source: owid
+  owid_slug: share-with-convenient-access-to-public-transport
+  start_year: 2000
+  end_year: 2024
+  unit: "%"
+  description: "Share of population with convenient access to public transport"
+  category: development
+  aggregation_method: population_weighted
+  enabled: true
+
+pisa_math_performance:
+  source: owid
+  owid_slug: pisa-mean-performance-on-the-mathematics-scale-by-sex
+  start_year: 2000
+  end_year: 2024
+  unit: "score"
+  description: "PISA mean performance on mathematics scale"
+  category: development
+  aggregation_method: population_weighted
+  enabled: true
+
+pisa_reading_performance:
+  source: owid
+  owid_slug: pisa-mean-performance-on-the-reading-scale-by-sex
+  start_year: 2000
+  end_year: 2024
+  unit: "score"
+  description: "PISA mean performance on reading scale"
+  category: development
+  aggregation_method: population_weighted
+  enabled: true
+
+# =============================================================================
+# OWID METRICS - INNOVATION
+# =============================================================================
+
+researchers_per_million:
+  source: owid
+  owid_slug: researchers-in-rd-per-million-people
+  start_year: 1990
+  end_year: 2024
+  unit: "per million people"
+  description: "Researchers in R&D per million people"
+  category: innovation
+  aggregation_method: population_weighted
+  enabled: true
+
+research_spending_gdp:
+  source: owid
+  owid_slug: research-spending-gdp
+  start_year: 1990
+  end_year: 2024
+  unit: "% of GDP"
+  description: "Research and development spending as % of GDP"
+  category: innovation
+  aggregation_method: population_weighted
+  enabled: true
+
+scientific_journal_articles:
+  source: owid
+  owid_slug: scientific-and-technical-journal-articles
+  start_year: 1990
+  end_year: 2024
+  unit: "articles"
+  description: "Scientific and technical journal articles published"
+  category: innovation
+  aggregation_method: sum
+  enabled: true
+
+# =============================================================================
+# OWID METRICS - ENVIRONMENT
+# =============================================================================
+
+low_carbon_energy_share:
+  source: owid
+  owid_slug: low-carbon-share-energy
+  start_year: 1990
+  end_year: 2024
+  unit: "%"
+  description: "Share of energy from low-carbon sources (nuclear and renewables)"
+  category: environment
+  aggregation_method: population_weighted
+  enabled: true

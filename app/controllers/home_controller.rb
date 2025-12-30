@@ -34,13 +34,27 @@ class HomeController < ApplicationController
 
   private
 
+  # Helper to convert string keys to symbols and add europe fallback from european_union
+  def normalize_metric_data(data)
+    return nil if data.nil? || data.empty?
+
+    result = data.transform_keys(&:to_sym)
+
+    # If 'europe' is missing, try to use 'european_union' as fallback
+    if !result.key?(:europe) && result.key?(:european_union)
+      result[:europe] = result[:european_union]
+    end
+
+    result
+  end
+
   def fetch_latest_gdp_data
     # Get latest GDP data for key countries using EuropeanMetricsService
-    key_countries = [ "europe", "usa", "india", "china" ]
+    key_countries = [ "europe", "european_union", "usa", "india", "china" ]
     latest_data = EuropeanMetricsService.latest_metric_for_countries("gdp_per_capita_ppp", key_countries)
 
     {
-      countries: latest_data,
+      countries: normalize_metric_data(latest_data),
       year: latest_data.values.first&.dig(:year) || 2024
     }
   rescue StandardError => e
@@ -50,11 +64,11 @@ class HomeController < ApplicationController
 
   def fetch_latest_population_data
     # Get latest population data for key countries and regions
-    key_countries = [ "europe", "usa", "india", "china" ]
+    key_countries = [ "europe", "european_union", "usa", "india", "china" ]
     latest_data = PopulationDataService.latest_population_for_countries(key_countries)
 
     {
-      countries: latest_data,
+      countries: normalize_metric_data(latest_data),
       year: latest_data.values.first&.dig(:year) || Date.current.year
     }
   rescue StandardError => e
@@ -64,11 +78,11 @@ class HomeController < ApplicationController
 
   def fetch_latest_child_mortality_data
     # Get latest child mortality data for key countries using EuropeanMetricsService
-    key_countries = [ "europe", "usa", "india", "china" ]
+    key_countries = [ "europe", "european_union", "usa", "india", "china" ]
     latest_data = EuropeanMetricsService.latest_metric_for_countries("child_mortality_rate", key_countries)
 
     {
-      countries: latest_data,
+      countries: normalize_metric_data(latest_data),
       year: latest_data.values.first&.dig(:year) || 2024
     }
   rescue StandardError => e
@@ -78,11 +92,11 @@ class HomeController < ApplicationController
 
   def fetch_latest_electricity_access_data
     # Get latest electricity access data for key countries using EuropeanMetricsService
-    key_countries = [ "europe", "usa", "india", "china" ]
+    key_countries = [ "europe", "european_union", "usa", "india", "china" ]
     latest_data = EuropeanMetricsService.latest_metric_for_countries("electricity_access", key_countries)
 
     {
-      countries: latest_data,
+      countries: normalize_metric_data(latest_data),
       year: latest_data.values.first&.dig(:year) || 2024
     }
   rescue StandardError => e

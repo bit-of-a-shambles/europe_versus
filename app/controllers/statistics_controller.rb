@@ -47,7 +47,11 @@ class StatisticsController < ApplicationController
       @chart_name = "happiness-cantril-ladder"
     elsif Metric.where(metric_name: @metric_name).exists?
       # Use local data for any metric we have in our database
-      config = OwidMetricImporter.all_configs[@metric_name] if defined?(OwidMetricImporter)
+      # Try unified MetricImporter first, fallback to OwidMetricImporter
+      config = nil
+      config = MetricImporter.configs[@metric_name] if defined?(MetricImporter)
+      config ||= OwidMetricImporter.all_configs[@metric_name] if defined?(OwidMetricImporter)
+
       title = config&.dig(:description) || @metric_name.humanize.titleize
       unit = config&.dig(:unit) || Metric.where(metric_name: @metric_name).first&.unit || ""
       @chart_data = build_metric_chart_data(@metric_name, title, unit)
@@ -154,17 +158,29 @@ class StatisticsController < ApplicationController
   end
 
   def group_metrics_by_category
-    # Get category mappings from OWID config (if available) plus hardcoded ones
-    owid_category_map = {}
-    if defined?(OwidMetricImporter)
-      OwidMetricImporter.all_configs.each do |metric_name, config|
-        category = config[:category] || "social"
-        owid_category_map[category] ||= []
-        owid_category_map[category] << metric_name
+    # Get category mappings from unified MetricImporter config (supports OWID + ILO)
+    unified_category_map = {}
+    if defined?(MetricImporter)
+      MetricImporter.configs.each do |metric_name, config|
+        # Skip disabled metrics
+        next if config[:enabled] == false
+
+        category = config[:category]&.to_s || "social"
+        unified_category_map[category] ||= []
+        unified_category_map[category] << metric_name
       end
     end
 
-    # Hardcoded category mappings for non-OWID metrics
+    # Fallback to OwidMetricImporter if MetricImporter not available
+    if unified_category_map.empty? && defined?(OwidMetricImporter)
+      OwidMetricImporter.all_configs.each do |metric_name, config|
+        category = config[:category] || "social"
+        unified_category_map[category] ||= []
+        unified_category_map[category] << metric_name
+      end
+    end
+
+    # Hardcoded category mappings for non-configured metrics
     hardcoded_mappings = {
       "economy" => [ "gdp_per_capita_ppp", "gni_per_capita", "unemployment_rate" ],
       "social" => [ "population", "life_expectancy", "birth_rate", "death_rate" ],
@@ -173,9 +189,9 @@ class StatisticsController < ApplicationController
       "innovation" => [ "research_development", "patents", "internet_users" ]
     }
 
-    # Merge OWID and hardcoded mappings
-    category_mappings = hardcoded_mappings.merge(owid_category_map) do |key, hardcoded, owid|
-      (hardcoded + owid).uniq
+    # Merge unified and hardcoded mappings
+    category_mappings = hardcoded_mappings.merge(unified_category_map) do |key, hardcoded, unified|
+      (hardcoded + unified).uniq
     end
 
     # Get all unique metric names that have data
@@ -203,10 +219,16 @@ class StatisticsController < ApplicationController
     # Group by country
     by_country = latest_metrics.index_by(&:country)
 
-    # Get Europe aggregate
-    europe_record = by_country["europe"]
-    europe_value = europe_record&.metric_value || 0
+    # Get Europe aggregate - fallback to european_union if europe doesn't exist
+    europe_record = by_country["europe"] || by_country["european_union"]
     europe_unit = europe_record&.unit || latest_metrics.first.unit
+
+    # Get source from country data (not the "Calculated from..." description)
+    # Prefer USA record source, fallback to any non-Europe record
+    original_source = by_country["usa"]&.source ||
+                      by_country["india"]&.source ||
+                      by_country["china"]&.source ||
+                      latest_metrics.find { |m| ![ "europe", "european_union" ].include?(m.country) }&.source
 
     # Create simple struct for index view - use nil for missing data, not 0
     OpenStruct.new(
@@ -219,7 +241,7 @@ class StatisticsController < ApplicationController
       unit: europe_unit,
       year: latest_metrics.first.year,
       description: europe_record&.description || latest_metrics.first.description,
-      source: europe_record&.source || latest_metrics.first.source
+      source: original_source
     )
   end
 end

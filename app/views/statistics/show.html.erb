@@ -112,7 +112,14 @@
       %>
       <% comparison_regions.each_with_index do |region, index| %>
         <% 
-          country_data = @chart_data.dig(:countries, region[:key], :data) || {}
+          # For Europe, fallback to european_union data if europe data is missing or empty
+          if region[:key] == 'europe'
+            europe_data = @chart_data.dig(:countries, 'europe', :data) || {}
+            eu_data = @chart_data.dig(:countries, 'european_union', :data) || {}
+            country_data = europe_data.any? ? europe_data : eu_data
+          else
+            country_data = @chart_data.dig(:countries, region[:key], :data) || {}
+          end
           latest_country_year = country_data.keys.max
           value = latest_country_year ? country_data[latest_country_year] : nil
         %>
@@ -265,7 +272,7 @@
     <div class="grid grid-cols-2 lg:grid-cols-4 gap-0">
       <% if @statistic.europe_value && @statistic.us_value && @statistic.us_value != 0 %>
         <div class="border-2 border-black p-6">
-          <div class="font-mono text-xs uppercase tracking-brutal text-black/50 mb-4">EU vs USA</div>
+          <div class="font-mono text-xs uppercase tracking-brutal text-black/50 mb-4">EUR vs USA</div>
           <% diff_us = ((@statistic.europe_value - @statistic.us_value) / @statistic.us_value * 100).round(1) %>
           <div class="font-mono text-3xl md:text-4xl font-bold <%= diff_us >= 0 ? 'text-[#0066FF]' : 'text-black' %>">
             <%= diff_us >= 0 ? '+' : '' %><%= diff_us %>%
@@ -275,7 +282,7 @@
       
       <% if @statistic.europe_value && @statistic.india_value && @statistic.india_value != 0 %>
         <div class="border-2 border-black border-l-0 p-6">
-          <div class="font-mono text-xs uppercase tracking-brutal text-black/50 mb-4">EU vs IND</div>
+          <div class="font-mono text-xs uppercase tracking-brutal text-black/50 mb-4">EUR vs IND</div>
           <% diff_india = ((@statistic.europe_value - @statistic.india_value) / @statistic.india_value * 100).round(1) %>
           <div class="font-mono text-3xl md:text-4xl font-bold <%= diff_india >= 0 ? 'text-[#0066FF]' : 'text-black' %>">
             <%= diff_india >= 0 ? '+' : '' %><%= diff_india %>%
@@ -285,7 +292,7 @@
       
       <% if @statistic.europe_value && @statistic.china_value && @statistic.china_value != 0 %>
         <div class="border-2 border-black border-l-0 p-6">
-          <div class="font-mono text-xs uppercase tracking-brutal text-black/50 mb-4">EU vs CHN</div>
+          <div class="font-mono text-xs uppercase tracking-brutal text-black/50 mb-4">EUR vs CHN</div>
           <% diff_china = ((@statistic.europe_value - @statistic.china_value) / @statistic.china_value * 100).round(1) %>
           <div class="font-mono text-3xl md:text-4xl font-bold <%= diff_china >= 0 ? 'text-[#0066FF]' : 'text-black' %>">
             <%= diff_china >= 0 ? '+' : '' %><%= diff_china %>%

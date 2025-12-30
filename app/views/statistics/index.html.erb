@@ -74,20 +74,15 @@
                 <% end %>
               </div>
               
-              <% if stat.description.present? %>
+              <% if stat.source.present? %>
                 <p class="text-xs text-black/50 mt-4 pt-4 border-t border-black/10">
-                  <%= truncate(stat.description, length: 100) %>
+                  Source: <%= stat.source %>
                 </p>
               <% end %>
               
-              <div class="mt-6 flex items-center justify-between">
+              <div class="mt-6">
                 <%= link_to statistic_path(stat.id), class: "font-mono text-xs uppercase tracking-brutal underline underline-offset-4 hover:text-[#0066FF] transition-colors" do %>
                   Details →
-                <% end %>
-                <% if stat.source.present? %>
-                  <span class="font-mono text-xs text-black/30">
-                    <%= truncate(stat.source, length: 20) %>
-                  </span>
                 <% end %>
               </div>
             </div>
