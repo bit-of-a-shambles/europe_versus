@@ -1,20 +1,20 @@
 <!-- Hero Section -->
 <section class="border-b-2 border-black">
-  <div class="max-w-7xl mx-auto px-6 py-20">
-    <div class="grid md:grid-cols-2 gap-12 items-end">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 py-12 md:py-20">
+    <div class="grid md:grid-cols-2 gap-8 md:gap-12 items-end">
       <div>
-        <h1 class="text-7xl md:text-[8rem] font-black leading-none tracking-tighter">
+        <h1 class="text-5xl sm:text-6xl md:text-[8rem] font-black leading-none tracking-tighter">
           EUROPE<br>
           <span class="text-[#0066FF]">VERSUS</span>
         </h1>
       </div>
-      <div class="border-l-2 border-black pl-8">
-        <p class="text-xl font-light leading-relaxed mb-8">
+      <div class="border-t-2 md:border-t-0 md:border-l-2 border-black pt-6 md:pt-0 md:pl-8">
+        <p class="text-lg md:text-xl font-light leading-relaxed mb-6 md:mb-8">
           Comparative statistics for Europe, the EU, USA, India, and China. 
-          Countering misconceptions with verified statistics from trusted international sources.</p>
+          Countering misconceptions with verified statistics from trusted international sources.
         </p>
-        <div class="h-px bg-black mb-8"></div>
-        <%= link_to statistics_path, class: "inline-flex items-center gap-4 bg-black text-white px-8 py-4 font-mono text-sm uppercase tracking-brutal hover:bg-[#0066FF] transition-colors" do %>
+        <div class="h-px bg-black mb-6 md:mb-8"></div>
+        <%= link_to statistics_path, class: "inline-flex items-center gap-3 md:gap-4 bg-black text-white px-6 md:px-8 py-3 md:py-4 font-mono text-xs md:text-sm uppercase tracking-brutal hover:bg-[#0066FF] transition-colors" do %>
           View Statistics
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
@@ -27,60 +27,60 @@
 
 <!-- Key Stats Banner -->
 <section class="bg-[#F5F5F5] border-b-2 border-black">
-  <div class="max-w-7xl mx-auto px-6">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6">
     <div class="grid grid-cols-2 md:grid-cols-4">
       <% if @gdp_data && @gdp_data[:countries] && @gdp_data[:countries][:europe] %>
-        <div class="py-8 pr-6 border-r-2 border-black">
-          <div class="font-mono text-xs uppercase tracking-brutal text-black/60 mb-2">GDP/CAPITA PPP</div>
-          <div class="font-mono text-4xl font-bold text-[#0066FF]">$<%= number_with_delimiter((@gdp_data[:countries][:europe][:value].to_i / 1000).round) %>K</div>
+        <div class="py-6 md:py-8 pr-4 md:pr-6 border-r-2 border-b-2 md:border-b-0 border-black">
+          <div class="font-mono text-[10px] md:text-xs uppercase tracking-brutal text-black/60 mb-1 md:mb-2">GDP/CAPITA PPP</div>
+          <div class="font-mono text-2xl md:text-4xl font-bold text-[#0066FF]">$<%= number_with_delimiter((@gdp_data[:countries][:europe][:value].to_i / 1000).round) %>K</div>
         </div>
       <% else %>
-        <div class="py-8 pr-6 border-r-2 border-black">
-          <div class="font-mono text-xs uppercase tracking-brutal text-black/60 mb-2">GDP/CAPITA PPP</div>
-          <div class="font-mono text-4xl font-bold text-[#0066FF]">—</div>
+        <div class="py-6 md:py-8 pr-4 md:pr-6 border-r-2 border-b-2 md:border-b-0 border-black">
+          <div class="font-mono text-[10px] md:text-xs uppercase tracking-brutal text-black/60 mb-1 md:mb-2">GDP/CAPITA PPP</div>
+          <div class="font-mono text-2xl md:text-4xl font-bold text-[#0066FF]">—</div>
         </div>
       <% end %>
       
       <% if @population_data && @population_data[:countries] && @population_data[:countries][:europe] %>
-        <div class="py-8 px-6 border-r-2 border-black">
-          <div class="font-mono text-xs uppercase tracking-brutal text-black/60 mb-2">POPULATION</div>
-          <div class="font-mono text-4xl font-bold text-[#0066FF]"><%= (@population_data[:countries][:europe][:value].to_i / 1_000_000).round %>M</div>
+        <div class="py-6 md:py-8 px-4 md:px-6 md:border-r-2 border-b-2 md:border-b-0 border-black">
+          <div class="font-mono text-[10px] md:text-xs uppercase tracking-brutal text-black/60 mb-1 md:mb-2">POPULATION</div>
+          <div class="font-mono text-2xl md:text-4xl font-bold text-[#0066FF]"><%= (@population_data[:countries][:europe][:value].to_i / 1_000_000).round %>M</div>
         </div>
       <% else %>
-        <div class="py-8 px-6 border-r-2 border-black">
-          <div class="font-mono text-xs uppercase tracking-brutal text-black/60 mb-2">POPULATION</div>
-          <div class="font-mono text-4xl font-bold text-[#0066FF]">—</div>
+        <div class="py-6 md:py-8 px-4 md:px-6 md:border-r-2 border-b-2 md:border-b-0 border-black">
+          <div class="font-mono text-[10px] md:text-xs uppercase tracking-brutal text-black/60 mb-1 md:mb-2">POPULATION</div>
+          <div class="font-mono text-2xl md:text-4xl font-bold text-[#0066FF]">—</div>
         </div>
       <% end %>
       
-      <div class="py-8 px-6 border-r-2 border-black">
-        <div class="font-mono text-xs uppercase tracking-brutal text-black/60 mb-2">COUNTRIES</div>
-        <div class="font-mono text-4xl font-bold text-[#0066FF]">50</div>
+      <div class="py-6 md:py-8 pr-4 md:px-6 border-r-2 md:border-r-2 border-black">
+        <div class="font-mono text-[10px] md:text-xs uppercase tracking-brutal text-black/60 mb-1 md:mb-2">COUNTRIES</div>
+        <div class="font-mono text-2xl md:text-4xl font-bold text-[#0066FF]">50</div>
       </div>
       
-      <div class="py-8 pl-6">
-        <div class="font-mono text-xs uppercase tracking-brutal text-black/60 mb-2">DATA SOURCES</div>
-        <div class="font-mono text-4xl font-bold text-[#0066FF]">4+</div>
+      <div class="py-6 md:py-8 pl-4 md:pl-6">
+        <div class="font-mono text-[10px] md:text-xs uppercase tracking-brutal text-black/60 mb-1 md:mb-2">DATA SOURCES</div>
+        <div class="font-mono text-2xl md:text-4xl font-bold text-[#0066FF]">4+</div>
       </div>
     </div>
   </div>
 </section>
 
 <!-- Section Label -->
-<div class="max-w-7xl mx-auto px-6">
-  <div class="flex items-center gap-6 py-8 border-b-2 border-black">
-    <span class="font-mono text-xs uppercase tracking-brutal text-black/60">Quick Comparisons</span>
+<div class="max-w-7xl mx-auto px-4 sm:px-6">
+  <div class="flex items-center gap-4 md:gap-6 py-6 md:py-8 border-b-2 border-black">
+    <span class="font-mono text-[10px] md:text-xs uppercase tracking-brutal text-black/60">Quick Comparisons</span>
     <div class="flex-1 h-px bg-black/20"></div>
-    <span class="font-mono text-xs text-black/40">Latest Data</span>
+    <span class="font-mono text-[10px] md:text-xs text-black/40">Latest Data</span>
   </div>
 </div>
 
 <!-- Statistics Cards -->
-<section class="max-w-7xl mx-auto px-6 py-12">
+<section class="max-w-7xl mx-auto px-4 sm:px-6 py-8 md:py-12">
   <div class="grid md:grid-cols-2 gap-0">
     
     <!-- GDP per Capita Card -->
-    <div class="border-2 border-black p-8 bg-white">
+    <div class="border-2 border-black p-5 md:p-8 bg-white">
       <div class="flex justify-between items-start mb-8">
         <h3 class="font-mono text-sm uppercase tracking-brutal">GDP per Capita (PPP)</h3>
         <% if @gdp_data && @gdp_data[:countries] && @gdp_data[:countries][:europe] %>
@@ -94,11 +94,11 @@
           <span class="font-mono text-xs uppercase tracking-brutal text-black/60">EU</span>
         </div>
         <% if @gdp_data && @gdp_data[:countries] && @gdp_data[:countries][:europe] %>
-          <div class="font-mono text-6xl font-bold text-[#0066FF] tracking-tight">
+          <div class="font-mono text-4xl md:text-6xl font-bold text-[#0066FF] tracking-tight">
             $<%= number_with_delimiter(@gdp_data[:countries][:europe][:value].to_i) %>
           </div>
         <% else %>
-          <div class="font-mono text-6xl font-bold text-black/20 tracking-tight">—</div>
+          <div class="font-mono text-4xl md:text-6xl font-bold text-black/20 tracking-tight">—</div>
         <% end %>
       </div>
       
@@ -126,7 +126,7 @@
     </div>
     
     <!-- Population Card -->
-    <div class="border-2 border-black border-l-0 p-8 bg-[#F5F5F5]">
+    <div class="border-2 border-black border-t-0 md:border-t-2 md:border-l-0 p-5 md:p-8 bg-[#F5F5F5]">
       <div class="flex justify-between items-start mb-8">
         <h3 class="font-mono text-sm uppercase tracking-brutal">Population</h3>
         <% if @population_data && @population_data[:countries] && @population_data[:countries][:europe] %>
@@ -140,11 +140,11 @@
           <span class="font-mono text-xs uppercase tracking-brutal text-black/60">EU</span>
         </div>
         <% if @population_data && @population_data[:countries] && @population_data[:countries][:europe] %>
-          <div class="font-mono text-6xl font-bold text-[#0066FF] tracking-tight">
+          <div class="font-mono text-4xl md:text-6xl font-bold text-[#0066FF] tracking-tight">
             <%= number_with_delimiter(@population_data[:countries][:europe][:value].to_i) %>
           </div>
         <% else %>
-          <div class="font-mono text-6xl font-bold text-black/20 tracking-tight">—</div>
+          <div class="font-mono text-4xl md:text-6xl font-bold text-black/20 tracking-tight">—</div>
         <% end %>
       </div>
       
@@ -172,7 +172,7 @@
     </div>
     
     <!-- Child Mortality Card -->
-    <div class="border-2 border-black border-t-0 p-8 bg-[#F5F5F5]">
+    <div class="border-2 border-black border-t-0 p-5 md:p-8 bg-[#F5F5F5]">
       <div class="flex justify-between items-start mb-8">
         <h3 class="font-mono text-sm uppercase tracking-brutal">Child Mortality Rate</h3>
         <% if @child_mortality_data && @child_mortality_data[:countries] && @child_mortality_data[:countries][:europe] %>
@@ -186,11 +186,11 @@
           <span class="font-mono text-xs uppercase tracking-brutal text-black/60">EU</span>
         </div>
         <% if @child_mortality_data && @child_mortality_data[:countries] && @child_mortality_data[:countries][:europe] %>
-          <div class="font-mono text-6xl font-bold text-[#0066FF] tracking-tight">
-            <%= @child_mortality_data[:countries][:europe][:value].round(1) %><span class="text-2xl">%</span>
+          <div class="font-mono text-4xl md:text-6xl font-bold text-[#0066FF] tracking-tight">
+            <%= @child_mortality_data[:countries][:europe][:value].round(1) %><span class="text-xl md:text-2xl">%</span>
           </div>
         <% else %>
-          <div class="font-mono text-6xl font-bold text-black/20 tracking-tight">—</div>
+          <div class="font-mono text-4xl md:text-6xl font-bold text-black/20 tracking-tight">—</div>
         <% end %>
       </div>
       
@@ -218,7 +218,7 @@
     </div>
     
     <!-- Healthy Life Expectancy Card -->
-    <div class="border-2 border-black border-t-0 border-l-0 p-8 bg-white">
+    <div class="border-2 border-black border-t-0 md:border-l-0 p-5 md:p-8 bg-white">
       <div class="flex justify-between items-start mb-8">
         <h3 class="font-mono text-sm uppercase tracking-brutal">Healthy Life Expectancy</h3>
         <% if @healthy_life_expectancy_data && @healthy_life_expectancy_data[:countries] && @healthy_life_expectancy_data[:countries][:europe] %>
@@ -232,11 +232,11 @@
           <span class="font-mono text-xs uppercase tracking-brutal text-black/60">EU</span>
         </div>
         <% if @healthy_life_expectancy_data && @healthy_life_expectancy_data[:countries] && @healthy_life_expectancy_data[:countries][:europe] %>
-          <div class="font-mono text-6xl font-bold text-[#0066FF] tracking-tight">
-            <%= @healthy_life_expectancy_data[:countries][:europe][:value].round(1) %><span class="text-2xl"> yrs</span>
+          <div class="font-mono text-4xl md:text-6xl font-bold text-[#0066FF] tracking-tight">
+            <%= @healthy_life_expectancy_data[:countries][:europe][:value].round(1) %><span class="text-xl md:text-2xl"> yrs</span>
           </div>
         <% else %>
-          <div class="font-mono text-6xl font-bold text-black/20 tracking-tight">—</div>
+          <div class="font-mono text-4xl md:text-6xl font-bold text-black/20 tracking-tight">—</div>
         <% end %>
       </div>
       
@@ -266,8 +266,8 @@
   </div>
   
   <!-- View All Statistics -->
-  <div class="mt-12 text-center">
-    <%= link_to statistics_path, class: "inline-flex items-center gap-4 bg-black text-white px-10 py-5 font-mono text-sm uppercase tracking-brutal hover:bg-[#0066FF] transition-colors" do %>
+  <div class="mt-8 md:mt-12 text-center">
+    <%= link_to statistics_path, class: "inline-flex items-center gap-3 md:gap-4 bg-black text-white px-6 md:px-10 py-4 md:py-5 font-mono text-xs md:text-sm uppercase tracking-brutal hover:bg-[#0066FF] transition-colors" do %>
       View All Statistics
       <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
@@ -278,27 +278,27 @@
 
 <!-- Mission Section -->
 <section class="border-y-2 border-black">
-  <div class="max-w-7xl mx-auto px-6 py-16">
-    <div class="flex items-center gap-4 mb-12">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 py-10 md:py-16">
+    <div class="flex items-center gap-4 mb-8 md:mb-12">
       <span class="font-mono text-xs uppercase tracking-brutal text-black/60">Our Mission</span>
       <div class="flex-1 h-px bg-black"></div>
     </div>
     
     <div class="grid md:grid-cols-3 gap-0">
-      <div class="border-2 border-black p-8 hover:bg-[#F5F5F5] transition-colors">
-        <div class="font-mono text-4xl font-bold text-black/20 mb-4">01</div>
-        <h3 class="font-mono text-sm uppercase tracking-brutal mb-4">Data-Driven</h3>
-        <p class="text-black/60">All comparisons use official statistics from reputable sources.</p>
+      <div class="border-2 border-black p-6 md:p-8 hover:bg-[#F5F5F5] transition-colors">
+        <div class="font-mono text-3xl md:text-4xl font-bold text-black/20 mb-3 md:mb-4">01</div>
+        <h3 class="font-mono text-sm uppercase tracking-brutal mb-3 md:mb-4">Data-Driven</h3>
+        <p class="text-black/60 text-sm md:text-base">All comparisons use official statistics from reputable sources.</p>
       </div>
-      <div class="border-2 border-black border-l-0 p-8 hover:bg-[#F5F5F5] transition-colors">
-        <div class="font-mono text-4xl font-bold text-black/20 mb-4">02</div>
-        <h3 class="font-mono text-sm uppercase tracking-brutal mb-4">Objective</h3>
-        <p class="text-black/60">We present facts without bias, letting the data speak for itself across economic, social, and environmental metrics.</p>
+      <div class="border-2 border-black border-t-0 md:border-t-2 md:border-l-0 p-6 md:p-8 hover:bg-[#F5F5F5] transition-colors">
+        <div class="font-mono text-3xl md:text-4xl font-bold text-black/20 mb-3 md:mb-4">02</div>
+        <h3 class="font-mono text-sm uppercase tracking-brutal mb-3 md:mb-4">Objective</h3>
+        <p class="text-black/60 text-sm md:text-base">We present facts without bias, letting the data speak for itself across economic, social, and environmental metrics.</p>
       </div>
-      <div class="border-2 border-black border-l-0 p-8 hover:bg-[#F5F5F5] transition-colors">
-        <div class="font-mono text-4xl font-bold text-black/20 mb-4">03</div>
-        <h3 class="font-mono text-sm uppercase tracking-brutal mb-4">Transparent</h3>
-        <p class="text-black/60">All calculations are population-weighted and methodology is fully documented. Open source on GitHub.</p>
+      <div class="border-2 border-black border-t-0 md:border-t-2 md:border-l-0 p-6 md:p-8 hover:bg-[#F5F5F5] transition-colors">
+        <div class="font-mono text-3xl md:text-4xl font-bold text-black/20 mb-3 md:mb-4">03</div>
+        <h3 class="font-mono text-sm uppercase tracking-brutal mb-3 md:mb-4">Transparent</h3>
+        <p class="text-black/60 text-sm md:text-base">All calculations are population-weighted and methodology is fully documented. Open source on GitHub.</p>
       </div>
     </div>
   </div>
@@ -309,55 +309,55 @@
 
 <!-- Open Source Section -->
 <section id="contribute" class="bg-black text-white">
-  <div class="max-w-7xl mx-auto px-6 py-16">
-    <div class="flex items-center gap-4 mb-12">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 py-10 md:py-16">
+    <div class="flex items-center gap-4 mb-8 md:mb-12">
       <span class="font-mono text-xs uppercase tracking-brutal text-white/60">Open Source</span>
       <div class="flex-1 h-px bg-white/20"></div>
     </div>
     
-    <div class="grid md:grid-cols-2 gap-12 items-center">
+    <div class="grid md:grid-cols-2 gap-8 md:gap-12 items-center">
       <div>
-        <h2 class="text-4xl md:text-5xl font-black mb-6">
+        <h2 class="text-3xl sm:text-4xl md:text-5xl font-black mb-4 md:mb-6">
           CONTRIBUTE<br>
           <span class="text-[#0066FF]">TO THE PROJECT</span>
         </h2>
-        <p class="text-white/70 text-lg mb-8">
+        <p class="text-white/70 text-base md:text-lg mb-6 md:mb-8">
           EuropeVersus is fully open source. The code, data pipelines, and methodology are all available on GitHub. 
           Help us expand the database with more verified statistics.
         </p>
         <a href="https://github.com/Duartemartins/europe_versus" 
            target="_blank"
-           class="inline-flex items-center gap-4 bg-white text-black px-8 py-4 font-mono text-sm uppercase tracking-brutal hover:bg-[#0066FF] hover:text-white transition-colors">
-          <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+           class="inline-flex items-center gap-3 md:gap-4 bg-white text-black px-6 md:px-8 py-3 md:py-4 font-mono text-xs md:text-sm uppercase tracking-brutal hover:bg-[#0066FF] hover:text-white transition-colors">
+          <svg class="w-4 h-4 md:w-5 md:h-5" fill="currentColor" viewBox="0 0 24 24">
             <path d="M12 0C5.374 0 0 5.373 0 12c0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0112 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576C20.566 21.797 24 17.300 24 12c0-6.627-5.373-12-12-12z"/>
           </svg>
           View on GitHub
         </a>
       </div>
-      <div class="border-2 border-white/20 p-8">
-        <h3 class="font-mono text-sm uppercase tracking-brutal text-white/60 mb-6">Data Sources</h3>
-        <div class="space-y-4 font-mono text-sm">
-          <div class="flex items-center gap-4">
+      <div class="border-2 border-white/20 p-6 md:p-8">
+        <h3 class="font-mono text-sm uppercase tracking-brutal text-white/60 mb-4 md:mb-6">Data Sources</h3>
+        <div class="grid grid-cols-2 md:block gap-2 md:space-y-4 font-mono text-sm">
+          <div class="flex items-center gap-3 md:gap-4">
             <span class="text-[#0066FF]">→</span>
             <span>Our World in Data</span>
           </div>
-          <div class="flex items-center gap-4">
+          <div class="flex items-center gap-3 md:gap-4">
             <span class="text-[#0066FF]">→</span>
             <span>World Bank</span>
           </div>
-          <div class="flex items-center gap-4">
+          <div class="flex items-center gap-3 md:gap-4">
             <span class="text-[#0066FF]">→</span>
             <span>OECD</span>
           </div>
-          <div class="flex items-center gap-4">
+          <div class="flex items-center gap-3 md:gap-4">
             <span class="text-[#0066FF]">→</span>
             <span>Eurostat</span>
           </div>
-          <div class="flex items-center gap-4">
+          <div class="flex items-center gap-3 md:gap-4">
             <span class="text-[#0066FF]">→</span>
             <span>IMF</span>
           </div>
-          <div class="flex items-center gap-4">
+          <div class="flex items-center gap-3 md:gap-4">
             <span class="text-[#0066FF]">→</span>
             <span>ILO</span>
           </div>

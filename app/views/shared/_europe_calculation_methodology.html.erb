@@ -1,26 +1,26 @@
 <% show_current_values = local_assigns.fetch(:show_current_values, true); compact_view = local_assigns.fetch(:compact_view, false); nil %>
-<section class="<%= compact_view ? 'py-12' : 'py-20' %> border-t-2 border-black">
-  <div class="max-w-6xl mx-auto">
-    <div class="mb-12">
-      <h2 class="<%= compact_view ? 'text-3xl' : 'text-5xl' %> font-black tracking-tighter mb-4">
+<section class="<%= compact_view ? 'py-8 md:py-12' : 'py-12 md:py-20' %> border-t-2 border-black">
+  <div class="max-w-6xl mx-auto px-4 sm:px-6">
+    <div class="mb-8 md:mb-12">
+      <h2 class="<%= compact_view ? 'text-2xl md:text-3xl' : 'text-3xl md:text-5xl' %> font-black tracking-tighter mb-3 md:mb-4">
         HOW EUROPE<br>
         <span class="text-[#0066FF]">IS DEFINED</span>
       </h2>
-      <p class="<%= compact_view ? 'text-base' : 'text-lg' %> text-black/60 max-w-2xl">
+      <p class="<%= compact_view ? 'text-sm md:text-base' : 'text-base md:text-lg' %> text-black/60 max-w-2xl">
         Transparent, population-weighted calculations for fair comparisons
       </p>
     </div>
     
-    <div class="grid md:grid-cols-2 gap-0">
-      <!-- Population Calculation -->
-      <div class="border-2 border-black p-8">
-        <div class="flex items-center gap-4 mb-6 pb-6 border-b border-black">
-          <span class="font-mono text-xs uppercase tracking-brutal bg-black text-white px-3 py-1">01</span>
-          <h3 class="font-mono text-sm uppercase tracking-brutal font-bold">Population</h3>
+    <div class="grid md:grid-cols-3 gap-0">
+      <!-- Europe Definition -->
+      <div class="border-2 border-black p-5 md:p-8 bg-white">
+        <div class="flex items-center gap-3 md:gap-4 mb-4 md:mb-6 pb-4 md:pb-6 border-b border-black">
+          <span class="font-mono text-xs uppercase tracking-brutal bg-black text-white px-2 md:px-3 py-1">01</span>
+          <h3 class="font-mono text-xs md:text-sm uppercase tracking-brutal font-bold">Europe</h3>
         </div>
-        <div class="space-y-4">
-          <p class="text-black/70">Europe includes all 50 European countries:</p>
-          <ul class="space-y-2 text-sm text-black/60">
+        <div class="space-y-3 md:space-y-4">
+          <p class="text-black/70 text-sm md:text-base">Includes all 50 European countries:</p>
+          <ul class="space-y-2 text-xs md:text-sm text-black/60">
             <li class="flex items-start gap-2">
               <span class="text-[#0066FF] font-bold">—</span>
               <span><strong class="text-black">27 EU member states:</strong> Germany, France, Italy, etc.</span>
@@ -48,12 +48,12 @@
               population_data = PopulationDataService.latest_population_for_countries(['europe'])
               if population_data && population_data['europe']
           %>
-            <div class="mt-6 pt-6 border-t border-black">
-              <div class="font-mono text-xs uppercase tracking-brutal text-black/50 mb-2">Current Total</div>
-              <div class="font-mono text-3xl font-bold text-[#0066FF]">
+            <div class="mt-4 md:mt-6 pt-4 md:pt-6 border-t border-black">
+              <div class="font-mono text-[10px] md:text-xs uppercase tracking-brutal text-black/50 mb-1 md:mb-2">Total Population</div>
+              <div class="font-mono text-2xl md:text-3xl font-bold text-[#0066FF]">
                 <%= number_with_delimiter(population_data['europe'][:value].to_i / 1_000_000) %>M
               </div>
-              <div class="font-mono text-xs text-black/40"><%= population_data['europe'][:year] %></div>
+              <div class="font-mono text-[10px] md:text-xs text-black/40"><%= population_data['europe'][:year] %></div>
             </div>
           <% 
               end
@@ -63,22 +63,73 @@
         <% end %>
       </div>
       
-      <!-- GDP Calculation -->
-      <div class="border-2 border-black border-l-0 p-8">
-        <div class="flex items-center gap-4 mb-6 pb-6 border-b border-black">
-          <span class="font-mono text-xs uppercase tracking-brutal bg-black text-white px-3 py-1">02</span>
-          <h3 class="font-mono text-sm uppercase tracking-brutal font-bold">GDP per Capita</h3>
+      <div class="grid md:grid-cols-1 gap-0 md:col-span-2">
+      <!-- Simple Sum -->
+      <div class="border-2 border-black border-t-0 md:border-t-2 md:border-l-0 p-5 md:p-8 bg-[#F5F5F5]">
+        <div class="flex items-center gap-3 md:gap-4 mb-4 md:mb-6 pb-4 md:pb-6 border-b border-black">
+          <span class="font-mono text-xs uppercase tracking-brutal bg-black text-white px-2 md:px-3 py-1">02</span>
+          <h3 class="font-mono text-xs md:text-sm uppercase tracking-brutal font-bold">Simple Sum</h3>
         </div>
-        <div class="space-y-4">
-          <p class="text-black/70">Population-weighted calculation:</p>
-          <ul class="space-y-2 text-sm text-black/60">
+        <div class="space-y-3 md:space-y-4">
+          <p class="text-black/70 text-sm md:text-base">Used for absolute totals across all countries:</p>
+          <ul class="space-y-2 text-xs md:text-sm text-black/60">
             <li class="flex items-start gap-2">
               <span class="text-[#0066FF] font-bold">—</span>
-              <span><strong class="text-black">Step 1:</strong> GDP × population = total GDP</span>
+              <span><strong class="text-black">Step 1:</strong> Collect metric for each country</span>
             </li>
             <li class="flex items-start gap-2">
               <span class="text-[#0066FF] font-bold">—</span>
-              <span><strong class="text-black">Step 2:</strong> Sum all countries' total GDP</span>
+              <span><strong class="text-black">Step 2:</strong> Add all values together</span>
+            </li>
+            <li class="flex items-start gap-2">
+              <span class="text-[#0066FF] font-bold">—</span>
+              <span><strong class="text-black">Examples:</strong> Total population, total GDP</span>
+            </li>
+            <% unless compact_view %>
+              <li class="flex items-start gap-2">
+                <span class="text-[#0066FF] font-bold">—</span>
+                <span><strong class="text-black">Coverage:</strong> 50 European countries</span>
+              </li>
+            <% end %>
+          </ul>
+        </div>
+        <% if show_current_values %>
+          <% 
+            begin
+              population_data = PopulationDataService.latest_population_for_countries(['europe'])
+              if population_data && population_data['europe']
+          %>
+            <div class="mt-4 md:mt-6 pt-4 md:pt-6 border-t border-black">
+              <div class="font-mono text-[10px] md:text-xs uppercase tracking-brutal text-black/50 mb-1 md:mb-2">Example: Population</div>
+              <div class="font-mono text-2xl md:text-3xl font-bold text-[#0066FF]">
+                <%= number_with_delimiter(population_data['europe'][:value].to_i / 1_000_000) %>M
+              </div>
+              <div class="font-mono text-[10px] md:text-xs text-black/40"><%= population_data['europe'][:year] %></div>
+            </div>
+          <% 
+              end
+            rescue => e
+            end
+          %>
+        <% end %>
+      </div>
+      
+      <!-- Population-Weighted Average -->
+      <div class="border-2 border-black border-t-0 p-5 md:p-8 bg-white">
+        <div class="flex items-center gap-3 md:gap-4 mb-4 md:mb-6 pb-4 md:pb-6 border-b border-black">
+          <span class="font-mono text-xs uppercase tracking-brutal bg-black text-white px-2 md:px-3 py-1">03</span>
+          <h3 class="font-mono text-xs md:text-sm uppercase tracking-brutal font-bold">Population-Weighted</h3>
+        </div>
+        <div class="space-y-3 md:space-y-4">
+          <p class="text-black/70 text-sm md:text-base">Used for per-capita metrics to reflect population size:</p>
+          <ul class="space-y-2 text-xs md:text-sm text-black/60">
+            <li class="flex items-start gap-2">
+              <span class="text-[#0066FF] font-bold">—</span>
+              <span><strong class="text-black">Step 1:</strong> Metric × population per country</span>
+            </li>
+            <li class="flex items-start gap-2">
+              <span class="text-[#0066FF] font-bold">—</span>
+              <span><strong class="text-black">Step 2:</strong> Sum all weighted values</span>
             </li>
             <li class="flex items-start gap-2">
               <span class="text-[#0066FF] font-bold">—</span>
@@ -87,7 +138,7 @@
             <% unless compact_view %>
               <li class="flex items-start gap-2">
                 <span class="text-[#0066FF] font-bold">—</span>
-                <span><strong class="text-black">Coverage:</strong> 49 countries (98%)</span>
+                <span><strong class="text-black">Examples:</strong> GDP per capita, life expectancy</span>
               </li>
             <% end %>
           </ul>
@@ -98,12 +149,12 @@
               gdp_data = EuropeanMetricsService.latest_metric_for_countries('gdp_per_capita_ppp', ['europe'])
               if gdp_data && gdp_data['europe']
           %>
-            <div class="mt-6 pt-6 border-t border-black">
-              <div class="font-mono text-xs uppercase tracking-brutal text-black/50 mb-2">GDP per Capita PPP</div>
-              <div class="font-mono text-3xl font-bold text-[#0066FF]">
+            <div class="mt-4 md:mt-6 pt-4 md:pt-6 border-t border-black">
+              <div class="font-mono text-[10px] md:text-xs uppercase tracking-brutal text-black/50 mb-1 md:mb-2">Example: GDP/Capita PPP</div>
+              <div class="font-mono text-2xl md:text-3xl font-bold text-[#0066FF]">
                 $<%= number_with_delimiter(gdp_data['europe'][:value].to_i) %>
               </div>
-              <div class="font-mono text-xs text-black/40"><%= gdp_data['europe'][:year] %></div>
+              <div class="font-mono text-[10px] md:text-xs text-black/40"><%= gdp_data['europe'][:year] %></div>
             </div>
           <% 
               end
@@ -112,19 +163,16 @@
           %>
         <% end %>
       </div>
+      </div>
     </div>
     
-    <% if compact_view %>
-      <div class="mt-8">
-        <%= link_to methodology_path, class: "inline-flex items-center gap-4 bg-black text-white px-8 py-4 font-mono text-sm uppercase tracking-brutal hover:bg-[#0066FF] transition-colors" do %>
-          Full Methodology
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
-          </svg>
-        <% end %>
-      </div>
-    <% else %>
-      
-    <% end %>
+    <div class="mt-6 md:mt-8 text-center">
+      <%= link_to methodology_path, class: "inline-flex items-center gap-3 md:gap-4 bg-black text-white px-6 md:px-8 py-3 md:py-4 font-mono text-xs md:text-sm uppercase tracking-brutal hover:bg-[#0066FF] transition-colors" do %>
+        Full Methodology
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
+        </svg>
+      <% end %>
+    </div>
   </div>
 </section>
