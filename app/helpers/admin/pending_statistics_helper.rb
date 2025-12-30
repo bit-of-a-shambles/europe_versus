@@ -1,2 +1,0 @@
-module Admin::PendingStatisticsHelper
-end

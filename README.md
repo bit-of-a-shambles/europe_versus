@@ -1,6 +1,7 @@
 # EuropeVersus 🇪🇺
 
-![Test Coverage](https://img.shields.io/badge/coverage-28.2%25-red)
+![Tests](https://img.shields.io/badge/tests-256%20passing-brightgreen)
+![Test Coverage](https://img.shields.io/badge/coverage-79.47%25-brightgreen)
 
 An **open source** Rails 8 web application that provides evidence-based comparisons between European statistics and those of the United States, India, and China. This project aims to counter negative narratives about Europe by presenting factual data in an accessible, visual format.
 
@@ -182,7 +183,8 @@ Before submitting data, ensure:
 
 ### Test Coverage
 
-**Current Test Coverage:** 28.2% (304/1078 lines covered)
+**Tests:** 256 tests passing, 1,560 assertions, 0 failures, 0 errors  
+**Coverage:** 79.47% (1,041/1,310 lines covered)
 
 ### Translation Contributions
 

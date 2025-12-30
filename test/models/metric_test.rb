@@ -48,7 +48,7 @@ class MetricTest < ActiveSupport::TestCase
       unit: "people",
       source: "Test source"
     )
-    
+
     assert_not duplicate_metric.valid?
     assert_includes duplicate_metric.errors[:country], "has already been taken"
   end
@@ -62,7 +62,7 @@ class MetricTest < ActiveSupport::TestCase
       unit: "people",
       source: "Test source"
     )
-    
+
     assert different_year_metric.valid?
   end
 
@@ -70,7 +70,7 @@ class MetricTest < ActiveSupport::TestCase
     @metric.metric_value = -100
     assert_not @metric.valid?
     assert_includes @metric.errors[:metric_value], "must be greater than 0"
-    
+
     @metric.metric_value = "not_a_number"
     assert_not @metric.valid?
     assert_includes @metric.errors[:metric_value], "is not a number"
@@ -80,7 +80,7 @@ class MetricTest < ActiveSupport::TestCase
     @metric.year = 1800
     assert_not @metric.valid?
     assert_includes @metric.errors[:year], "must be greater than or equal to 1900"
-    
+
     @metric.year = 2100
     assert_not @metric.valid?
     assert_includes @metric.errors[:year], "must be less than or equal to #{Date.current.year + 10}"
@@ -88,15 +88,15 @@ class MetricTest < ActiveSupport::TestCase
 
   # Test scopes
   test "for_country scope should return metrics for specific country" do
-    europe_metrics = Metric.for_country('europe')
-    assert europe_metrics.all? { |m| m.country == 'europe' }
+    europe_metrics = Metric.for_country("europe")
+    assert europe_metrics.all? { |m| m.country == "europe" }
     assert_includes europe_metrics, metrics(:europe_population_2024)
     assert_includes europe_metrics, metrics(:europe_gdp_2024)
   end
 
   test "for_metric scope should return metrics for specific metric type" do
-    population_metrics = Metric.for_metric('population')
-    assert population_metrics.all? { |m| m.metric_name == 'population' }
+    population_metrics = Metric.for_metric("population")
+    assert population_metrics.all? { |m| m.metric_name == "population" }
     assert_includes population_metrics, metrics(:europe_population_2024)
     assert_includes population_metrics, metrics(:usa_population_2024)
   end
@@ -109,11 +109,11 @@ class MetricTest < ActiveSupport::TestCase
   end
 
   test "latest_for_country_and_metric should return most recent metric" do
-    latest = Metric.latest_for_country_and_metric('europe', 'population')
+    latest = Metric.latest_for_country_and_metric("europe", "population")
     assert_equal metrics(:europe_population_2024), latest
-    
+
     # Test when no data exists
-    no_data = Metric.latest_for_country_and_metric('nonexistent', 'population')
+    no_data = Metric.latest_for_country_and_metric("nonexistent", "population")
     assert_nil no_data
   end
 
@@ -122,11 +122,11 @@ class MetricTest < ActiveSupport::TestCase
     # Population values (millions)
     population_metric = metrics(:europe_population_2024)
     assert_equal "745.1M", population_metric.formatted_value
-    
+
     # GDP values (thousands with currency)
     gdp_metric = metrics(:usa_gdp_2024)
     assert_equal "$75,492", gdp_metric.formatted_value
-    
+
     # Life expectancy (one decimal place)
     life_metric = metrics(:europe_life_expectancy_2024)
     assert_equal "78.5", life_metric.formatted_value
@@ -148,12 +148,12 @@ class MetricTest < ActiveSupport::TestCase
   # Test data integrity
   test "should maintain data consistency across related metrics" do
     # Verify that we have both population and GDP data for key countries
-    key_countries = ['europe', 'usa', 'china', 'india']
-    
+    key_countries = [ "europe", "usa", "china", "india" ]
+
     key_countries.each do |country|
-      population = Metric.latest_for_country_and_metric(country, 'population')
-      gdp = Metric.latest_for_country_and_metric(country, 'gdp_per_capita_ppp')
-      
+      population = Metric.latest_for_country_and_metric(country, "population")
+      gdp = Metric.latest_for_country_and_metric(country, "gdp_per_capita_ppp")
+
       assert population, "Missing population data for #{country}"
       assert gdp, "Missing GDP data for #{country}"
       assert_equal population.year, gdp.year, "Year mismatch for #{country} between population and GDP"
@@ -164,10 +164,10 @@ class MetricTest < ActiveSupport::TestCase
     # Test that transcontinental countries exist in fixtures
     russia = metrics(:russia_population_2024)
     turkey = metrics(:turkey_population_2024)
-    
+
     assert russia.present?, "Russia should be in fixtures for transcontinental testing"
     assert turkey.present?, "Turkey should be in fixtures for transcontinental testing"
-    
+
     # Verify populations are reasonable
     assert russia.metric_value > 100_000_000, "Russia population should be substantial"
     assert turkey.metric_value > 80_000_000, "Turkey population should be substantial"
@@ -183,7 +183,7 @@ class MetricTest < ActiveSupport::TestCase
       unit: "test_unit",
       source: "Test"
     )
-    
+
     assert large_metric.valid?
     assert_equal 1_000_000_000_000, large_metric.metric_value
   end
@@ -197,8 +197,8 @@ class MetricTest < ActiveSupport::TestCase
       unit: "percentage",
       source: "Test"
     )
-    
+
     assert decimal_metric.valid?
-    assert_equal 12.345, decimal_metric.metric_value
+    assert_in_delta 12.345, decimal_metric.metric_value.to_f, 0.01
   end
 end

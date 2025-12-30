@@ -66,6 +66,9 @@ group :test do
   gem "capybara"
   gem "selenium-webdriver"
 
+  # HTTP request stubbing [https://github.com/bblimke/webmock]
+  gem "webmock"
+
   # Code coverage analysis [https://github.com/simplecov-ruby/simplecov]
   gem "simplecov", require: false
   gem "simplecov-badge", require: false
