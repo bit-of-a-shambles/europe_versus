@@ -15,7 +15,10 @@
   country_groups = {
     'Aggregates' => [
       { key: 'europe', flag: '🇪🇺', name: 'Europe', category: 'aggregates' },
-      { key: 'european_union', flag: '🇪🇺', name: 'EU-27', category: 'aggregates' }
+      { key: 'european_union', flag: '🇪🇺', name: 'EU-27', category: 'aggregates' },
+      { key: 'eurozone', flag: '💶', name: 'Eurozone', category: 'aggregates' },
+      { key: 'non_euro_eu', flag: '🇪🇺', name: 'Non-€ EU', category: 'aggregates' },
+      { key: 'non_eu_europe', flag: '🌍', name: 'Non-EU Europe', category: 'aggregates' }
     ],
     'Global' => [
       { key: 'usa', flag: '🇺🇸', name: 'USA', category: 'global' },
@@ -57,11 +60,35 @@
       { key: 'bulgaria', flag: '🇧🇬', name: 'Bulgaria', category: 'non-euro-eu' }
     ],
     'Non-EU Europe' => [
-      # European countries not in the EU (includes EEA and others)
+      # European countries not in the EU (includes EEA, EFTA, Balkans, Eastern Europe, and small states)
       { key: 'united_kingdom', flag: '🇬🇧', name: 'UK', category: 'non-eu' },
       { key: 'switzerland', flag: '🇨🇭', name: 'Switzerland', category: 'non-eu' },
       { key: 'norway', flag: '🇳🇴', name: 'Norway', category: 'non-eu' },
-      { key: 'iceland', flag: '🇮🇸', name: 'Iceland', category: 'non-eu' }
+      { key: 'iceland', flag: '🇮🇸', name: 'Iceland', category: 'non-eu' },
+      # Eastern Europe
+      { key: 'ukraine', flag: '🇺🇦', name: 'Ukraine', category: 'non-eu' },
+      { key: 'belarus', flag: '🇧🇾', name: 'Belarus', category: 'non-eu' },
+      { key: 'moldova', flag: '🇲🇩', name: 'Moldova', category: 'non-eu' },
+      { key: 'russia', flag: '🇷🇺', name: 'Russia', category: 'non-eu' },
+      # Balkans (non-EU)
+      { key: 'albania', flag: '🇦🇱', name: 'Albania', category: 'non-eu' },
+      { key: 'bosnia_herzegovina', flag: '🇧🇦', name: 'Bosnia & Herzegovina', category: 'non-eu' },
+      { key: 'serbia', flag: '🇷🇸', name: 'Serbia', category: 'non-eu' },
+      { key: 'montenegro', flag: '🇲🇪', name: 'Montenegro', category: 'non-eu' },
+      { key: 'north_macedonia', flag: '🇲🇰', name: 'North Macedonia', category: 'non-eu' },
+      { key: 'kosovo', flag: '🇽🇰', name: 'Kosovo', category: 'non-eu' },
+      # Caucasus
+      { key: 'armenia', flag: '🇦🇲', name: 'Armenia', category: 'non-eu' },
+      { key: 'azerbaijan', flag: '🇦🇿', name: 'Azerbaijan', category: 'non-eu' },
+      { key: 'georgia', flag: '🇬🇪', name: 'Georgia', category: 'non-eu' },
+      # Transcontinental
+      { key: 'turkey', flag: '🇹🇷', name: 'Turkey', category: 'non-eu' },
+      # Small states
+      { key: 'andorra', flag: '🇦🇩', name: 'Andorra', category: 'non-eu' },
+      { key: 'monaco', flag: '🇲🇨', name: 'Monaco', category: 'non-eu' },
+      { key: 'san_marino', flag: '🇸🇲', name: 'San Marino', category: 'non-eu' },
+      { key: 'vatican', flag: '🇻🇦', name: 'Vatican', category: 'non-eu' },
+      { key: 'liechtenstein', flag: '🇱🇮', name: 'Liechtenstein', category: 'non-eu' }
     ]
   }
   

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_10_12_131945) do
+ActiveRecord::Schema[8.0].define(version: 2025_12_30_191505) do
   create_table "metrics", force: :cascade do |t|
     t.string "country", null: false
     t.string "metric_name", null: false
@@ -21,6 +21,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_12_131945) do
     t.text "description"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.decimal "coverage", precision: 5, scale: 4
     t.index ["country", "metric_name", "year"], name: "index_metrics_on_country_and_metric_name_and_year", unique: true
     t.index ["metric_name"], name: "index_metrics_on_metric_name"
     t.index ["year"], name: "index_metrics_on_year"

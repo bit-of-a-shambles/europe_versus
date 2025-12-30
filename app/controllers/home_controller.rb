@@ -63,13 +63,31 @@ class HomeController < ApplicationController
   end
 
   def fetch_latest_population_data
-    # Get latest population data for key countries and regions
-    key_countries = [ "europe", "european_union", "usa", "india", "china" ]
-    latest_data = PopulationDataService.latest_population_for_countries(key_countries)
+    # Get all European countries' latest population data plus comparison countries
+    european_countries = EuropeanCountriesHelper.all_european_countries
+    all_data = PopulationDataService.latest_population_for_countries(
+      european_countries + [ "european_union", "usa", "india", "china" ]
+    )
+
+    # Calculate Europe's total population by summing individual country populations
+    # Apply population factors for transcontinental countries (Russia, Turkey, Azerbaijan)
+    europe_total = 0
+    europe_year = Date.current.year
+    european_countries.each do |country|
+      if all_data[country]
+        raw_pop = all_data[country][:value].to_i
+        factor = EuropeanCountriesHelper.population_factor(country)
+        europe_total += (raw_pop * factor).round
+        europe_year = all_data[country][:year] if all_data[country][:year]
+      end
+    end
+
+    # Add calculated Europe aggregate to the data
+    all_data["europe"] = { value: europe_total, year: europe_year }
 
     {
-      countries: normalize_metric_data(latest_data),
-      year: latest_data.values.first&.dig(:year) || Date.current.year
+      countries: normalize_metric_data(all_data),
+      year: europe_year
     }
   rescue StandardError => e
     Rails.logger.error "Failed to fetch population data: #{e.message}"
@@ -164,12 +182,28 @@ class HomeController < ApplicationController
   def fetch_detailed_population_data
     # Get all European countries' latest population data
     european_countries = EuropeanCountriesHelper.all_european_countries
-    all_data = PopulationDataService.latest_population_for_countries(european_countries + [ "europe", "usa", "india", "china" ])
+    all_data = PopulationDataService.latest_population_for_countries(european_countries + [ "usa", "india", "china" ])
+
+    # Calculate Europe's total population by summing individual country populations
+    # Apply population factors for transcontinental countries (Russia, Turkey, Azerbaijan)
+    europe_total = 0
+    europe_year = Date.current.year
+    european_countries.each do |country|
+      if all_data[country]
+        raw_pop = all_data[country][:value].to_i
+        factor = EuropeanCountriesHelper.population_factor(country)
+        europe_total += (raw_pop * factor).round
+        europe_year = all_data[country][:year] if all_data[country][:year]
+      end
+    end
+
+    # Add calculated Europe aggregate to the data
+    all_data["europe"] = { value: europe_total, year: europe_year }
 
     {
       countries: all_data,
       european_countries: european_countries,
-      year: all_data["europe"]&.dig(:year) || Date.current.year
+      year: europe_year
     }
   rescue StandardError => e
     Rails.logger.error "Failed to fetch detailed population data: #{e.message}"
@@ -209,21 +243,29 @@ class HomeController < ApplicationController
     european_country_keys = EuropeanCountriesHelper.all_european_countries
 
     # Fetch latest population data for all European countries
-    population_data = PopulationDataService.latest_population_for_countries(european_country_keys + [ "europe" ])
+    population_data = PopulationDataService.latest_population_for_countries(european_country_keys)
 
-    # Get Europe's total population
-    europe_total = population_data["europe"]&.dig(:value) || 0
+    # Calculate Europe's total population by summing individual country populations
+    # Apply population factors for transcontinental countries (Russia, Turkey, Azerbaijan)
+    europe_total = european_country_keys.sum do |country_key|
+      raw_pop = population_data[country_key]&.dig(:value).to_i
+      factor = EuropeanCountriesHelper.population_factor(country_key)
+      (raw_pop * factor).round
+    end
 
     # Build array with country data including percentages
     countries_with_data = european_country_keys.map do |country_key|
       country_name = EuropeanCountriesHelper.country_name(country_key)
-      population = population_data[country_key]&.dig(:value) || 0
-      percentage = europe_total > 0 ? (population.to_f / europe_total * 100).round(2) : 0
+      raw_population = population_data[country_key]&.dig(:value) || 0
+      # Apply population factor for transcontinental countries
+      factor = EuropeanCountriesHelper.population_factor(country_key)
+      adjusted_population = (raw_population * factor).round
+      percentage = europe_total > 0 ? (adjusted_population.to_f / europe_total * 100).round(2) : 0
 
       {
         key: country_key,
         name: country_name,
-        population: population,
+        population: adjusted_population,
         percentage: percentage
       }
     end

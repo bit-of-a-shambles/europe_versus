@@ -14,13 +14,16 @@ export default class extends Controller {
 
   // Color palette for chart lines - Swiss brutalist inspired
   static COLORS = {
-    // Aggregates - bold primary colors
-    europe: { line: '#0066FF', bg: 'rgba(0, 102, 255, 0.1)' },
-    european_union: { line: '#003D99', bg: 'rgba(0, 61, 153, 0.1)' },
+    // Aggregates - bold distinct colors
+    europe: { line: '#0066FF', bg: 'rgba(0, 102, 255, 0.1)' },           // Bright blue
+    european_union: { line: '#003D99', bg: 'rgba(0, 61, 153, 0.1)' },    // Dark blue
+    eurozone: { line: '#7C3AED', bg: 'rgba(124, 58, 237, 0.1)' },        // Purple
+    non_euro_eu: { line: '#059669', bg: 'rgba(5, 150, 105, 0.1)' },      // Emerald green
+    non_eu_europe: { line: '#0D9488', bg: 'rgba(13, 148, 136, 0.1)' },   // Teal
     // Global comparisons
-    usa: { line: '#DC2626', bg: 'rgba(220, 38, 38, 0.1)' },
-    china: { line: '#EA580C', bg: 'rgba(234, 88, 12, 0.1)' },
-    india: { line: '#16A34A', bg: 'rgba(22, 163, 74, 0.1)' },
+    usa: { line: '#DC2626', bg: 'rgba(220, 38, 38, 0.1)' },              // Red
+    china: { line: '#EA580C', bg: 'rgba(234, 88, 12, 0.1)' },            // Orange
+    india: { line: '#16A34A', bg: 'rgba(22, 163, 74, 0.1)' },            // Green
     // Major EU - blues and teals
     germany: { line: '#0891B2', bg: 'rgba(8, 145, 178, 0.1)' },
     france: { line: '#6366F1', bg: 'rgba(99, 102, 241, 0.1)' },
@@ -147,6 +150,12 @@ export default class extends Controller {
               family: 'ui-monospace, monospace',
               size: 11
             },
+            itemSort: (a, b) => {
+              // Sort tooltip items by value descending (highest first)
+              const aVal = a.parsed.y ?? -Infinity
+              const bVal = b.parsed.y ?? -Infinity
+              return bVal - aVal
+            },
             callbacks: {
               label: (context) => {
                 const value = context.parsed.y
@@ -212,6 +221,9 @@ export default class extends Controller {
     const countries = this.dataValue.countries || {}
     const years = this.getFilteredYears()
     const datasets = []
+    
+    // Threshold below which coverage is considered "incomplete" (70% of European population)
+    const INCOMPLETE_THRESHOLD = 0.7
 
     // Sort countries: aggregates first, then global, then alphabetically
     const sortedCountries = Array.from(this.selectedCountries).sort((a, b) => {
@@ -227,6 +239,18 @@ export default class extends Controller {
       if (!countryData || !countryData.data) return
 
       const color = this.constructor.COLORS[countryKey] || this.constructor.COLORS.default
+      const isAggregate = countryData.is_aggregate || false
+      const coverageData = countryData.coverage || {}
+      
+      // Check if this aggregate has any incomplete years in the current range
+      let hasIncompleteYears = false
+      if (isAggregate && Object.keys(coverageData).length > 0) {
+        hasIncompleteYears = years.some(year => {
+          const coverage = coverageData[year]
+          return coverage !== undefined && coverage !== null && coverage < INCOMPLETE_THRESHOLD
+        })
+      }
+      
       const data = years.map(year => {
         const value = countryData.data[year]
         if (value === null || value === undefined) return null
@@ -236,6 +260,24 @@ export default class extends Controller {
         }
         return parseFloat(value)
       })
+      
+      // Build segment configuration for dotted/solid line segments based on coverage
+      let segment = undefined
+      if (isAggregate && Object.keys(coverageData).length > 0) {
+        segment = {
+          borderDash: ctx => {
+            // Get the year for this segment (convert to string for object key lookup)
+            const index = ctx.p0DataIndex
+            const year = String(years[index])
+            const coverage = coverageData[year]
+            // Use dotted line if coverage is below threshold (70% population)
+            if (coverage !== undefined && coverage !== null && coverage < INCOMPLETE_THRESHOLD) {
+              return [5, 5] // Dotted line pattern
+            }
+            return undefined // Solid line
+          }
+        }
+      }
 
       datasets.push({
         label: countryData.name || this.formatCountryName(countryKey),
@@ -247,7 +289,12 @@ export default class extends Controller {
         pointHoverRadius: 6,
         tension: 0.1,
         fill: false,
-        spanGaps: true
+        spanGaps: true,
+        segment: segment,
+        // Store metadata for tooltip
+        countryKey: countryKey,
+        coverageData: coverageData,
+        isAggregate: isAggregate
       })
     })
 

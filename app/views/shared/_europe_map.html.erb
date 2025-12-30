@@ -1,0 +1,17 @@
+<%# Real geographic SVG map of Europe generated from GeoJSON data %>
+<div class="relative">
+  <%= raw File.read(Rails.root.join('app/assets/images/europe_map.svg')).sub('<svg ', '<svg class="w-full h-auto" ') %>
+</div>
+
+<style>
+  .transcontinental {
+    transition: fill 0.3s ease;
+  }
+  path:hover {
+    fill: #1D4ED8 !important;
+    cursor: pointer;
+  }
+  .transcontinental:hover {
+    fill: #60A5FA !important;
+  }
+</style>

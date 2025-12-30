@@ -322,13 +322,8 @@ class MetricImporter
       puts "   → Calculating Europe aggregate (#{aggregation_method})..." if verbose
       EuropeanMetricsService.calculate_europe_aggregate(metric_name, method: aggregation_method)
 
-      puts "   → Calculating EU-27 aggregate (#{aggregation_method})..." if verbose
-      EuropeanMetricsService.calculate_group_aggregate(
-        metric_name,
-        country_keys: EuropeanMetricsService::EU27_COUNTRIES,
-        target_key: "european_union",
-        options: { method: aggregation_method }
-      )
+      puts "   → Calculating all regional aggregates (EU-27, Eurozone, Non-Euro EU, Non-EU Europe)..." if verbose
+      EuropeanMetricsService.calculate_all_regional_aggregates(metric_name, options: { method: aggregation_method })
     rescue => e
       puts "   ⚠️ Aggregate calculation failed: #{e.message}" if verbose
     end

@@ -1,5 +1,5 @@
 <% 
-  # Define countries array using official EU classifications
+  # Define countries array using official EU classifications - includes ALL European countries
   key_countries = [
     # Eurozone countries (20 countries using the Euro)
     { key: 'germany', flag: '🇩🇪', name: 'Germany', category: 'eurozone' },
@@ -26,18 +26,44 @@
     { key: 'poland', flag: '🇵🇱', name: 'Poland', category: 'non-euro-eu' },
     { key: 'sweden', flag: '🇸🇪', name: 'Sweden', category: 'non-euro-eu' },
     { key: 'denmark', flag: '🇩🇰', name: 'Denmark', category: 'non-euro-eu' },
-    { key: 'czech_republic', flag: '🇨🇿', name: 'Czechia', category: 'non-euro-eu' },
+    { key: 'czechia', flag: '🇨🇿', name: 'Czechia', category: 'non-euro-eu' },
     { key: 'hungary', flag: '🇭🇺', name: 'Hungary', category: 'non-euro-eu' },
     { key: 'romania', flag: '🇷🇴', name: 'Romania', category: 'non-euro-eu' },
     { key: 'bulgaria', flag: '🇧🇬', name: 'Bulgaria', category: 'non-euro-eu' },
-    # Non-EU European countries
+    # Non-EU European countries - Western Europe
     { key: 'switzerland', flag: '🇨🇭', name: 'Switzerland', category: 'non-eu' },
     { key: 'norway', flag: '🇳🇴', name: 'Norway', category: 'non-eu' },
     { key: 'united_kingdom', flag: '🇬🇧', name: 'UK', category: 'non-eu' },
     { key: 'iceland', flag: '🇮🇸', name: 'Iceland', category: 'non-eu' },
+    { key: 'liechtenstein', flag: '🇱🇮', name: 'Liechtenstein', category: 'non-eu' },
+    { key: 'monaco', flag: '🇲🇨', name: 'Monaco', category: 'non-eu' },
+    { key: 'andorra', flag: '🇦🇩', name: 'Andorra', category: 'non-eu' },
+    { key: 'san_marino', flag: '🇸🇲', name: 'San Marino', category: 'non-eu' },
+    { key: 'vatican', flag: '🇻🇦', name: 'Vatican', category: 'non-eu' },
+    # Non-EU European countries - Eastern Europe
+    { key: 'ukraine', flag: '🇺🇦', name: 'Ukraine', category: 'non-eu' },
+    { key: 'belarus', flag: '🇧🇾', name: 'Belarus', category: 'non-eu' },
+    { key: 'moldova', flag: '🇲🇩', name: 'Moldova', category: 'non-eu' },
+    { key: 'russia', flag: '🇷🇺', name: 'Russia', category: 'non-eu' },
+    # Non-EU European countries - Balkans
+    { key: 'albania', flag: '🇦🇱', name: 'Albania', category: 'non-eu' },
+    { key: 'bosnia_herzegovina', flag: '🇧🇦', name: 'Bosnia & Herzegovina', category: 'non-eu' },
+    { key: 'serbia', flag: '🇷🇸', name: 'Serbia', category: 'non-eu' },
+    { key: 'montenegro', flag: '🇲🇪', name: 'Montenegro', category: 'non-eu' },
+    { key: 'north_macedonia', flag: '🇲🇰', name: 'North Macedonia', category: 'non-eu' },
+    { key: 'kosovo', flag: '🇽🇰', name: 'Kosovo', category: 'non-eu' },
+    # Non-EU European countries - Caucasus
+    { key: 'georgia', flag: '🇬🇪', name: 'Georgia', category: 'non-eu' },
+    { key: 'armenia', flag: '🇦🇲', name: 'Armenia', category: 'non-eu' },
+    { key: 'azerbaijan', flag: '🇦🇿', name: 'Azerbaijan', category: 'non-eu' },
+    # Transcontinental
+    { key: 'turkey', flag: '🇹🇷', name: 'Turkey', category: 'non-eu' },
     # Regional aggregates
     { key: 'europe', flag: '🇪🇺', name: 'Europe', category: 'aggregates' },
-    { key: 'european_union', flag: '🇪🇺', name: 'European Union', category: 'aggregates' },
+    { key: 'european_union', flag: '🇪🇺', name: 'EU-27', category: 'aggregates' },
+    { key: 'eurozone', flag: '💶', name: 'Eurozone (Agg)', category: 'aggregates' },
+    { key: 'non_euro_eu', flag: '🇪🇺', name: 'Non-€ EU (Agg)', category: 'aggregates' },
+    { key: 'non_eu_europe', flag: '🌍', name: 'Non-EU Eur (Agg)', category: 'aggregates' },
     # Global comparisons
     { key: 'usa', flag: '🇺🇸', name: 'USA', category: 'global' },
     { key: 'china', flag: '🇨🇳', name: 'China', category: 'global' },
@@ -185,13 +211,19 @@
               <tr class="border-b border-black/20 hover:bg-[#F5F5F5] transition-colors">
                 <td class="sticky left-0 z-10 bg-white py-3 px-4 font-mono text-sm font-bold border-r-2 border-black"><%= year %></td>
                 <% key_countries.each do |country| %>
-                  <% value = @chart_data.dig(:countries, country[:key], :data, year) %>
+                  <% 
+                    value = @chart_data.dig(:countries, country[:key], :data, year)
+                    coverage = @chart_data.dig(:countries, country[:key], :coverage, year)
+                    is_aggregate = @chart_data.dig(:countries, country[:key], :is_aggregate)
+                    is_incomplete = is_aggregate && coverage.present? && coverage < 0.7
+                  %>
                   <td class="country-column py-3 px-4 text-right font-mono text-sm" 
                       data-category="<%= country[:category] %>" 
-                      data-country="<%= country[:key] %>">
+                      data-country="<%= country[:key] %>"
+                      <% if is_incomplete %>title="<%= (coverage * 100).round(0) %>% data coverage - some countries using forward-filled values"<% end %>>
                     <% if value %>
-                      <span class="<%= country[:category] == 'aggregates' || country[:key] == 'europe' ? 'text-[#0066FF] font-bold' : '' %>">
-                        <%= format_value_with_unit(value, @chart_data&.dig(:metadata, :unit) || @statistic&.unit, decimals: 1) %>
+                      <span class="<%= country[:category] == 'aggregates' || country[:key] == 'europe' ? 'text-[#0066FF] font-bold' : '' %> <%= is_incomplete ? 'border-b border-dashed border-current' : '' %>">
+                        <%= format_value_with_unit(value, @chart_data&.dig(:metadata, :unit) || @statistic&.unit, decimals: 1) %><% if is_incomplete %><sup class="text-xs ml-0.5">*</sup><% end %>
                       </span>
                     <% else %>
                       <span class="text-black/30">—</span>
@@ -204,12 +236,18 @@
         </table>
       </div>
       
-      <% if @chart_data[:years].length > 15 %>
-        <div class="mt-4 font-mono text-xs text-black/50 text-center">
-          Showing latest 15 years. Total data spans <%= @chart_data[:years].length %> years 
-          (<%= @chart_data[:years].min %> – <%= @chart_data[:years].max %>)
+      <!-- Legend for incomplete data -->
+      <div class="mt-4 flex items-center justify-between">
+        <div class="font-mono text-xs text-black/50">
+          <span class="border-b border-dashed border-black/50">*</span> = Incomplete data (<70% population coverage) - some countries using forward-filled values from previous years
         </div>
-      <% end %>
+        <% if @chart_data[:years].length > 15 %>
+          <div class="font-mono text-xs text-black/50">
+            Showing latest 15 years. Total data spans <%= @chart_data[:years].length %> years 
+            (<%= @chart_data[:years].min %> – <%= @chart_data[:years].max %>)
+          </div>
+        <% end %>
+      </div>
     <% end %>
   </div>
 

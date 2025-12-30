@@ -100,16 +100,46 @@
           </div>
           
           <div class="border-l-2 border-black pl-4">
+            <div class="font-mono text-xs uppercase tracking-brutal mb-2">Transcontinental Countries</div>
+            <p class="text-sm text-black/60">For Russia and Turkey, we count only the European portion of their population: ~77% of Russia's population lives in European Russia, and ~14% lives in European Turkey (Thrace)</p>
+          </div>
+          
+          <div class="border-l-2 border-black pl-4">
             <div class="font-mono text-xs uppercase tracking-brutal mb-2">Comprehensive Coverage</div>
             <p class="text-sm text-black/60">From large nations like Germany and France to small states like Monaco and San Marino</p>
           </div>
           
           <div class="border-l-2 border-black/50 pl-4">
             <div class="font-mono text-xs uppercase tracking-brutal mb-2">Data Availability</div>
-            <p class="text-sm text-black/60">Countries with reliable data from Our World in Data and other authoritative sources</p>
+            <p class="text-sm text-black/60">Countries with reliable data from authoritative sources</p>
           </div>
         </div>
       </div>
+    </div>
+    
+    <!-- Europe Map - Using actual geographic SVG paths -->
+    <div class="border-2 border-black border-t-0 p-8">
+      <h3 class="font-mono text-sm uppercase tracking-brutal font-bold mb-6 pb-4 border-b border-black">European Countries Map</h3>
+      <p class="font-mono text-xs text-black/60 mb-6">Geographic representation of the 50 countries included in our European aggregate calculations.</p>
+      <div class="flex justify-center">
+        <div class="relative w-full max-w-4xl">
+          <!-- Actual Geographic Map of Europe -->
+          <%= render 'shared/europe_map' %>
+          
+          <!-- Legend -->
+          <div class="flex justify-center gap-8 mt-4 pt-4 border-t border-black/20">
+            <div class="flex items-center gap-2">
+              <div class="w-4 h-4 bg-[#0066FF] border border-black"></div>
+              <span class="font-mono text-xs">European Countries (100%)</span>
+            </div>
+            <div class="flex items-center gap-2">
+              <div class="w-4 h-4 bg-[#0066FF]/75 border border-black"></div>
+              <span class="font-mono text-xs">Transcontinental (RU 77%, TR 14%, AZ 30%)</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <p class="font-mono text-xs text-center text-black/50 mt-4">50 countries included • Transcontinental countries shown with European population percentage</p>
     </div>
   </section>
 
@@ -308,11 +338,11 @@
                 <div class="bg-white border border-black p-4">
                   <div class="text-black/50 uppercase tracking-brutal mb-2">Step 3: Divide</div>
                   <div class="space-y-2">
-                    <div>Europe Population: <span class="font-bold"><%= number_to_human(@population_data[:countries]['europe'][:value], precision: 3) %></span></div>
+                    <div>Europe Population: <span class="font-bold"><%= number_to_human(@population_data.dig(:countries, 'europe', :value) || 0, precision: 3) %></span></div>
                     <div class="pt-2 border-t border-black">
                       $<%= number_to_human(@gdp_data[:total_weighted_gdp] || total_weighted_gdp, precision: 3, format: '%n%u', units: { quadrillion: 'Q', trillion: 'T' }) %> 
-                      ÷ <%= number_to_human(@population_data[:countries]['europe'][:value], precision: 3) %>
-                      = <span class="font-bold text-[#0066FF] text-lg">$<%= number_with_delimiter(@gdp_data[:countries]['europe'][:value].round(0)) %></span>
+                      ÷ <%= number_to_human(@population_data.dig(:countries, 'europe', :value) || 0, precision: 3) %>
+                      = <span class="font-bold text-[#0066FF] text-lg">$<%= number_with_delimiter((@gdp_data.dig(:countries, 'europe', :value) || 0).round(0)) %></span>
                     </div>
                   </div>
                 </div>
@@ -366,10 +396,125 @@
     </div>
   </section>
 
-  <!-- Data Sources Section -->
+  <!-- Data Gap Handling Section -->
   <section class="py-16 border-b-2 border-black">
     <div class="flex items-center gap-6 mb-12">
       <span class="font-mono text-xs uppercase tracking-brutal bg-black text-white px-3 py-1">03</span>
+      <h2 class="text-4xl font-black tracking-tighter">HANDLING DATA GAPS</h2>
+    </div>
+
+    <div class="grid md:grid-cols-2 gap-0 mb-8">
+      <div class="border-2 border-black p-8">
+        <h3 class="font-mono text-sm uppercase tracking-brutal font-bold mb-6 pb-4 border-b border-black">The Challenge</h3>
+        <p class="text-black/60 mb-6">
+          Real-world data is rarely complete. Countries report statistics at different intervals, and some years may have 
+          data for only a subset of European nations.
+        </p>
+        <div class="border-l-2 border-[#FFCC00] pl-4 bg-[#FFCC00]/10 p-4">
+          <div class="font-mono text-xs uppercase tracking-brutal mb-2">Example</div>
+          <p class="text-sm text-black/70">
+            For homicide rates in 2024, we might have fresh data from only 15 of 50 European countries. 
+            Excluding the others would bias the aggregate toward countries that happen to report more frequently.
+          </p>
+        </div>
+      </div>
+      
+      <div class="border-2 border-black border-l-0 p-8">
+        <h3 class="font-mono text-sm uppercase tracking-brutal font-bold mb-6 pb-4 border-b border-black">Our Solution</h3>
+        <div class="space-y-6">
+          <div class="border-l-2 border-[#0066FF] pl-4">
+            <div class="font-mono text-xs uppercase tracking-brutal text-[#0066FF] mb-2">Forward-Fill</div>
+            <p class="text-sm text-black/60">
+              When a country lacks data for a specific year, we use the most recent available value. 
+              This assumes metrics change gradually rather than disappearing.
+            </p>
+          </div>
+          
+          <div class="border-l-2 border-black pl-4">
+            <div class="font-mono text-xs uppercase tracking-brutal mb-2">Population-Based Coverage</div>
+            <p class="text-sm text-black/60">
+              We track what percentage of Europe's <strong>population</strong> has actual data vs. forward-filled values. 
+              This ensures large countries like Germany, France, Russia, Italy, and Poland are properly represented—
+              if major countries are missing, the aggregate is marked as incomplete.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Visual Indicators -->
+    <div class="border-2 border-black p-8 mb-8">
+      <h3 class="font-mono text-sm uppercase tracking-brutal font-bold mb-6 pb-4 border-b border-black">Understanding Visual Indicators</h3>
+      
+      <div class="grid md:grid-cols-2 gap-8">
+        <div>
+          <h4 class="font-mono text-sm font-bold mb-4">In Charts</h4>
+          <div class="space-y-4">
+            <div class="flex items-center gap-4 p-4 bg-[#F5F5F5]">
+              <div class="w-24 h-1 bg-[#0066FF]"></div>
+              <span class="text-sm text-black/70"><strong>Solid line:</strong> ≥70% of European population has data for that year</span>
+            </div>
+            <div class="flex items-center gap-4 p-4 bg-[#F5F5F5]">
+              <div class="w-24 h-0 border-t-2 border-dashed border-[#0066FF]"></div>
+              <span class="text-sm text-black/70"><strong>Dotted line:</strong> <70% of population has data (incomplete)</span>
+            </div>
+          </div>
+        </div>
+        
+        <div>
+          <h4 class="font-mono text-sm font-bold mb-4">In Data Tables</h4>
+          <div class="space-y-4">
+            <div class="flex items-center gap-4 p-4 bg-[#F5F5F5]">
+              <span class="text-[#0066FF] font-bold font-mono">42,500</span>
+              <span class="text-sm text-black/70">Normal value: Complete data</span>
+            </div>
+            <div class="flex items-center gap-4 p-4 bg-[#F5F5F5]">
+              <span class="text-[#0066FF] font-bold font-mono border-b border-dashed border-current">42,500<sup class="text-xs">*</sup></span>
+              <span class="text-sm text-black/70">Asterisk: Incomplete data (<70% population coverage)</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Thresholds -->
+    <div class="border-2 border-black p-8 bg-[#F5F5F5]">
+      <h3 class="font-mono text-sm uppercase tracking-brutal font-bold mb-6">Coverage Thresholds</h3>
+      <div class="grid md:grid-cols-3 gap-6">
+        <div class="border-2 border-black bg-white p-6">
+          <div class="font-mono text-4xl font-bold text-[#FF0000] mb-2">&lt;30%</div>
+          <div class="font-mono text-xs uppercase tracking-brutal text-black/50 mb-2">Minimum Threshold</div>
+          <p class="text-sm text-black/60">
+            If countries representing fewer than 30% of European population have data (current or forward-filled), 
+            we don't calculate an aggregate at all—the data would be too unreliable.
+          </p>
+        </div>
+        
+        <div class="border-2 border-black bg-white p-6">
+          <div class="font-mono text-4xl font-bold text-[#FFCC00] mb-2">30-69%</div>
+          <div class="font-mono text-xs uppercase tracking-brutal text-black/50 mb-2">Incomplete</div>
+          <p class="text-sm text-black/60">
+            Aggregate is calculated but marked as incomplete with dotted lines 
+            in charts and asterisks in tables.
+          </p>
+        </div>
+        
+        <div class="border-2 border-black bg-white p-6">
+          <div class="font-mono text-4xl font-bold text-[#00CC66] mb-2">≥70%</div>
+          <div class="font-mono text-xs uppercase tracking-brutal text-black/50 mb-2">Complete</div>
+          <p class="text-sm text-black/60">
+            Displayed normally with solid lines. This represents a reliable 
+            aggregate covering at least 70% of Europe's population.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Data Sources Section -->
+  <section class="py-16 border-b-2 border-black">
+    <div class="flex items-center gap-6 mb-12">
+      <span class="font-mono text-xs uppercase tracking-brutal bg-black text-white px-3 py-1">04</span>
       <h2 class="text-4xl font-black tracking-tighter">DATA SOURCES</h2>
     </div>
     
@@ -415,7 +560,7 @@
   <!-- Transparency Section -->
   <section class="py-16">
     <div class="flex items-center gap-6 mb-12">
-      <span class="font-mono text-xs uppercase tracking-brutal bg-black text-white px-3 py-1">04</span>
+      <span class="font-mono text-xs uppercase tracking-brutal bg-black text-white px-3 py-1">05</span>
       <h2 class="text-4xl font-black tracking-tighter">OPEN SOURCE</h2>
     </div>
     
