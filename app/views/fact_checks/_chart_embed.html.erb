@@ -1,0 +1,25 @@
+<%# OWID Chart Embed - embedded via {{chart:owid-slug}} %>
+
+<div class="my-8">
+  <div class="border-2 border-black">
+    <div style="position:relative;padding-bottom:56.25%;height:0;overflow:hidden;">
+      <iframe
+        src="https://ourworldindata.org/grapher/<%= chart_slug %>?tab=chart&country=Germany~France~Italy~Spain~Netherlands~Poland~Sweden~Denmark~Finland~Austria~Belgium~Czechia~Estonia~Greece~Hungary~Ireland~Latvia~Lithuania~Luxembourg~Malta~Portugal~Slovakia~Slovenia~Bulgaria~Croatia~Romania~Cyprus~Norway~Switzerland~United+Kingdom~Iceland~European+Union+%2827%29~United+States~India~China&time=2000..latest&yScale=linear"
+        style="position:absolute;top:0;left:0;width:100%;height:100%;border:0;background:white;"
+        title="<%= chart_slug.humanize %>"
+        loading="lazy"
+      ></iframe>
+    </div>
+    <div class="p-3 bg-[#F5F5F5] border-t-2 border-black flex items-center justify-between">
+      <span class="font-mono text-xs text-black/50">
+        Interactive chart from Our World in Data
+      </span>
+      <a href="https://ourworldindata.org/grapher/<%= chart_slug %>" 
+         target="_blank" 
+         rel="noopener"
+         class="font-mono text-xs uppercase tracking-brutal text-[#0066FF] hover:underline">
+        Open in OWID →
+      </a>
+    </div>
+  </div>
+</div>

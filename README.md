@@ -14,7 +14,10 @@ EuropeVersus promotes data-driven understanding of European performance across m
 ## Features
 
 - **Comprehensive Statistics**: Compare Europe with the US, India, and China across economics, social indicators, environment, and innovation
+- **Multiple European Groupings**: Compare Europe, EU-27, Core EU (founding members), Eurozone, Non-Euro EU, and Non-EU Europe
+- **Fact Check Articles**: In-depth, markdown-based articles examining common claims about Europe with embedded live data
 - **Beautiful Visualizations**: Clean, responsive design with interactive comparison charts
+- **Social Sharing**: OG images and share buttons optimized for social media
 - **Mobile-First**: Optimized for all devices with Tailwind CSS
 - **Fast & Modern**: Built with Rails 8, Turbo, SQLite, and minimal JavaScript
 - **Evidence-Based**: All data sourced from official statistics and reputable international organizations
@@ -24,7 +27,24 @@ EuropeVersus promotes data-driven understanding of European performance across m
 - **Backend**: Ruby on Rails 8
 - **Frontend**: Tailwind CSS, Turbo, Stimulus
 - **Database**: SQLite
+- **Content**: Markdown with YAML frontmatter for fact-check articles
+- **Image Generation**: Grover (Puppeteer) for OG images
 - **Deployment**: Docker-ready with Kamal configuration
+
+## European Groupings
+
+The application calculates aggregates for multiple European groupings:
+
+| Grouping | Description | Countries |
+|----------|-------------|-----------|
+| **Europe** | All European countries | ~50 countries including transcontinental |
+| **EU-27** | European Union members | 27 member states |
+| **Core EU** | Founding EEC members | Germany, France, Italy, Netherlands, Belgium, Luxembourg |
+| **Eurozone** | Euro currency users | 20 countries |
+| **Non-Euro EU** | EU members without Euro | Poland, Sweden, Denmark, Czechia, Hungary, Romania, Bulgaria |
+| **Non-EU Europe** | European non-EU states | UK, Switzerland, Norway, Iceland |
+
+All aggregates are population-weighted averages adjusted for transcontinental populations.
 
 
 ## Data Categories
@@ -142,6 +162,47 @@ The application uses a unified YAML configuration file (`config/metrics.yml`) th
 | `preferred` | Set to `true` to prioritize over similar metrics | No |
 
 See [ADDING_METRICS_GUIDE.md](ADDING_METRICS_GUIDE.md) for complete instructions.
+
+## Fact Check Articles
+
+The application supports in-depth fact-check articles written in Markdown with YAML frontmatter. Articles are stored in `content/fact_checks/` and support custom embed tags:
+
+### Custom Tags
+
+- `{{metric:metric_name}}` - Renders a metric comparison card with all European groupings
+- `{{chart:metric_slug}}` - Renders an interactive chart inline
+
+### Creating Articles
+
+1. Create a markdown file in `content/fact_checks/`:
+
+```markdown
+---
+title: "Your Article Title"
+subtitle: "A compelling subtitle"
+description: "Brief description for meta tags"
+published: true
+created_at: 2026-01-12
+metrics:
+  - gdp_per_capita_ppp
+  - labor_productivity_per_hour
+---
+
+## Your Content Here
+
+{{metric:gdp_per_capita_ppp}}
+
+{{chart:labor_productivity_per_hour}}
+```
+
+2. The article will automatically appear at `/facts/your-article-slug`
+
+### Features
+
+- **OG Images**: Auto-generated 1200x630 PNG images for social sharing
+- **Share Sidebar**: Floating share buttons for Twitter, LinkedIn, Facebook
+- **Responsive**: Mobile-optimized with collapsible sections
+- **Live Data**: Metrics and charts pull live data from the database
 
 
 ## Contributing

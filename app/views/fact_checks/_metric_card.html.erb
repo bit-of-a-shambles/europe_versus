@@ -1,0 +1,97 @@
+<%# Metric comparison card - embedded via {{metric:metric_name}} %>
+<%# Supports multiple European groupings: Europe, EU-27, Eurozone, Non-€ EU, Non-EU Europe %>
+<%
+  config = data[:config] || {}
+  year = data[:year]
+  
+  title = config[:description] || metric_name.humanize.titleize
+  unit = config[:unit] || data[:europe]&.unit || ""
+  
+  # European regions with their data
+  european_regions = [
+    { key: :europe, name: "Europe", flag: "🇪🇺", metric: data[:europe], highlight: true },
+    { key: :european_union, name: "EU-27", flag: "🇪🇺", metric: data[:european_union] },
+    { key: :eurozone, name: "Eurozone", flag: "💶", metric: data[:eurozone] },
+    { key: :non_euro_eu, name: "Non-€ EU", flag: "🇪🇺", metric: data[:non_euro_eu] },
+    { key: :non_eu_europe, name: "Non-EU", flag: "🌍", metric: data[:non_eu_europe] }
+  ].select { |r| r[:metric]&.metric_value.present? }
+  
+  # Global comparisons
+  global_regions = [
+    { key: :usa, name: "USA", flag: "🇺🇸", metric: data[:usa] },
+    { key: :china, name: "China", flag: "🇨🇳", metric: data[:china] },
+    { key: :india, name: "India", flag: "🇮🇳", metric: data[:india] }
+  ].select { |r| r[:metric]&.metric_value.present? }
+%>
+
+<div class="my-8 border-4 border-black bg-white not-prose">
+  <!-- Header -->
+  <div class="border-b-4 border-black p-4 md:p-6 flex flex-col md:flex-row md:items-center md:justify-between gap-2">
+    <div>
+      <span class="font-mono text-xs uppercase tracking-brutal bg-[#0066FF] text-white px-3 py-1 inline-block">
+        Data Point
+      </span>
+      <h3 class="text-xl md:text-2xl font-black tracking-tight uppercase mt-2">
+        <%= title %>
+      </h3>
+    </div>
+    <div class="text-left md:text-right">
+      <span class="font-mono text-3xl md:text-4xl font-bold text-black/20"><%= year %></span>
+    </div>
+  </div>
+
+  <!-- European Groupings Section -->
+  <% if european_regions.any? %>
+    <div class="p-4 md:p-6 border-b-2 border-black/10">
+      <h4 class="font-mono text-xs uppercase tracking-brutal text-black/50 mb-4">European Groupings</h4>
+      <div class="grid grid-cols-2 md:grid-cols-<%= [european_regions.size, 5].min %> gap-3">
+        <% european_regions.each_with_index do |region, index| %>
+          <div class="<%= region[:highlight] ? 'border-2 border-[#0066FF] bg-[#0066FF]/5' : 'border border-black/20' %> p-3 md:p-4">
+            <div class="flex items-center gap-2 mb-2">
+              <span class="text-xl"><%= region[:flag] %></span>
+              <div>
+                <span class="font-mono text-xs uppercase tracking-brutal <%= region[:highlight] ? 'text-[#0066FF] font-bold' : 'text-black/60' %>">
+                  <%= region[:name] %>
+                </span>
+              </div>
+            </div>
+            <div class="font-mono text-xl md:text-2xl font-bold <%= region[:highlight] ? 'text-[#0066FF]' : '' %>">
+              <%= format_value_with_unit(region[:metric].metric_value, unit, decimals: 1) %>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  <% end %>
+
+  <!-- Global Comparisons Section -->
+  <% if global_regions.any? %>
+    <div class="p-4 md:p-6">
+      <h4 class="font-mono text-xs uppercase tracking-brutal text-black/50 mb-4">Global Comparison</h4>
+      <div class="grid grid-cols-3 gap-3">
+        <% global_regions.each do |region| %>
+          <div class="border border-black/20 p-3 md:p-4">
+            <div class="flex items-center gap-2 mb-2">
+              <span class="text-xl"><%= region[:flag] %></span>
+              <span class="font-mono text-xs uppercase tracking-brutal text-black/60"><%= region[:name] %></span>
+            </div>
+            <div class="font-mono text-xl md:text-2xl font-bold">
+              <%= format_value_with_unit(region[:metric].metric_value, unit, decimals: 1) %>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  <% end %>
+
+  <!-- Footer with link to full statistics -->
+  <div class="border-t-2 border-black/20 p-3 md:p-4 flex items-center justify-between bg-[#F5F5F5]">
+    <span class="font-mono text-xs text-black/50">
+      Source: <%= data[:europe]&.source || data[:european_union]&.source || "Our World in Data" %>
+    </span>
+    <%= link_to statistic_path(metric_name.tr("_", "-")), 
+        class: "font-mono text-xs uppercase tracking-brutal text-[#0066FF] hover:underline" do %>
+      View full data →
+    <% end %>
+  </div>
+</div>

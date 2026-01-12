@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title><%= @fact_check.title %> — EUROPEVERSUS</title>
+  
+  <!-- Minimal styles for embed -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+  
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: 'Inter', sans-serif;
+      background: white;
+      padding: 0;
+      margin: 0;
+    }
+    
+    .font-mono {
+      font-family: 'Space Mono', monospace;
+    }
+    
+    .card {
+      border: 3px solid #000;
+      background: white;
+      min-height: 100%;
+    }
+    
+    .card-header {
+      padding: 16px 20px;
+      border-bottom: 3px solid #000;
+    }
+    
+    .badge {
+      background: #0066FF;
+      color: white;
+      padding: 4px 8px;
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      display: inline-block;
+      margin-bottom: 8px;
+    }
+    
+    .title {
+      font-size: 18px;
+      font-weight: 900;
+      line-height: 1.2;
+    }
+    
+    .subtitle {
+      font-size: 14px;
+      color: rgba(0,0,0,0.6);
+      font-style: italic;
+      margin-top: 8px;
+    }
+    
+    .card-body {
+      padding: 16px 20px;
+    }
+    
+    .description {
+      font-size: 14px;
+      line-height: 1.5;
+      color: rgba(0,0,0,0.8);
+    }
+    
+    .metrics {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 12px;
+    }
+    
+    .metric-tag {
+      font-size: 10px;
+      padding: 4px 8px;
+      border: 1px solid rgba(0,0,0,0.2);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    
+    .card-footer {
+      padding: 12px 20px;
+      border-top: 2px solid #000;
+      background: #F5F5F5;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    .read-more {
+      font-size: 12px;
+      color: #0066FF;
+      text-decoration: none;
+    }
+    
+    .read-more:hover {
+      text-decoration: underline;
+    }
+    
+    .brand {
+      font-size: 11px;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="card-header">
+      <span class="badge font-mono">Fact Check</span>
+      <h1 class="title"><%= @fact_check.title %></h1>
+      <% if @fact_check.subtitle %>
+        <p class="subtitle">"<%= @fact_check.subtitle %>"</p>
+      <% end %>
+    </div>
+    
+    <div class="card-body">
+      <% if @fact_check.description %>
+        <p class="description">
+          <%= truncate(@fact_check.description, length: 200) %>
+        </p>
+      <% end %>
+      
+      <% if @fact_check.metrics.any? %>
+        <div class="metrics">
+          <% @fact_check.metrics.first(5).each do |metric| %>
+            <span class="metric-tag font-mono"><%= metric.tr("_", " ").titleize %></span>
+          <% end %>
+        </div>
+      <% end %>
+    </div>
+    
+    <div class="card-footer">
+      <a href="<%= fact_check_url(slug: @fact_check.slug) %>" target="_blank" class="read-more font-mono">
+        Read full analysis →
+      </a>
+      <span class="brand font-mono">EUROPEVERSUS</span>
+    </div>
+  </div>
+</body>
+</html>

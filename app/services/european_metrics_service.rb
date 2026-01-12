@@ -29,6 +29,12 @@ class EuropeanMetricsService
     "united_kingdom", "switzerland", "norway", "iceland"
   ].freeze
 
+  # Core EU countries (founding members + major economies - the economic heart of Europe)
+  # Original EEC founding members (1957): Germany, France, Italy, Netherlands, Belgium, Luxembourg
+  CORE_EU_COUNTRIES = [
+    "germany", "france", "italy", "netherlands", "belgium", "luxembourg"
+  ].freeze
+
   # Generic method to calculate Europe aggregate for any metric
   def self.calculate_europe_aggregate(metric_name, options = {})
     puts "Calculating Europe #{metric_name} from individual countries..."
@@ -436,6 +442,15 @@ class EuropeanMetricsService
       options: options
     )
 
+    # Core EU (founding members + major economies)
+    puts "  → Core EU aggregate..."
+    results[:core_eu] = calculate_group_aggregate(
+      metric_name,
+      country_keys: CORE_EU_COUNTRIES,
+      target_key: "core_eu",
+      options: options
+    )
+
     # Non-EU Europe (only if data available)
     non_eu_with_data = NON_EU_EUROPE_COUNTRIES.select do |country|
       Metric.where(metric_name: metric_name, country: country).exists?
@@ -754,7 +769,7 @@ class EuropeanMetricsService
     requested_countries = options[:countries] || available_countries
 
     # Aggregate country keys for coverage lookup
-    aggregate_countries = [ "europe", "european_union", "eurozone", "non_euro_eu", "non_eu_europe" ]
+    aggregate_countries = [ "europe", "european_union", "core_eu", "eurozone", "non_euro_eu", "non_eu_europe" ]
 
     # Get countries data
     countries_data = {}
@@ -827,6 +842,8 @@ class EuropeanMetricsService
       return "Europe"
     when "european_union"
       return "EU-27"
+    when "core_eu"
+      return "Core EU"
     when "eurozone"
       return "Eurozone"
     when "non_euro_eu"

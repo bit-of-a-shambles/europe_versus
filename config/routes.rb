@@ -11,6 +11,12 @@ Rails.application.routes.draw do
   # The controller will handle the conversion and redirection if needed
   get "/statistics/:id", to: "statistics#show", as: :statistic
 
+  # Fact-check articles (markdown-based deep dives)
+  get "/facts", to: "fact_checks#index", as: :facts
+  get "/facts/:slug", to: "fact_checks#show", as: :fact_check, constraints: { slug: /[^\/]+(?<!\.png)/ }
+  get "/facts/:slug.png", to: "fact_checks#image", as: :fact_check_image, format: false
+  get "/embed/facts/:slug", to: "fact_checks#embed", as: :embed_fact
+
   # Redirect contribute to GitHub since we use Our World in Data
   get "/contribute", to: redirect("https://github.com/duartemartins/europeversus"), as: :contribute
 

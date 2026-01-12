@@ -22,6 +22,10 @@ gem "jbuilder"
 # CSV parsing (will be removed from stdlib in Ruby 3.4)
 gem "csv"
 
+# Markdown parsing [https://github.com/gettalong/kramdown]
+gem "kramdown"
+gem "kramdown-parser-gfm" # GitHub Flavored Markdown support
+
 # Use Active Model has_secure_password [https://guides.rubyonrails.org/active_model_basics.html#securepassword]
 # gem "bcrypt", "~> 3.1.7"
 
@@ -60,6 +64,9 @@ group :development do
   # Use console on exceptions pages [https://github.com/rails/web-console]
   gem "web-console"
 end
+
+# Server-side HTML to PDF/PNG rendering [https://github.com/Studiosity/grover]
+gem "grover"
 
 group :test do
   # Use system testing [https://guides.rubyonrails.org/testing.html#system-testing]

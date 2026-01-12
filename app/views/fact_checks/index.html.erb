@@ -1,0 +1,121 @@
+<% content_for(:title) { "Fact Checks — EUROPEVERSUS" } %>
+
+<div class="max-w-7xl mx-auto px-4 md:px-6">
+  <!-- Hero Section -->
+  <section class="border-b-2 border-black py-12 md:py-16">
+    <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-6">
+      <div>
+        <span class="font-mono text-xs uppercase tracking-brutal bg-[#0066FF] text-white px-3 py-1 inline-block mb-4">
+          Evidence-Based Analysis
+        </span>
+        <h1 class="text-4xl md:text-6xl lg:text-8xl font-black tracking-tighter mb-4">
+          FACT<br>
+          <span class="text-[#0066FF]">CHECKS</span>
+        </h1>
+        <p class="text-lg md:text-xl text-black/70 max-w-2xl">
+          In-depth articles examining common claims about Europe with data and evidence. Each article pulls together multiple metrics to give you the full picture.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Articles Grid -->
+  <% if @fact_checks.any? %>
+    <section class="py-12 md:py-16">
+      <div class="grid md:grid-cols-2 gap-0">
+        <% @fact_checks.each_with_index do |fact_check, index| %>
+          <%= link_to fact_check_path(slug: fact_check.slug), class: "block group" do %>
+            <article class="border-2 border-black p-6 md:p-8 <%= index > 0 ? 'border-t-0 md:border-t-2' : '' %> <%= index.odd? ? 'md:border-l-0' : '' %> hover:bg-[#F5F5F5] transition-colors h-full">
+              <!-- Category/Date -->
+              <div class="flex items-center gap-4 mb-4">
+                <% if fact_check.created_at %>
+                  <span class="font-mono text-xs text-black/50">
+                    <%= fact_check.created_at.strftime("%B %Y") %>
+                  </span>
+                <% end %>
+                <span class="font-mono text-xs bg-black text-white px-2 py-1">
+                  <%= fact_check.metrics.size %> metrics
+                </span>
+              </div>
+
+              <!-- Title -->
+              <h2 class="text-2xl md:text-3xl font-black tracking-tight mb-3 group-hover:text-[#0066FF] transition-colors">
+                <%= fact_check.title %>
+              </h2>
+
+              <!-- Subtitle -->
+              <% if fact_check.subtitle %>
+                <p class="text-lg text-black/70 mb-4 italic">
+                  "<%= fact_check.subtitle %>"
+                </p>
+              <% end %>
+
+              <!-- Description -->
+              <% if fact_check.description %>
+                <p class="text-black/60 mb-6">
+                  <%= truncate(fact_check.description, length: 200) %>
+                </p>
+              <% end %>
+
+              <!-- Metrics Preview -->
+              <% if fact_check.metrics.any? %>
+                <div class="flex flex-wrap gap-2 mb-6">
+                  <% fact_check.metrics.first(4).each do |metric| %>
+                    <span class="font-mono text-xs px-2 py-1 border border-black/20 text-black/60">
+                      <%= metric.tr("_", " ").titleize %>
+                    </span>
+                  <% end %>
+                  <% if fact_check.metrics.size > 4 %>
+                    <span class="font-mono text-xs px-2 py-1 text-black/40">
+                      +<%= fact_check.metrics.size - 4 %> more
+                    </span>
+                  <% end %>
+                </div>
+              <% end %>
+
+              <!-- CTA -->
+              <span class="font-mono text-sm uppercase tracking-brutal text-[#0066FF] group-hover:underline">
+                Read Analysis →
+              </span>
+            </article>
+          <% end %>
+        <% end %>
+      </div>
+    </section>
+  <% else %>
+    <section class="py-16 md:py-24">
+      <div class="text-center">
+        <div class="font-mono text-6xl mb-6">📊</div>
+        <h2 class="text-2xl font-bold mb-4">Coming Soon</h2>
+        <p class="text-black/60 max-w-md mx-auto">
+          We're working on in-depth fact-check articles. Check back soon for evidence-based analysis of common claims about Europe.
+        </p>
+        <%= link_to statistics_path, class: "inline-block mt-6 font-mono text-sm uppercase tracking-brutal border-2 border-black px-6 py-3 hover:bg-black hover:text-white transition-colors" do %>
+          Browse Statistics →
+        <% end %>
+      </div>
+    </section>
+  <% end %>
+
+  <!-- What to Expect Section -->
+  <section class="border-t-2 border-black py-12 md:py-16">
+    <h2 class="font-mono text-xs uppercase tracking-brutal text-black/60 mb-8">What you'll find</h2>
+    <div class="grid md:grid-cols-3 gap-0">
+      <div class="border-2 border-black p-6">
+        <span class="font-mono text-4xl font-bold text-black/20">01</span>
+        <h3 class="font-mono text-sm uppercase tracking-brutal font-bold mt-4 mb-2">Common Claims</h3>
+        <p class="text-sm text-black/70">Each article examines a widespread narrative about Europe and tests it against the evidence.</p>
+      </div>
+      <div class="border-2 border-black border-t-0 md:border-t-2 md:border-l-0 p-6">
+        <span class="font-mono text-4xl font-bold text-black/20">02</span>
+        <h3 class="font-mono text-sm uppercase tracking-brutal font-bold mt-4 mb-2">Multiple Metrics</h3>
+        <p class="text-sm text-black/70">We combine multiple data points from trusted sources to build a complete picture.</p>
+      </div>
+      <div class="border-2 border-black border-t-0 md:border-t-2 md:border-l-0 p-6">
+        <span class="font-mono text-4xl font-bold text-black/20">03</span>
+        <h3 class="font-mono text-sm uppercase tracking-brutal font-bold mt-4 mb-2">Context & Nuance</h3>
+        <p class="text-sm text-black/70">Raw numbers don't tell the whole story. We provide context to help you understand what the data means.</p>
+      </div>
+    </div>
+  </section>
+</div>

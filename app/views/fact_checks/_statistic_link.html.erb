@@ -1,0 +1,69 @@
+<%# Inline interactive chart - embedded via {{chart:metric_slug}} %>
+<%
+  # Convert slug format to internal metric format
+  metric_key = metric_slug.tr("-", "_")
+  
+  # Build chart data using EuropeanMetricsService
+  chart_data = EuropeanMetricsService.build_metric_chart_data(metric_key)
+  
+  # Get config for title and unit
+  config = nil
+  config = MetricImporter.configs[metric_key] if defined?(MetricImporter)
+  config ||= OwidMetricImporter.all_configs[metric_key] if defined?(OwidMetricImporter)
+  
+  title = config&.dig(:description) || chart_data&.dig(:metadata, :title) || metric_slug.tr("-_", " ").titleize
+  unit = config&.dig(:unit) || chart_data&.dig(:metadata, :unit) || ""
+  source = chart_data&.dig(:metadata, :source) || "Our World in Data"
+%>
+
+<% if chart_data && chart_data[:years]&.any? %>
+  <div class="my-10 not-prose">
+    <%= render 'shared/chart', 
+        chart_data: chart_data,
+        title: title,
+        unit: unit,
+        metric_name: metric_key,
+        source: source %>
+    
+    <!-- Link to full statistics page -->
+    <div class="mt-4 text-center">
+      <%= link_to statistic_path(metric_slug.tr("_", "-")), 
+          class: "inline-flex items-center gap-2 font-mono text-xs uppercase tracking-brutal text-black/60 hover:text-[#0066FF] transition-colors" do %>
+        <span>View full statistics page</span>
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
+        </svg>
+      <% end %>
+    </div>
+  </div>
+<% else %>
+  <!-- Fallback link if no chart data available -->
+  <div class="my-8 not-prose">
+    <%= link_to statistic_path(metric_slug.tr("_", "-")), 
+        class: "block border-2 border-black hover:border-[#0066FF] transition-colors group" do %>
+      <div class="flex items-center justify-between p-4 md:p-6 bg-[#F5F5F5] group-hover:bg-[#0066FF]/5">
+        <div class="flex items-center gap-4">
+          <div class="w-12 h-12 flex items-center justify-center bg-black text-white group-hover:bg-[#0066FF] transition-colors">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z"></path>
+            </svg>
+          </div>
+          <div>
+            <span class="font-mono text-xs uppercase tracking-brutal text-black/50 group-hover:text-[#0066FF] block">
+              Interactive Chart
+            </span>
+            <span class="font-bold text-lg group-hover:text-[#0066FF] transition-colors">
+              <%= title %>
+            </span>
+          </div>
+        </div>
+        <div class="flex items-center gap-2 font-mono text-sm uppercase tracking-brutal text-black/50 group-hover:text-[#0066FF]">
+          <span class="hidden md:inline">Explore Data</span>
+          <svg class="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
+          </svg>
+        </div>
+      </div>
+    <% end %>
+  </div>
+<% end %>
