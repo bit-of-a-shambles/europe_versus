@@ -4,6 +4,32 @@
 # Metrics are configured in config/owid_metrics.yml
 # Just add a metric there, commit, and deploy - the app does the rest!
 class OwidMetricImporter
+  # Maximum retries for SQLite busy exceptions
+  MAX_RETRIES = 5
+  BASE_DELAY = 0.5 # seconds
+
+  # Retry block with exponential backoff for SQLite busy exceptions
+  def self.with_retry(max_retries: MAX_RETRIES, &block)
+    retries = 0
+    begin
+      yield
+    rescue ActiveRecord::StatementInvalid => e
+      if e.message.include?("database is locked") || e.message.include?("BusyException")
+        retries += 1
+        if retries <= max_retries
+          delay = BASE_DELAY * (2 ** (retries - 1)) + rand(0.0..0.5)
+          Rails.logger.warn "SQLite busy, retry #{retries}/#{max_retries} after #{delay.round(2)}s"
+          sleep delay
+          retry
+        else
+          Rails.logger.error "SQLite still busy after #{max_retries} retries, giving up"
+          raise
+        end
+      else
+        raise
+      end
+    end
+  end
   # Load metrics from YAML file
   def self.load_configs
     config_file = Rails.root.join("config", "owid_metrics.yml")
@@ -181,6 +207,9 @@ class OwidMetricImporter
       stored_count = 0
       skipped_count = 0
 
+      # Collect all records to upsert
+      records_to_save = []
+
       result[:countries].each do |country_key, country_data|
         country_data[:data].each do |year, value|
           # Skip if value is nil or empty
@@ -200,25 +229,37 @@ class OwidMetricImporter
           unit_value = config[:unit] || result.dig(:metadata, :unit).presence || ""
           next if unit_value.blank?
 
-          # Use upsert-style operation
-          metric = Metric.find_or_initialize_by(
+          records_to_save << {
             country: country_key,
             metric_name: metric_name,
-            year: year
-          )
-
-          metric.assign_attributes(
+            year: year,
             metric_value: numeric_value,
             unit: unit_value,
             source: result.dig(:metadata, :source) || "Our World in Data",
             description: config[:description] || result.dig(:metadata, :description)
-          )
+          }
+        end
+      end
 
-          begin
-            metric.save!
-            stored_count += 1
-          rescue ActiveRecord::RecordInvalid => e
-            puts "   ⚠️  Failed to save #{country_key} #{year}: #{e.message}" if verbose
+      # Save in batches with retry logic to handle SQLite locking
+      batch_size = 100
+      records_to_save.each_slice(batch_size) do |batch|
+        with_retry do
+          Metric.transaction do
+            batch.each do |record_attrs|
+              metric = Metric.find_or_initialize_by(
+                country: record_attrs[:country],
+                metric_name: record_attrs[:metric_name],
+                year: record_attrs[:year]
+              )
+              metric.assign_attributes(record_attrs)
+              begin
+                metric.save!
+                stored_count += 1
+              rescue ActiveRecord::RecordInvalid => e
+                puts "   ⚠️  Failed to save #{record_attrs[:country]} #{record_attrs[:year]}: #{e.message}" if verbose
+              end
+            end
           end
         end
       end

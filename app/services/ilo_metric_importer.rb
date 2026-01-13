@@ -3,6 +3,10 @@
 class IloMetricImporter
   include EuropeanCountriesHelper
 
+  # Maximum retries for SQLite busy exceptions
+  MAX_RETRIES = 5
+  BASE_DELAY = 0.5 # seconds
+
   # Map of metric names to ILO indicator keys
   METRIC_MAPPINGS = {
     "labor_productivity_per_hour_ilo" => :labor_productivity_per_hour,
@@ -10,6 +14,28 @@ class IloMetricImporter
   }.freeze
 
   class << self
+    # Retry block with exponential backoff for SQLite busy exceptions
+    def with_retry(max_retries: MAX_RETRIES, &block)
+      retries = 0
+      begin
+        yield
+      rescue ActiveRecord::StatementInvalid => e
+        if e.message.include?("database is locked") || e.message.include?("BusyException")
+          retries += 1
+          if retries <= max_retries
+            delay = BASE_DELAY * (2 ** (retries - 1)) + rand(0.0..0.5)
+            Rails.logger.warn "SQLite busy, retry #{retries}/#{max_retries} after #{delay.round(2)}s"
+            sleep delay
+            retry
+          else
+            Rails.logger.error "SQLite still busy after #{max_retries} retries, giving up"
+            raise
+          end
+        else
+          raise
+        end
+      end
+    end
     # Import all available ILO metrics
     # @param start_year [Integer] Start year for data range
     # @param end_year [Integer] End year for data range
@@ -47,28 +73,41 @@ class IloMetricImporter
         return { imported: 0, errors: 1, error_message: result[:error] }
       end
 
-      # Store the data
+      # Store the data in batches with retry logic
       imported = 0
       errors = 0
       unit = result.dig(:metadata, :unit) || "units"
 
+      # Collect all records
+      records = []
       result[:data].each do |country, years|
         years.each do |year, value|
-          begin
-            Metric.find_or_initialize_by(
-              metric_name: metric_name,
-              country: country,
-              year: year
-            ).tap do |metric|
-              metric.metric_value = value
-              metric.unit = unit
-              metric.description = "Labor productivity per hour worked (ILO Modelled Estimates)"
-              metric.save!
+          records << { country: country, year: year, value: value }
+        end
+      end
+
+      # Save in batches
+      records.each_slice(100) do |batch|
+        with_retry do
+          Metric.transaction do
+            batch.each do |record|
+              begin
+                Metric.find_or_initialize_by(
+                  metric_name: metric_name,
+                  country: record[:country],
+                  year: record[:year]
+                ).tap do |metric|
+                  metric.metric_value = record[:value]
+                  metric.unit = unit
+                  metric.description = "Labor productivity per hour worked (ILO Modelled Estimates)"
+                  metric.save!
+                end
+                imported += 1
+              rescue ActiveRecord::RecordInvalid => e
+                Rails.logger.error "Failed to save #{metric_name} for #{record[:country]} #{record[:year]}: #{e.message}"
+                errors += 1
+              end
             end
-            imported += 1
-          rescue ActiveRecord::RecordInvalid => e
-            Rails.logger.error "Failed to save #{metric_name} for #{country} #{year}: #{e.message}"
-            errors += 1
           end
         end
       end
@@ -92,23 +131,36 @@ class IloMetricImporter
 
         unit = result.dig(:metadata, :unit) || "units"
 
+        # Collect all records
+        records = []
         result[:data].each do |country, years|
           years.each do |year, value|
-            begin
-              Metric.find_or_initialize_by(
-                metric_name: metric_name,
-                country: country,
-                year: year
-              ).tap do |metric|
-                metric.metric_value = value
-                metric.unit = unit
-                metric.description = "Labor productivity (ILO Modelled Estimates)"
-                metric.save!
+            records << { country: country, year: year, value: value }
+          end
+        end
+
+        # Save in batches with retry
+        records.each_slice(100) do |batch|
+          with_retry do
+            Metric.transaction do
+              batch.each do |record|
+                begin
+                  Metric.find_or_initialize_by(
+                    metric_name: metric_name,
+                    country: record[:country],
+                    year: record[:year]
+                  ).tap do |metric|
+                    metric.metric_value = record[:value]
+                    metric.unit = unit
+                    metric.description = "Labor productivity (ILO Modelled Estimates)"
+                    metric.save!
+                  end
+                  imported += 1
+                rescue ActiveRecord::RecordInvalid => e
+                  Rails.logger.error "Failed to save comparison data: #{e.message}"
+                  errors += 1
+                end
               end
-              imported += 1
-            rescue ActiveRecord::RecordInvalid => e
-              Rails.logger.error "Failed to save comparison data: #{e.message}"
-              errors += 1
             end
           end
         end
@@ -123,33 +175,35 @@ class IloMetricImporter
       Rails.logger.info "Calculating Europe aggregate for #{metric_name}"
 
       (start_year..end_year).each do |year|
-        # Get all country data for this year
-        country_metrics = Metric.where(
-          metric_name: metric_name,
-          year: year
-        ).where.not(country: %w[europe usa china india])
+        with_retry do
+          # Get all country data for this year
+          country_metrics = Metric.where(
+            metric_name: metric_name,
+            year: year
+          ).where.not(country: %w[europe usa china india])
 
-        next if country_metrics.count < 5 # Need at least 5 countries
+          next if country_metrics.count < 5 # Need at least 5 countries
 
-        # Calculate simple average (could be improved with population weighting)
-        values = country_metrics.pluck(:metric_value).compact
-        next if values.empty?
+          # Calculate simple average (could be improved with population weighting)
+          values = country_metrics.pluck(:metric_value).compact
+          next if values.empty?
 
-        avg_value = values.sum / values.length
+          avg_value = values.sum / values.length
 
-        # Get unit from existing records
-        unit = country_metrics.first&.unit || "2021 PPP $ per hour"
+          # Get unit from existing records
+          unit = country_metrics.first&.unit || "2021 PPP $ per hour"
 
-        # Store the aggregate
-        Metric.find_or_initialize_by(
-          metric_name: metric_name,
-          country: "europe",
-          year: year
-        ).tap do |metric|
-          metric.metric_value = avg_value.round(2)
-          metric.unit = unit
-          metric.description = "European average labor productivity (ILO data, #{country_metrics.count} countries)"
-          metric.save!
+          # Store the aggregate
+          Metric.find_or_initialize_by(
+            metric_name: metric_name,
+            country: "europe",
+            year: year
+          ).tap do |metric|
+            metric.metric_value = avg_value.round(2)
+            metric.unit = unit
+            metric.description = "European average labor productivity (ILO data, #{country_metrics.count} countries)"
+            metric.save!
+          end
         end
       end
     end
