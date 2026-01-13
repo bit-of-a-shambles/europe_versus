@@ -19,7 +19,34 @@ class MetricImporter
   # Supported data sources
   SOURCES = %i[owid ilo worldbank].freeze
 
+  # SQLite retry configuration
+  MAX_RETRIES = 5
+  BASE_DELAY = 0.5 # seconds
+
   class << self
+    # Retry block with exponential backoff for SQLite busy exceptions
+    def with_retry(max_retries: MAX_RETRIES, &block)
+      retries = 0
+      begin
+        yield
+      rescue ActiveRecord::StatementInvalid => e
+        if e.message.include?("database is locked") || e.message.include?("BusyException")
+          retries += 1
+          if retries <= max_retries
+            delay = BASE_DELAY * (2 ** (retries - 1)) + rand(0.0..0.5)
+            Rails.logger.warn "SQLite busy, retry #{retries}/#{max_retries} after #{delay.round(2)}s"
+            sleep delay
+            retry
+          else
+            Rails.logger.error "SQLite still busy after #{max_retries} retries, giving up"
+            raise
+          end
+        else
+          raise
+        end
+      end
+    end
+
     # Load all metric configurations from YAML
     def load_configs
       return {} unless File.exist?(CONFIG_FILE)
@@ -306,6 +333,8 @@ class MetricImporter
     def store_owid_data(result, metric_name, config, verbose)
       stored_count = 0
 
+      # Collect all records first
+      records = []
       result[:countries].each do |country_key, country_data|
         country_data[:data].each do |year, value|
           next if value.nil? || value.to_s.strip.empty?
@@ -316,24 +345,36 @@ class MetricImporter
 
           unit_value = config[:unit] || result.dig(:metadata, :unit).presence || ""
 
-          metric = Metric.find_or_initialize_by(
+          records << {
             country: country_key,
             metric_name: metric_name,
-            year: year
-          )
-
-          metric.assign_attributes(
+            year: year,
             metric_value: numeric_value,
             unit: unit_value,
             source: "Our World in Data",
             description: config[:description]
-          )
+          }
+        end
+      end
 
-          begin
-            metric.save!
-            stored_count += 1
-          rescue ActiveRecord::RecordInvalid => e
-            puts "   ⚠️ Failed: #{country_key} #{year}: #{e.message}" if verbose
+      # Save in batches with retry logic
+      records.each_slice(100) do |batch|
+        with_retry do
+          Metric.transaction do
+            batch.each do |attrs|
+              metric = Metric.find_or_initialize_by(
+                country: attrs[:country],
+                metric_name: attrs[:metric_name],
+                year: attrs[:year]
+              )
+              metric.assign_attributes(attrs)
+              begin
+                metric.save!
+                stored_count += 1
+              rescue ActiveRecord::RecordInvalid => e
+                puts "   ⚠️ Failed: #{attrs[:country]} #{attrs[:year]}: #{e.message}" if verbose
+              end
+            end
           end
         end
       end
@@ -346,28 +387,42 @@ class MetricImporter
       stored_count = 0
       unit = config[:unit] || result.dig(:metadata, :unit) || "units"
 
+      # Collect all records first
+      records = []
       result[:data].each do |country_key, years|
         years.each do |year, value|
           next if value.nil?
 
-          metric = Metric.find_or_initialize_by(
+          records << {
             country: country_key,
             metric_name: metric_name,
-            year: year
-          )
-
-          metric.assign_attributes(
+            year: year,
             metric_value: value.to_f,
             unit: unit,
             source: "ILO - Modelled Estimates",
             description: config[:description]
-          )
+          }
+        end
+      end
 
-          begin
-            metric.save!
-            stored_count += 1
-          rescue ActiveRecord::RecordInvalid => e
-            puts "   ⚠️ Failed: #{country_key} #{year}: #{e.message}" if verbose
+      # Save in batches with retry logic
+      records.each_slice(100) do |batch|
+        with_retry do
+          Metric.transaction do
+            batch.each do |attrs|
+              metric = Metric.find_or_initialize_by(
+                country: attrs[:country],
+                metric_name: attrs[:metric_name],
+                year: attrs[:year]
+              )
+              metric.assign_attributes(attrs)
+              begin
+                metric.save!
+                stored_count += 1
+              rescue ActiveRecord::RecordInvalid => e
+                puts "   ⚠️ Failed: #{attrs[:country]} #{attrs[:year]}: #{e.message}" if verbose
+              end
+            end
           end
         end
       end
@@ -381,28 +436,42 @@ class MetricImporter
       stored_count = 0
       unit = config[:unit] || result.dig(:metadata, :unit) || "units"
 
+      # Collect all records first
+      records = []
       result[:data].each do |country_key, years|
         years.each do |year, value|
           next if value.nil?
 
-          metric = Metric.find_or_initialize_by(
+          records << {
             country: country_key,
             metric_name: metric_name,
-            year: year
-          )
-
-          metric.assign_attributes(
+            year: year,
             metric_value: value.to_f,
             unit: unit,
             source: "World Bank",
             description: config[:description]
-          )
+          }
+        end
+      end
 
-          begin
-            metric.save!
-            stored_count += 1
-          rescue ActiveRecord::RecordInvalid => e
-            puts "   ⚠️ Failed: #{country_key} #{year}: #{e.message}" if verbose
+      # Save in batches with retry logic
+      records.each_slice(100) do |batch|
+        with_retry do
+          Metric.transaction do
+            batch.each do |attrs|
+              metric = Metric.find_or_initialize_by(
+                country: attrs[:country],
+                metric_name: attrs[:metric_name],
+                year: attrs[:year]
+              )
+              metric.assign_attributes(attrs)
+              begin
+                metric.save!
+                stored_count += 1
+              rescue ActiveRecord::RecordInvalid => e
+                puts "   ⚠️ Failed: #{attrs[:country]} #{attrs[:year]}: #{e.message}" if verbose
+              end
+            end
           end
         end
       end
