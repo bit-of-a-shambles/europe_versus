@@ -50,8 +50,23 @@ class MetricImporter
 
       results = { total_records: 0, metrics: {} }
 
-      configs.each do |metric_name, config|
-        result = import_metric(metric_name, verbose: verbose)
+      # CRITICAL: Import population data FIRST - it's required for all aggregate calculations
+      # Population data comes from a separate service, not from metrics.yml
+      ensure_population_data(verbose: verbose)
+
+      # Import OWID metrics first (they're generally more reliable and include foundational data)
+      # Then import ILO and WorldBank metrics
+      sorted_configs = configs.sort_by do |_name, config|
+        case config[:source]&.to_sym
+        when :owid then 0
+        when :worldbank then 1
+        when :ilo then 2
+        else 3
+        end
+      end
+
+      sorted_configs.each do |metric_name, config|
+        result = import_metric(metric_name, verbose: verbose, config: config)
         results[:metrics][metric_name] = result
         results[:total_records] += result[:stored_count] || 0
       end
@@ -63,6 +78,26 @@ class MetricImporter
       end
 
       results
+    end
+
+    # Ensure population data exists - required for all aggregate calculations
+    def ensure_population_data(verbose: true)
+      existing_count = Metric.where(metric_name: "population").count
+
+      if existing_count > 5000 # Assume we have enough data if > 5000 records
+        puts "📊 Population data already exists (#{existing_count} records)" if verbose
+        return true
+      end
+
+      puts "📊 Importing population data (required for aggregates)..." if verbose
+      PopulationDataService.fetch_and_store_population
+
+      new_count = Metric.where(metric_name: "population").count
+      puts "   ✅ Population data ready: #{new_count} records" if verbose
+      true
+    rescue StandardError => e
+      puts "   ⚠️  Failed to import population data: #{e.message}" if verbose
+      false
     end
 
     # Import a single metric by name
