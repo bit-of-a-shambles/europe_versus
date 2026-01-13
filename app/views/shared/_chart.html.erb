@@ -106,7 +106,7 @@
   total_countries = filtered_groups.values.flatten.size
 %>
 
-<div class="py-12 border-b-2 border-black" 
+<div class="py-6 md:py-12 border-b-2 border-black" 
      data-controller="chart"
      data-chart-data-value="<%= chart_data.to_json %>"
      data-chart-title-value="<%= title %>"
@@ -116,22 +116,22 @@
      <% if initial_countries.present? %>data-chart-initial-countries-value="<%= initial_countries.to_json %>"<% end %>>
   
   <!-- Chart Header -->
-  <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 mb-6">
-    <h2 class="font-mono text-sm uppercase tracking-brutal">Interactive Trend</h2>
+  <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-4 md:mb-6">
+    <h2 class="font-mono text-xs md:text-sm uppercase tracking-brutal">Interactive Trend</h2>
     
     <!-- Export Buttons -->
     <div class="flex gap-2">
       <button data-chart-target="exportBtn" 
               data-action="click->chart#exportImage"
-              class="font-mono text-xs uppercase tracking-brutal px-4 py-2 border-2 border-black bg-white hover:bg-black hover:text-white transition-colors flex items-center gap-2">
-        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              class="font-mono text-[10px] md:text-xs uppercase tracking-brutal px-2 md:px-4 py-1.5 md:py-2 border-2 border-black bg-white hover:bg-black hover:text-white transition-colors flex items-center gap-1 md:gap-2">
+        <svg class="w-3 h-3 md:w-4 md:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
         </svg>
-        Download PNG
+        <span class="hidden xs:inline">Download</span> PNG
       </button>
       <button data-action="click->chart#copyToClipboard"
-              class="font-mono text-xs uppercase tracking-brutal px-4 py-2 border-2 border-black bg-white hover:bg-black hover:text-white transition-colors flex items-center gap-2">
-        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              class="font-mono text-[10px] md:text-xs uppercase tracking-brutal px-2 md:px-4 py-1.5 md:py-2 border-2 border-black bg-white hover:bg-black hover:text-white transition-colors flex items-center gap-1 md:gap-2">
+        <svg class="w-3 h-3 md:w-4 md:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"></path>
         </svg>
         Copy
@@ -142,86 +142,86 @@
   <!-- Chart Container (for export) -->
   <div data-chart-target="container" class="border-2 border-black bg-white">
     <!-- Chart Title Bar -->
-    <div class="border-b-2 border-black px-6 py-4 bg-[#F5F5F5]">
-      <div class="flex items-center justify-between">
-        <div class="flex-1">
-          <h3 class="text-xl md:text-2xl font-black tracking-tight uppercase"><%= metric_name.to_s.humanize.titleize %></h3>
+    <div class="border-b-2 border-black px-3 md:px-6 py-3 md:py-4 bg-[#F5F5F5]">
+      <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2">
+        <div class="flex-1 min-w-0">
+          <h3 class="text-base md:text-xl lg:text-2xl font-black tracking-tight uppercase truncate"><%= metric_name.to_s.humanize.titleize %></h3>
           <% if title.present? %>
-            <p class="text-sm text-black/60 mt-2 normal-case font-normal leading-relaxed max-w-2xl">
+            <p class="text-xs md:text-sm text-black/60 mt-1 md:mt-2 normal-case font-normal leading-relaxed line-clamp-3 md:line-clamp-none">
               <%= title %>
             </p>
           <% end %>
-          <p class="font-mono text-xs text-black/60 mt-2">Source: EuropeVersus.com • <%= source %></p>
+          <p class="font-mono text-[10px] md:text-xs text-black/60 mt-1 md:mt-2">Source: EuropeVersus.com • <%= source %></p>
         </div>
-        <div class="font-mono text-xs text-black/60">
+        <div class="font-mono text-[10px] md:text-xs text-black/60 hidden sm:block flex-shrink-0">
           europeversus.com
         </div>
       </div>
     </div>
     
     <!-- Chart Canvas -->
-    <div class="p-6">
-      <div class="relative" style="height: 400px;">
+    <div class="p-3 md:p-6">
+      <div class="relative h-[250px] sm:h-[300px] md:h-[400px]">
         <canvas data-chart-target="canvas"></canvas>
       </div>
       
       <!-- Custom Legend -->
-      <div data-chart-target="legend" class="flex flex-wrap gap-2 mt-4 pt-4 border-t border-black/20">
+      <div data-chart-target="legend" class="flex flex-wrap gap-1.5 md:gap-2 mt-3 md:mt-4 pt-3 md:pt-4 border-t border-black/20">
         <!-- Populated by JavaScript -->
       </div>
     </div>
   </div>
 
   <!-- Controls Panel -->
-  <div class="mt-6 border-2 border-black bg-white">
+  <div class="mt-4 md:mt-6 border-2 border-black bg-white">
     <!-- Mode Toggle -->
-    <div class="border-b-2 border-black px-6 py-4">
-      <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-        <span class="font-mono text-xs uppercase tracking-brutal font-bold">Display Mode</span>
-        <div class="flex flex-wrap">
+    <div class="border-b-2 border-black px-3 md:px-6 py-3 md:py-4">
+      <div class="flex flex-col gap-3">
+        <span class="font-mono text-[10px] md:text-xs uppercase tracking-brutal font-bold">Display Mode</span>
+        <div class="flex flex-wrap gap-1 md:gap-0">
           <button data-chart-target="modeToggle"
                   data-mode="absolute"
                   data-action="click->chart#toggleMode"
-                  class="font-mono text-xs uppercase tracking-brutal px-4 py-2 border-2 border-black border-r-0 bg-black text-white hover:bg-[#0066FF] hover:border-[#0066FF] transition-colors">
-            Absolute Values
+                  class="font-mono text-[10px] md:text-xs uppercase tracking-brutal px-2 md:px-4 py-1.5 md:py-2 border-2 border-black md:border-r-0 bg-black text-white hover:bg-[#0066FF] hover:border-[#0066FF] transition-colors">
+            Absolute
           </button>
           <button data-chart-target="modeToggle"
                   data-mode="absolute_change"
                   data-action="click->chart#toggleMode"
-                  class="font-mono text-xs uppercase tracking-brutal px-4 py-2 border-2 border-black border-r-0 bg-white hover:bg-black hover:text-white transition-colors">
-            Change from Start
+                  class="font-mono text-[10px] md:text-xs uppercase tracking-brutal px-2 md:px-4 py-1.5 md:py-2 border-2 border-black md:border-r-0 bg-white hover:bg-black hover:text-white transition-colors">
+            Change
           </button>
           <button data-chart-target="modeToggle"
                   data-mode="relative"
                   data-action="click->chart#toggleMode"
-                  class="font-mono text-xs uppercase tracking-brutal px-4 py-2 border-2 border-black bg-white hover:bg-black hover:text-white transition-colors">
-            % Change from Start
+                  class="font-mono text-[10px] md:text-xs uppercase tracking-brutal px-2 md:px-4 py-1.5 md:py-2 border-2 border-black bg-white hover:bg-black hover:text-white transition-colors">
+            % Change
           </button>
         </div>
       </div>
     </div>
 
     <!-- Year Range -->
-    <div class="border-b-2 border-black px-6 py-4">
-      <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-        <span class="font-mono text-xs uppercase tracking-brutal font-bold">Year Range</span>
-        <div class="flex items-center gap-4">
-          <div class="flex items-center gap-2">
-            <label class="font-mono text-xs text-black/60">From</label>
+    <div class="border-b-2 border-black px-3 md:px-6 py-3 md:py-4">
+      <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+        <span class="font-mono text-[10px] md:text-xs uppercase tracking-brutal font-bold">Year Range</span>
+        <div class="flex items-center gap-2 md:gap-4">
+          <div class="flex items-center gap-1 md:gap-2">
+            <label class="font-mono text-[10px] md:text-xs text-black/60">From</label>
             <select data-chart-target="yearStart" 
                     data-action="change->chart#updateYearRange"
-                    class="font-mono text-sm border-2 border-black px-3 py-1.5 bg-white">
+                    class="font-mono text-xs md:text-sm border-2 border-black px-2 md:px-3 py-1 md:py-1.5 bg-white">
               <% years.each do |year| %>
                 <option value="<%= year %>" <%= year == years.first ? 'selected' : '' %>><%= year %></option>
               <% end %>
             </select>
           </div>
-          <span class="font-mono text-black/40">→</span>
-          <div class="flex items-center gap-2">
-            <label class="font-mono text-xs text-black/60">To</label>
+          <span class="font-mono text-black/40 text-xs">→</span>
+          <div class="flex items-center gap-1 md:gap-2">
+            <label class="font-mono text-[10px] md:text-xs text-black/60">To</label>
             <select data-chart-target="yearEnd" 
                     data-action="change->chart#updateYearRange"
-                    class="font-mono text-sm border-2 border-black px-3 py-1.5 bg-white">
+                    class="font-mono text-xs md:text-sm border-2 border-black px-2 md:px-3 py-1 md:py-1.5 bg-white">
               <% years.each do |year| %>
                 <option value="<%= year %>" <%= year == years.last ? 'selected' : '' %>><%= year %></option>
               <% end %>
@@ -232,48 +232,48 @@
     </div>
 
     <!-- Filter Controls - Official EU groupings -->
-    <div class="border-b-2 border-black px-6 py-4">
-      <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-        <span class="font-mono text-xs uppercase tracking-brutal font-bold">Filter</span>
-        <div class="flex flex-wrap gap-2">
+    <div class="border-b-2 border-black px-3 md:px-6 py-3 md:py-4">
+      <div class="flex flex-col gap-3">
+        <span class="font-mono text-[10px] md:text-xs uppercase tracking-brutal font-bold">Filter</span>
+        <div class="flex gap-1.5 md:gap-2 overflow-x-auto pb-2 -mb-2 scrollbar-thin">
           <button data-group="all" 
                   data-action="click->chart#selectRegionGroup"
-                  class="font-mono text-xs uppercase tracking-brutal px-4 py-2 border-2 border-black bg-white hover:bg-black hover:text-white transition-colors">
+                  class="font-mono text-[10px] md:text-xs uppercase tracking-brutal px-2 md:px-4 py-1.5 md:py-2 border-2 border-black bg-white hover:bg-black hover:text-white transition-colors whitespace-nowrap flex-shrink-0">
             All
           </button>
           <button data-group="eu-27" 
                   data-action="click->chart#selectRegionGroup"
-                  class="font-mono text-xs uppercase tracking-brutal px-4 py-2 border-2 border-black bg-white hover:bg-black hover:text-white transition-colors">
+                  class="font-mono text-[10px] md:text-xs uppercase tracking-brutal px-2 md:px-4 py-1.5 md:py-2 border-2 border-black bg-white hover:bg-black hover:text-white transition-colors whitespace-nowrap flex-shrink-0">
             EU-27
           </button>
           <button data-group="eurozone" 
                   data-action="click->chart#selectRegionGroup"
-                  class="font-mono text-xs uppercase tracking-brutal px-4 py-2 border-2 border-black bg-white hover:bg-black hover:text-white transition-colors">
+                  class="font-mono text-[10px] md:text-xs uppercase tracking-brutal px-2 md:px-4 py-1.5 md:py-2 border-2 border-black bg-white hover:bg-black hover:text-white transition-colors whitespace-nowrap flex-shrink-0">
             Eurozone
           </button>
           <button data-group="non-euro-eu" 
                   data-action="click->chart#selectRegionGroup"
-                  class="font-mono text-xs uppercase tracking-brutal px-4 py-2 border-2 border-black bg-white hover:bg-black hover:text-white transition-colors">
+                  class="font-mono text-[10px] md:text-xs uppercase tracking-brutal px-2 md:px-4 py-1.5 md:py-2 border-2 border-black bg-white hover:bg-black hover:text-white transition-colors whitespace-nowrap flex-shrink-0">
             Non-€ EU
           </button>
           <button data-group="non-eu" 
                   data-action="click->chart#selectRegionGroup"
-                  class="font-mono text-xs uppercase tracking-brutal px-4 py-2 border-2 border-black bg-white hover:bg-black hover:text-white transition-colors">
+                  class="font-mono text-[10px] md:text-xs uppercase tracking-brutal px-2 md:px-4 py-1.5 md:py-2 border-2 border-black bg-white hover:bg-black hover:text-white transition-colors whitespace-nowrap flex-shrink-0">
             Non-EU
           </button>
           <button data-group="global" 
                   data-action="click->chart#selectRegionGroup"
-                  class="font-mono text-xs uppercase tracking-brutal px-4 py-2 border-2 border-black bg-white hover:bg-black hover:text-white transition-colors">
+                  class="font-mono text-[10px] md:text-xs uppercase tracking-brutal px-2 md:px-4 py-1.5 md:py-2 border-2 border-black bg-white hover:bg-black hover:text-white transition-colors whitespace-nowrap flex-shrink-0">
             Global
           </button>
           <button data-group="aggregates" 
                   data-action="click->chart#selectRegionGroup"
-                  class="font-mono text-xs uppercase tracking-brutal px-4 py-2 border-2 border-black bg-white hover:bg-black hover:text-white transition-colors">
+                  class="font-mono text-[10px] md:text-xs uppercase tracking-brutal px-2 md:px-4 py-1.5 md:py-2 border-2 border-black bg-white hover:bg-black hover:text-white transition-colors whitespace-nowrap flex-shrink-0">
             Aggregates
           </button>
           <button data-group="clear" 
                   data-action="click->chart#selectRegionGroup"
-                  class="font-mono text-xs uppercase tracking-brutal px-4 py-2 border-2 border-black bg-white hover:bg-black hover:text-white transition-colors text-red-600">
+                  class="font-mono text-[10px] md:text-xs uppercase tracking-brutal px-2 md:px-4 py-1.5 md:py-2 border-2 border-black bg-white hover:bg-black hover:text-white transition-colors text-red-600 whitespace-nowrap flex-shrink-0">
             Clear
           </button>
         </div>
@@ -281,35 +281,35 @@
     </div>
 
     <!-- Country Selection - Collapsible Dropdown -->
-    <div class="px-6 py-4">
+    <div class="px-3 md:px-6 py-3 md:py-4">
       <details class="group">
         <summary class="flex items-center justify-between cursor-pointer list-none">
-          <div class="flex items-center gap-3">
-            <span class="font-mono text-xs uppercase tracking-brutal font-bold">Select Countries/Regions</span>
-            <span data-chart-target="selectionCount" class="font-mono text-xs bg-[#0066FF] text-white px-2 py-0.5">4 selected</span>
+          <div class="flex items-center gap-2 md:gap-3">
+            <span class="font-mono text-[10px] md:text-xs uppercase tracking-brutal font-bold">Select Countries</span>
+            <span data-chart-target="selectionCount" class="font-mono text-[10px] md:text-xs bg-[#0066FF] text-white px-1.5 md:px-2 py-0.5">4 selected</span>
           </div>
-          <svg class="w-5 h-5 transition-transform group-open:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <svg class="w-4 h-4 md:w-5 md:h-5 transition-transform group-open:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
           </svg>
         </summary>
         
-        <div class="mt-4 pt-4 border-t border-black/20">
-          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6">
+        <div class="mt-3 md:mt-4 pt-3 md:pt-4 border-t border-black/20">
+          <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 md:gap-6">
             <% filtered_groups.each do |group_name, countries| %>
               <div>
-                <h4 class="font-mono text-xs uppercase tracking-brutal text-black/60 mb-3 pb-2 border-b border-black/20"><%= group_name %></h4>
-                <div class="space-y-1">
+                <h4 class="font-mono text-[10px] md:text-xs uppercase tracking-brutal text-black/60 mb-2 md:mb-3 pb-1.5 md:pb-2 border-b border-black/20"><%= group_name %></h4>
+                <div class="space-y-0.5 md:space-y-1">
                   <% countries.each do |country| %>
-                    <label class="flex items-center gap-2 cursor-pointer hover:bg-[#F5F5F5] px-2 py-1 -mx-2 transition-colors">
+                    <label class="flex items-center gap-1.5 md:gap-2 cursor-pointer hover:bg-[#F5F5F5] px-1.5 md:px-2 py-0.5 md:py-1 -mx-1.5 md:-mx-2 transition-colors">
                       <input type="checkbox" 
                              data-chart-target="countryCheckbox"
                              data-country="<%= country[:key] %>"
                              data-category="<%= country[:category] %>"
                              data-action="change->chart#toggleCountry"
-                             class="w-4 h-4 border-2 border-black accent-[#0066FF]"
+                             class="w-3.5 h-3.5 md:w-4 md:h-4 border-2 border-black accent-[#0066FF]"
                              <%= ['europe', 'usa', 'china', 'india'].include?(country[:key]) ? 'checked' : '' %>>
-                      <span class="text-base"><%= country[:flag] %></span>
-                      <span class="font-mono text-xs"><%= country[:name] %></span>
+                      <span class="text-sm md:text-base"><%= country[:flag] %></span>
+                      <span class="font-mono text-[10px] md:text-xs"><%= country[:name] %></span>
                     </label>
                   <% end %>
                 </div>

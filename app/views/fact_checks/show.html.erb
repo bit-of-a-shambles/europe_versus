@@ -158,32 +158,60 @@
 <!-- Improved Typography Styles -->
 <style>
   .fact-check-content {
-    font-size: 1.125rem;
+    font-size: 1rem;
     line-height: 1.8;
     color: #1a1a1a;
   }
   
-  .fact-check-content h2 {
-    font-size: 1.875rem;
-    font-weight: 900;
-    letter-spacing: -0.025em;
-    margin-top: 3rem;
-    margin-bottom: 1.5rem;
-    padding-bottom: 0.75rem;
-    border-bottom: 3px solid #000;
+  @media (min-width: 640px) {
+    .fact-check-content {
+      font-size: 1.125rem;
+    }
   }
   
-  .fact-check-content h3 {
+  .fact-check-content h2 {
     font-size: 1.5rem;
-    font-weight: 800;
+    font-weight: 900;
     letter-spacing: -0.025em;
     margin-top: 2rem;
     margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 3px solid #000;
+  }
+  
+  @media (min-width: 640px) {
+    .fact-check-content h2 {
+      font-size: 1.875rem;
+      margin-top: 3rem;
+      margin-bottom: 1.5rem;
+      padding-bottom: 0.75rem;
+    }
+  }
+  
+  .fact-check-content h3 {
+    font-size: 1.25rem;
+    font-weight: 800;
+    letter-spacing: -0.025em;
+    margin-top: 1.5rem;
+    margin-bottom: 1rem;
+  }
+  
+  @media (min-width: 640px) {
+    .fact-check-content h3 {
+      font-size: 1.5rem;
+      margin-top: 2rem;
+    }
   }
   
   .fact-check-content p {
-    margin-bottom: 1.5rem;
+    margin-bottom: 1.25rem;
     color: rgba(0, 0, 0, 0.85);
+  }
+  
+  @media (min-width: 640px) {
+    .fact-check-content p {
+      margin-bottom: 1.5rem;
+    }
   }
   
   .fact-check-content strong {
@@ -297,6 +325,33 @@
     background: rgba(0, 102, 255, 0.05);
   }
   
+  /* Thin scrollbar utility for filter buttons */
+  .scrollbar-thin {
+    scrollbar-width: thin;
+    scrollbar-color: #000 transparent;
+  }
+  
+  .scrollbar-thin::-webkit-scrollbar {
+    height: 4px;
+  }
+  
+  .scrollbar-thin::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  
+  .scrollbar-thin::-webkit-scrollbar-thumb {
+    background-color: #000;
+    border-radius: 2px;
+  }
+  
+  /* Line clamp utility */
+  .line-clamp-3 {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  
   @media (min-width: 768px) {
     .fact-check-content h2 {
       font-size: 2.25rem;
@@ -314,6 +369,10 @@
     
     .fact-check-content th {
       font-size: 0.875rem;
+    }
+    
+    .line-clamp-3 {
+      -webkit-line-clamp: unset;
     }
   }
 </style>

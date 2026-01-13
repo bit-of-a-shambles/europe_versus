@@ -412,9 +412,9 @@ export default class extends Controller {
     if (!this.hasLegendTarget) return
     
     const legendHtml = datasets.map(ds => `
-      <div class="flex items-center gap-2 px-3 py-1.5 border-2 border-black text-xs font-mono">
-        <span class="w-3 h-3 rounded-full" style="background-color: ${ds.borderColor}"></span>
-        <span>${ds.label}</span>
+      <div class="flex items-center gap-1.5 md:gap-2 px-2 md:px-3 py-1 md:py-1.5 border border-black md:border-2 text-[10px] md:text-xs font-mono">
+        <span class="w-2 h-2 md:w-3 md:h-3 rounded-full flex-shrink-0" style="background-color: ${ds.borderColor}"></span>
+        <span class="truncate max-w-[80px] md:max-w-none">${ds.label}</span>
       </div>
     `).join('')
     
