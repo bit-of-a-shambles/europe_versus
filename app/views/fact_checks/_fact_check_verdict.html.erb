@@ -1,0 +1,149 @@
+<%# Fact Check Verdict - embedded via {{verdict:rating}} %>
+<%# 
+  Ratings scale (0-4):
+  0 = false - Claim is demonstrably false
+  1 = mostly_false - Claim contains significant inaccuracies
+  2 = mixed - Claim has elements of truth but is misleading
+  3 = mostly_true - Claim is accurate but lacks important context
+  4 = true - Claim is accurate and well-supported
+  
+  Usage: {{verdict:mixed|The claim oversimplifies a complex economic reality}}
+%>
+
+<%
+  # Rating configuration
+  rating_config = {
+    'false' => { 
+      value: 0, 
+      label: 'False', 
+      color: '#DC2626', 
+      bg: '#FEE2E2',
+      icon: '✗',
+      description: 'This claim is demonstrably false'
+    },
+    'mostly_false' => { 
+      value: 1, 
+      label: 'Mostly False', 
+      color: '#EA580C', 
+      bg: '#FFEDD5',
+      icon: '⚠',
+      description: 'Contains significant inaccuracies'
+    },
+    'mixed' => { 
+      value: 2, 
+      label: 'Mixed', 
+      color: '#CA8A04', 
+      bg: '#FEF9C3',
+      icon: '◐',
+      description: 'Has elements of truth but is misleading'
+    },
+    'mostly_true' => { 
+      value: 3, 
+      label: 'Mostly True', 
+      color: '#0066FF', 
+      bg: '#DBEAFE',
+      icon: '◑',
+      description: 'Accurate but lacks important context'
+    },
+    'true' => { 
+      value: 4, 
+      label: 'True', 
+      color: '#16A34A', 
+      bg: '#DCFCE7',
+      icon: '✓',
+      description: 'Accurate and well-supported by evidence'
+    }
+  }
+  
+  config = rating_config[rating] || rating_config['mixed']
+  rating_value = config[:value]
+%>
+
+<div class="my-10 not-prose">
+  <div class="border-4 border-black bg-white">
+    <!-- Header -->
+    <div class="border-b-4 border-black p-6 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+      <div>
+        <span class="font-mono text-xs uppercase tracking-[0.2em] text-black/50">
+          Fact Check Verdict
+        </span>
+        <div class="flex items-center gap-3 mt-2">
+          <span class="text-4xl md:text-5xl font-black" style="color: <%= config[:color] %>;">
+            <%= config[:icon] %>
+          </span>
+          <h3 class="text-2xl md:text-3xl font-black tracking-tight uppercase" style="color: <%= config[:color] %>;">
+            <%= config[:label] %>
+          </h3>
+        </div>
+      </div>
+    </div>
+
+    <!-- Scale visualization -->
+    <div class="p-6 border-b-2 border-black/10">
+      <div class="flex items-center justify-between mb-3">
+        <span class="font-mono text-xs uppercase tracking-[0.2em] text-black/40">False</span>
+        <span class="font-mono text-xs uppercase tracking-[0.2em] text-black/40">True</span>
+      </div>
+      
+      <!-- Scale bar -->
+      <div class="relative">
+        <!-- Background track -->
+        <div class="h-3 bg-gradient-to-r from-[#DC2626] via-[#CA8A04] to-[#16A34A] rounded-none"></div>
+        
+        <!-- Scale markers -->
+        <div class="absolute inset-0 flex">
+          <% 5.times do |i| %>
+            <div class="flex-1 border-r-2 border-white/50 last:border-r-0"></div>
+          <% end %>
+        </div>
+        
+        <!-- Current position indicator -->
+        <div class="absolute top-1/2 -translate-y-1/2 transition-all duration-300"
+             style="left: <%= (rating_value / 4.0) * 100 %>%;">
+          <div class="relative -translate-x-1/2">
+            <!-- Pointer -->
+            <div class="w-6 h-6 border-4 border-black bg-white rotate-45 transform"></div>
+            <!-- Center dot -->
+            <div class="absolute inset-0 flex items-center justify-center">
+              <div class="w-2 h-2 rounded-full" style="background-color: <%= config[:color] %>;"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Scale labels -->
+      <div class="flex justify-between mt-4">
+        <% rating_config.each do |key, cfg| %>
+          <div class="flex-1 text-center <%= key == rating ? 'opacity-100' : 'opacity-30' %>">
+            <div class="font-mono text-[10px] md:text-xs uppercase tracking-brutal leading-tight"
+                 style="color: <%= cfg[:color] %>;">
+              <%= cfg[:label].gsub(' ', '<br>').html_safe %>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    </div>
+
+    <!-- Summary -->
+    <% if summary.present? %>
+      <div class="p-6 bg-[#F5F5F5]">
+        <div class="flex gap-3">
+          <div class="shrink-0 w-1 rounded-full" style="background-color: <%= config[:color] %>;"></div>
+          <p class="text-base md:text-lg leading-relaxed text-black/80">
+            <%= summary %>
+          </p>
+        </div>
+      </div>
+    <% end %>
+
+    <!-- Footer -->
+    <div class="border-t-2 border-black/20 px-6 py-3 flex items-center justify-between">
+      <span class="font-mono text-xs text-black/50">
+        EUROPEVERSUS Fact Check
+      </span>
+      <span class="font-mono text-xs uppercase tracking-brutal" style="color: <%= config[:color] %>;">
+        <%= config[:description] %>
+      </span>
+    </div>
+  </div>
+</div>

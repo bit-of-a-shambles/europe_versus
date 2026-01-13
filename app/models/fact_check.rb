@@ -57,12 +57,19 @@ class FactCheck
 
   # Render the markdown body to HTML, processing custom tags
   def render_html(view_context)
+    # Pre-process: Replace verdict tags with placeholders before Kramdown
+    # (to prevent | from being interpreted as table syntax)
+    body_with_placeholders, verdict_placeholders = preprocess_verdict_tags(@body)
+
     # First pass: convert markdown to HTML
-    html = Kramdown::Document.new(@body, input: "GFM", syntax_highlighter: nil).to_html
+    html = Kramdown::Document.new(body_with_placeholders, input: "GFM", syntax_highlighter: nil).to_html
 
     # Second pass: process custom tags
     html = process_metric_tags(html, view_context)
     html = process_chart_tags(html, view_context)
+
+    # Restore verdict placeholders with rendered partials
+    html = restore_verdict_placeholders(html, verdict_placeholders, view_context)
 
     html.html_safe
   end
@@ -160,6 +167,35 @@ class FactCheck
         locals: { metric_slug: metric_slug, chart_options: options }
       )
     end
+  end
+
+  def preprocess_verdict_tags(body)
+    placeholders = {}
+    counter = 0
+
+    processed_body = body.gsub(/\{\{verdict:([a-z_]+)\|([^}]+)\}\}/) do |_match|
+      rating = ::Regexp.last_match(1)
+      summary = ::Regexp.last_match(2)
+
+      placeholder = "VERDICT_PLACEHOLDER_#{counter}"
+      placeholders[placeholder] = { rating: rating, summary: summary }
+      counter += 1
+
+      placeholder
+    end
+
+    [ processed_body, placeholders ]
+  end
+
+  def restore_verdict_placeholders(html, placeholders, view_context)
+    placeholders.each do |placeholder, data|
+      rendered = view_context.render(
+        partial: "fact_checks/fact_check_verdict",
+        locals: { rating: data[:rating], summary: data[:summary] }
+      )
+      html = html.gsub(/<p>#{placeholder}<\/p>|#{placeholder}/, rendered)
+    end
+    html
   end
 
   def metric_config(metric_name)
