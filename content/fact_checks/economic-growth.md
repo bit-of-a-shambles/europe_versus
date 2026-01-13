@@ -119,13 +119,13 @@ The decline narrative often focuses on *growth rates*. It's true that US GDP gro
 
 The chart reveals two very different stories:
 
-1. **Core EU vs USA**: The founding EU members have grown more slowly than the US since 2008—adding roughly $17,000 per person compared to America's $20,000. This is the gap that drives most "Europe is declining" headlines.
+1. **Core EU vs USA**: The founding EU members have grown more slowly than the US since 2008-adding roughly $17,000 per person compared to America's $20,000. This is the gap that drives most "Europe is declining" headlines.
 
-2. **Non-Euro EU: Europe's Growth Engine**: Poland, Romania, Hungary, and their neighbors tell a completely different story. This region has grown *faster than China* in absolute GDP per capita terms since 2000—adding over $22,000 per person. These aren't small countries either: Poland alone has 38 million people.
+2. **Non-Euro EU: Europe's Growth Engine**: Poland, Romania, Hungary, and their neighbors tell a completely different story. This region has grown *faster than China* in absolute GDP per capita terms since 2000-adding over $22,000 per person. These aren't small countries either: Poland alone has 38 million people.
 
 ### What About Productivity Growth?
 
-GDP growth is one thing—but what about productivity, the fundamental driver of long-term prosperity? Here the story gets more interesting:
+GDP growth is one thing-but what about productivity, the fundamental driver of long-term prosperity? Here the story gets more interesting:
 
 {{chart:labor_productivity_per_hour?mode=absolute_change&countries=core_eu,europe,non_euro_eu,usa,china,india}}
 
@@ -151,5 +151,5 @@ Is Europe "falling behind"? The data tells a more nuanced story than the headlin
 
 ## Our Verdict
 
-{{verdict:mostly_false|The "Europe is falling behind" narrative gets the headline right but the story wrong. Yes, nominal US GDP per capita is higher—but Core EU real productivity growth has matched the US since 2000, adding roughly $20-25 per hour worked. The GDP gap reflects Americans working more hours, not producing more efficiently. Meanwhile, Eastern Europe has grown faster than not only the USA, but even China. The claim conflates "different choices" with "decline" and treats a diverse continent as a monolith.}}
+{{verdict:mostly_false|The "Europe is falling behind" narrative gets the headline right but the story wrong. Yes, nominal US GDP per capita is higher-but Core EU real productivity growth has matched the US since 2000, adding roughly $20-25 per hour worked. The GDP gap reflects Americans working more hours, not producing more efficiently. Meanwhile, Eastern Europe has grown faster than not only the USA, but even China. The claim conflates "different choices" with "decline" and treats a diverse continent as a monolith.}}
 

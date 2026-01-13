@@ -71,6 +71,9 @@ class FactCheck
     # Restore verdict placeholders with rendered partials
     html = restore_verdict_placeholders(html, verdict_placeholders, view_context)
 
+    # Wrap tables in responsive container
+    html = wrap_tables_for_responsive(html)
+
     html.html_safe
   end
 
@@ -196,6 +199,11 @@ class FactCheck
       html = html.gsub(/<p>#{placeholder}<\/p>|#{placeholder}/, rendered)
     end
     html
+  end
+
+  def wrap_tables_for_responsive(html)
+    # Wrap standalone tables in a responsive wrapper div
+    html.gsub(/<table>/, '<div class="table-wrapper"><table>').gsub(/<\/table>/, "</table></div>")
   end
 
   def metric_config(metric_name)
