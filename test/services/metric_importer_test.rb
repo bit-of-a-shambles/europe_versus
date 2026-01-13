@@ -42,6 +42,9 @@ class MetricImporterTest < ActiveSupport::TestCase
 
   test "ensure_population_data method exists and is callable" do
     assert MetricImporter.respond_to?(:ensure_population_data)
+    # Stub the population data request
+    stub_request(:get, /ourworldindata\.org.*population\.csv/)
+      .to_return(status: 200, body: "Entity,Code,Year,Population\nGermany,DEU,2020,83000000", headers: { "Content-Type" => "text/csv" })
     # Should not raise when called (even if it returns false due to errors)
     assert_nothing_raised do
       MetricImporter.ensure_population_data(verbose: false)

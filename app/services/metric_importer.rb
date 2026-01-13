@@ -117,7 +117,7 @@ class MetricImporter
       end
 
       puts "📊 Importing population data (required for aggregates)..." if verbose
-      PopulationDataService.fetch_and_store_population
+      PopulationDataService.fetch_and_store_population_data
 
       new_count = Metric.where(metric_name: "population").count
       puts "   ✅ Population data ready: #{new_count} records" if verbose
