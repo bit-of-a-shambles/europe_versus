@@ -51,10 +51,10 @@
 
   <body class="min-h-screen bg-white text-black">
     <!-- Header -->
-    <header class="bg-black text-white">
+    <header class="bg-black text-white" data-controller="mobile-menu">
       <div class="max-w-7xl mx-auto">
-        <div class="flex items-center justify-between px-6 py-4">
-          <%= link_to root_path, class: "font-mono font-bold text-xl tracking-tight hover:text-[#0066FF] transition-colors" do %>
+        <div class="flex items-center justify-between px-4 md:px-6 py-3 md:py-4">
+          <%= link_to root_path, class: "font-mono font-bold text-lg md:text-xl tracking-tight hover:text-[#0066FF] transition-colors" do %>
             EUROPEVERSUS
           <% end %>
           
@@ -66,7 +66,7 @@
             <%= link_to "CONTRIBUTE", root_path(anchor: "contribute"), class: "text-xs font-medium tracking-brutal uppercase bg-[#0066FF] px-4 py-2 hover:bg-white hover:text-black transition-colors" %>
           </nav>
           
-          <button class="md:hidden p-2" data-controller="mobile-menu" data-action="click->mobile-menu#toggle">
+          <button class="md:hidden p-2" data-action="click->mobile-menu#toggle" aria-label="Toggle menu">
             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
             </svg>
@@ -75,12 +75,12 @@
         
         <!-- Mobile Navigation -->
         <nav class="md:hidden border-t border-white/20 hidden" data-mobile-menu-target="menu">
-          <div class="px-6 py-4 space-y-4">
-            <%= link_to "HOME", root_path, class: "block text-sm font-medium tracking-brutal uppercase" %>
-            <%= link_to "STATISTICS", statistics_path, class: "block text-sm font-medium tracking-brutal uppercase" %>
-            <%= link_to "FACT CHECKS", facts_path, class: "block text-sm font-medium tracking-brutal uppercase" %>
-            <%= link_to "METHODOLOGY", methodology_path, class: "block text-sm font-medium tracking-brutal uppercase" %>
-            <%= link_to "CONTRIBUTE", root_path(anchor: "contribute"), class: "block text-sm font-medium tracking-brutal uppercase text-[#0066FF]" %>
+          <div class="px-4 py-4 space-y-3">
+            <%= link_to "HOME", root_path, class: "block text-sm font-medium tracking-brutal uppercase py-1" %>
+            <%= link_to "STATISTICS", statistics_path, class: "block text-sm font-medium tracking-brutal uppercase py-1" %>
+            <%= link_to "FACT CHECKS", facts_path, class: "block text-sm font-medium tracking-brutal uppercase py-1" %>
+            <%= link_to "METHODOLOGY", methodology_path, class: "block text-sm font-medium tracking-brutal uppercase py-1" %>
+            <%= link_to "CONTRIBUTE", root_path(anchor: "contribute"), class: "block text-sm font-medium tracking-brutal uppercase text-[#0066FF] py-1" %>
           </div>
         </nav>
       </div>
