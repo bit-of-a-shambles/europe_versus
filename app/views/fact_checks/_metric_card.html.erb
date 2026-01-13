@@ -63,7 +63,7 @@
                 </span>
               </div>
             </div>
-            <div class="font-mono text-xl md:text-2xl font-bold <%= region[:highlight] ? 'text-[#0066FF]' : '' %>">
+            <div class="font-mono text-base md:text-lg lg:text-xl font-bold <%= region[:highlight] ? 'text-[#0066FF]' : '' %> break-all leading-tight">
               <%= format_value_with_unit(region[:metric].metric_value, unit, decimals: 1) %>
             </div>
           </div>
@@ -83,7 +83,7 @@
               <span class="text-xl"><%= region[:flag] %></span>
               <span class="font-mono text-xs uppercase tracking-brutal text-black/60"><%= region[:name] %></span>
             </div>
-            <div class="font-mono text-xl md:text-2xl font-bold">
+            <div class="font-mono text-base md:text-lg lg:text-xl font-bold break-all leading-tight">
               <%= format_value_with_unit(region[:metric].metric_value, unit, decimals: 1) %>
             </div>
           </div>

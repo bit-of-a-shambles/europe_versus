@@ -3,6 +3,7 @@
 # Supports importing metrics from multiple data sources:
 #   - OWID (Our World in Data)
 #   - ILO (International Labour Organization)
+#   - World Bank (World Bank Open Data)
 #
 # Configuration is read from config/metrics.yml
 #
@@ -16,7 +17,7 @@ class MetricImporter
   CONFIG_FILE = Rails.root.join("config", "metrics.yml")
 
   # Supported data sources
-  SOURCES = %i[owid ilo].freeze
+  SOURCES = %i[owid ilo worldbank].freeze
 
   class << self
     # Load all metric configurations from YAML
@@ -81,6 +82,8 @@ class MetricImporter
         import_owid_metric(metric_name, config, verbose: verbose)
       when :ilo
         import_ilo_metric(metric_name, config, verbose: verbose)
+      when :worldbank
+        import_worldbank_metric(metric_name, config, verbose: verbose)
       else
         error_msg = "Unknown source '#{source}' for metric #{metric_name}"
         puts "❌ #{error_msg}" if verbose
@@ -164,6 +167,7 @@ class MetricImporter
         source: config["source"]&.to_sym,
         owid_slug: config["owid_slug"],
         ilo_indicator: config["ilo_indicator"]&.to_sym,
+        worldbank_indicator: config["worldbank_indicator"]&.to_sym,
         start_year: config["start_year"] || 2000,
         end_year: config["end_year"] || 2024,
         unit: config["unit"],
@@ -236,6 +240,34 @@ class MetricImporter
       { success: true, stored_count: stored_count, source: :ilo }
     end
 
+    # Import from World Bank source
+    def import_worldbank_metric(metric_name, config, verbose: true)
+      puts "🏦 [World Bank] Importing #{metric_name}..." if verbose
+
+      indicator = config[:worldbank_indicator]
+      unless indicator
+        return { error: "Missing worldbank_indicator for #{metric_name}" }
+      end
+
+      # Fetch data from World Bank
+      result = WorldBankDataService.fetch_indicator(
+        indicator,
+        start_year: config[:start_year],
+        end_year: config[:end_year]
+      )
+
+      return { error: result[:error] } if result[:error]
+
+      # Store the data
+      stored_count = store_worldbank_data(result, metric_name, config, verbose)
+
+      # Calculate aggregates
+      calculate_aggregates(metric_name, config, verbose) if stored_count > 0
+
+      puts "   ✅ #{metric_name}: #{stored_count} records" if verbose
+      { success: true, stored_count: stored_count, source: :worldbank }
+    end
+
     def store_owid_data(result, metric_name, config, verbose)
       stored_count = 0
 
@@ -293,6 +325,41 @@ class MetricImporter
             metric_value: value.to_f,
             unit: unit,
             source: "ILO - Modelled Estimates",
+            description: config[:description]
+          )
+
+          begin
+            metric.save!
+            stored_count += 1
+          rescue ActiveRecord::RecordInvalid => e
+            puts "   ⚠️ Failed: #{country_key} #{year}: #{e.message}" if verbose
+          end
+        end
+      end
+
+      countries_count = result[:countries]&.length || result[:data].keys.length
+      puts "   → Stored #{stored_count} records across #{countries_count} countries" if verbose
+      stored_count
+    end
+
+    def store_worldbank_data(result, metric_name, config, verbose)
+      stored_count = 0
+      unit = config[:unit] || result.dig(:metadata, :unit) || "units"
+
+      result[:data].each do |country_key, years|
+        years.each do |year, value|
+          next if value.nil?
+
+          metric = Metric.find_or_initialize_by(
+            country: country_key,
+            metric_name: metric_name,
+            year: year
+          )
+
+          metric.assign_attributes(
+            metric_value: value.to_f,
+            unit: unit,
+            source: "World Bank",
             description: config[:description]
           )
 

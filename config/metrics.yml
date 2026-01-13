@@ -3,19 +3,23 @@
 # This configuration supports importing data from multiple sources:
 #   - owid: Our World in Data (ourworldindata.org)
 #   - ilo: International Labour Organization (ilostat.ilo.org)
+#   - worldbank: World Bank Open Data (data.worldbank.org)
 #
 # ============================================================================
 # FORMAT:
 # ============================================================================
 #
 #   metric_name:
-#     source: owid | ilo
+#     source: owid | ilo | worldbank
 #     
 #     # For OWID sources:
 #     owid_slug: the-slug-from-owid-url
 #     
 #     # For ILO sources:
 #     ilo_indicator: labor_productivity_per_hour | labor_productivity_per_worker
+#
+#     # For World Bank sources:
+#     worldbank_indicator: gdp_nominal | gdp_ppp | gni_nominal | gni_ppp | population
 #     
 #     # Common fields:
 #     start_year: 2000
@@ -39,6 +43,15 @@
 #   Available indicators (defined in IloDataService):
 #     - labor_productivity_per_hour: Output per hour (GDP constant 2021 PPP $)
 #     - labor_productivity_per_worker: Output per worker (GDP constant 2015 US$)
+#
+# World Bank:
+#   Available indicators (defined in WorldBankDataService):
+#     - gdp_nominal: GDP per capita (current US$)
+#     - gdp_ppp: GDP per capita, PPP (constant 2021 international $)
+#     - gni_nominal: GNI per capita (current US$)
+#     - gni_ppp: GNI per capita, PPP (current international $)
+#     - population: Total population
+#   Full indicator list: https://data.worldbank.org/indicator
 #
 # ============================================================================
 # CATEGORIES:
@@ -75,6 +88,21 @@ labor_productivity_per_worker:
   end_year: 2025
   unit: "2015 USD per worker"
   description: "GDP generated per employed person, measured in constant 2015 US dollars. This measures economic output per worker regardless of hours worked, reflecting both productivity and working patterns."
+  category: economy
+  aggregation_method: population_weighted
+  enabled: true
+
+# =============================================================================
+# WORLD BANK METRICS - ECONOMY
+# =============================================================================
+
+gdp_per_capita_nominal:
+  source: worldbank
+  worldbank_indicator: gdp_nominal
+  start_year: 1990
+  end_year: 2024
+  unit: "current US$"
+  description: "Gross domestic product per person in current US dollars at market exchange rates. Unlike PPP-adjusted figures, this reflects actual market values and is useful for comparing financial or trade-related metrics, though it doesn't account for differences in local purchasing power."
   category: economy
   aggregation_method: population_weighted
   enabled: true

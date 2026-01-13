@@ -9,7 +9,9 @@ export default class extends Controller {
     data: Object,
     title: String,
     unit: String,
-    metricName: String
+    metricName: String,
+    initialMode: { type: String, default: 'absolute' },
+    initialCountries: { type: Array, default: null }
   }
 
   // Color palette for chart lines - Swiss brutalist inspired
@@ -17,6 +19,7 @@ export default class extends Controller {
     // Aggregates - bold distinct colors
     europe: { line: '#0066FF', bg: 'rgba(0, 102, 255, 0.1)' },           // Bright blue
     european_union: { line: '#003D99', bg: 'rgba(0, 61, 153, 0.1)' },    // Dark blue
+    core_eu: { line: '#FFD700', bg: 'rgba(255, 215, 0, 0.15)' },         // Gold for Core EU
     eurozone: { line: '#7C3AED', bg: 'rgba(124, 58, 237, 0.1)' },        // Purple
     non_euro_eu: { line: '#059669', bg: 'rgba(5, 150, 105, 0.1)' },      // Emerald green
     non_eu_europe: { line: '#0D9488', bg: 'rgba(13, 148, 136, 0.1)' },   // Teal
@@ -43,8 +46,18 @@ export default class extends Controller {
 
   connect() {
     this.chart = null
-    this.mode = 'absolute' // 'absolute' or 'relative'
-    this.selectedCountries = new Set(['europe', 'usa', 'china', 'india'])
+    
+    // Use initial values from data attributes, or defaults
+    this.mode = this.initialModeValue || 'absolute'
+    
+    // Use initial countries from data attributes, or defaults
+    const initialCountries = this.initialCountriesValue
+    if (initialCountries && Array.isArray(initialCountries) && initialCountries.length > 0) {
+      this.selectedCountries = new Set(initialCountries)
+    } else {
+      this.selectedCountries = new Set(['europe', 'usa', 'china', 'india'])
+    }
+    
     this.yearRange = { start: null, end: null }
     
     // Initialize once data is available
@@ -74,8 +87,26 @@ export default class extends Controller {
     // Initialize country checkboxes based on available data
     this.initializeCountryFilters()
     
+    // Initialize mode toggle visual state
+    this.updateModeToggleVisuals()
+    
     // Render the chart
     this.renderChart()
+  }
+  
+  updateModeToggleVisuals() {
+    if (!this.hasModeToggleTarget) return
+    
+    this.modeToggleTargets.forEach(btn => {
+      const btnMode = btn.dataset.mode
+      if (btnMode === this.mode) {
+        btn.classList.add('bg-black', 'text-white')
+        btn.classList.remove('bg-white')
+      } else {
+        btn.classList.remove('bg-black', 'text-white')
+        btn.classList.add('bg-white')
+      }
+    })
   }
 
   initializeCountryFilters() {
@@ -200,7 +231,7 @@ export default class extends Controller {
             },
             title: {
               display: true,
-              text: this.mode === 'relative' ? 'Change from baseline (%)' : (this.unitValue || ''),
+              text: this.mode === 'relative' ? 'Change from baseline (%)' : (this.mode === 'absolute_change' ? `Change from baseline (${this.unitValue || ''})` : (this.unitValue || '')),
               font: {
                 family: 'ui-monospace, monospace',
                 size: 11,
@@ -257,6 +288,8 @@ export default class extends Controller {
         
         if (this.mode === 'relative') {
           return this.calculateRelativeChange(countryData.data, year, years[0])
+        } else if (this.mode === 'absolute_change') {
+          return this.calculateAbsoluteChange(countryData.data, year, years[0])
         }
         return parseFloat(value)
       })
@@ -315,6 +348,15 @@ export default class extends Controller {
     return ((currentValue - baseValue) / baseValue) * 100
   }
 
+  calculateAbsoluteChange(data, currentYear, baseYear) {
+    const baseValue = data[baseYear]
+    const currentValue = data[currentYear]
+    
+    if (baseValue === null || baseValue === undefined || currentValue === null || currentValue === undefined) return null
+    
+    return currentValue - baseValue
+  }
+
   getFilteredYears() {
     const allYears = (this.dataValue.years || []).sort((a, b) => a - b)
     return allYears.filter(year => 
@@ -330,6 +372,22 @@ export default class extends Controller {
     
     if (this.mode === 'relative') {
       return `${num >= 0 ? '+' : ''}${num.toFixed(1)}%`
+    }
+    
+    if (this.mode === 'absolute_change') {
+      // Format absolute change with +/- sign
+      const sign = num >= 0 ? '+' : ''
+      if (Math.abs(num) >= 1000000000) {
+        return `${sign}${(num / 1000000000).toFixed(1)}B`
+      } else if (Math.abs(num) >= 1000000) {
+        return `${sign}${(num / 1000000).toFixed(1)}M`
+      } else if (Math.abs(num) >= 1000) {
+        return `${sign}${(num / 1000).toFixed(1)}K`
+      } else if (Number.isInteger(num)) {
+        return `${sign}${num.toLocaleString()}`
+      } else {
+        return `${sign}${num.toFixed(2)}`
+      }
     }
     
     // Format based on magnitude

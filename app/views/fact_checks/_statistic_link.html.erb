@@ -1,7 +1,12 @@
-<%# Inline interactive chart - embedded via {{chart:metric_slug}} %>
+<%# Inline interactive chart - embedded via {{chart:metric_slug}} or {{chart:metric_slug?mode=relative&countries=usa,china}} %>
 <%
   # Convert slug format to internal metric format
   metric_key = metric_slug.tr("-", "_")
+  
+  # Parse chart options (mode, countries, etc.)
+  chart_options ||= {}
+  initial_mode = chart_options[:mode] || 'absolute'
+  initial_countries = chart_options[:countries]&.split(',') || nil
   
   # Build chart data using EuropeanMetricsService
   chart_data = EuropeanMetricsService.build_metric_chart_data(metric_key)
@@ -23,7 +28,9 @@
         title: title,
         unit: unit,
         metric_name: metric_key,
-        source: source %>
+        source: source,
+        initial_mode: initial_mode,
+        initial_countries: initial_countries %>
     
     <!-- Link to full statistics page -->
     <div class="mt-4 text-center">

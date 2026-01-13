@@ -64,9 +64,9 @@ module ApplicationHelper
       return "#{number_with_precision(value, precision: 1)} years"
     end
 
-    # Handle people/population
+    # Handle people/population - use compact format for large numbers
     if unit_str == "people" || unit_str.include?("population")
-      return number_with_delimiter(value.round(0))
+      return format_compact_number(value)
     end
 
     # Handle births per woman
@@ -90,6 +90,37 @@ module ApplicationHelper
   # For percentage values < 10, always show decimals
   def should_show_decimals?(value, unit)
     unit&.include?("%") && value < 10
+  end
+
+  # Format large numbers in compact form (e.g., 1.4B, 450M, 83.5M)
+  def format_compact_number(value)
+    return "—" if value.nil?
+
+    if value >= 1_000_000_000
+      # Billions
+      formatted = value / 1_000_000_000.0
+      if formatted == formatted.round
+        "#{formatted.round}B"
+      else
+        "#{number_with_precision(formatted, precision: 1, strip_insignificant_zeros: true)}B"
+      end
+    elsif value >= 1_000_000
+      # Millions
+      formatted = value / 1_000_000.0
+      if formatted >= 100
+        "#{formatted.round}M"
+      elsif formatted == formatted.round
+        "#{formatted.round}M"
+      else
+        "#{number_with_precision(formatted, precision: 1, strip_insignificant_zeros: true)}M"
+      end
+    elsif value >= 1_000
+      # Thousands
+      formatted = value / 1_000.0
+      "#{number_with_precision(formatted, precision: 1, strip_insignificant_zeros: true)}K"
+    else
+      number_with_delimiter(value.round(0))
+    end
   end
 
   # Get the CSS color class for a growth rate based on metric directionality

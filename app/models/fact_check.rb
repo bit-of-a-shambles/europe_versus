@@ -140,11 +140,24 @@ class FactCheck
   end
 
   def process_chart_tags(html, view_context)
-    html.gsub(/\{\{chart:([a-z0-9_-]+)\}\}/) do |_match|
+    html.gsub(/\{\{chart:([a-z0-9_-]+)(\?[^}]+)?\}\}/) do |_match|
       metric_slug = ::Regexp.last_match(1)
+      options_string = ::Regexp.last_match(2)
+
+      # Parse options from query string format
+      options = {}
+      if options_string
+        # Unescape HTML entities that Kramdown may have encoded
+        unescaped_options = CGI.unescapeHTML(options_string[1..])
+        unescaped_options.split("&").each do |pair|
+          key, value = pair.split("=")
+          options[key.to_sym] = value
+        end
+      end
+
       view_context.render(
         partial: "fact_checks/statistic_link",
-        locals: { metric_slug: metric_slug }
+        locals: { metric_slug: metric_slug, chart_options: options }
       )
     end
   end

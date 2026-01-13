@@ -7,6 +7,10 @@
   metric_name ||= 'chart'
   source ||= chart_data.dig(:metadata, :source) || 'Our World in Data'
   
+  # Initial state options (can be passed from embed syntax)
+  initial_mode ||= 'absolute'  # 'absolute' or 'relative'
+  initial_countries ||= nil    # Array of country keys, or nil for default
+  
   # Available countries from data
   available_countries = chart_data[:countries]&.keys || []
   years = chart_data[:years]&.sort || []
@@ -107,7 +111,9 @@
      data-chart-data-value="<%= chart_data.to_json %>"
      data-chart-title-value="<%= title %>"
      data-chart-unit-value="<%= unit %>"
-     data-chart-metric-name-value="<%= metric_name %>">
+     data-chart-metric-name-value="<%= metric_name %>"
+     data-chart-initial-mode-value="<%= initial_mode %>"
+     <% if initial_countries.present? %>data-chart-initial-countries-value="<%= initial_countries.to_json %>"<% end %>>
   
   <!-- Chart Header -->
   <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 mb-6">
@@ -138,9 +144,14 @@
     <!-- Chart Title Bar -->
     <div class="border-b-2 border-black px-6 py-4 bg-[#F5F5F5]">
       <div class="flex items-center justify-between">
-        <div>
-          <h3 class="font-mono text-lg font-bold uppercase"><%= title %></h3>
-          <p class="font-mono text-xs text-black/60 mt-1">Source: EuropeVersus.com • <%= source %></p>
+        <div class="flex-1">
+          <h3 class="text-xl md:text-2xl font-black tracking-tight uppercase"><%= metric_name.to_s.humanize.titleize %></h3>
+          <% if title.present? %>
+            <p class="text-sm text-black/60 mt-2 normal-case font-normal leading-relaxed max-w-2xl">
+              <%= title %>
+            </p>
+          <% end %>
+          <p class="font-mono text-xs text-black/60 mt-2">Source: EuropeVersus.com • <%= source %></p>
         </div>
         <div class="font-mono text-xs text-black/60">
           europeversus.com
@@ -167,12 +178,18 @@
     <div class="border-b-2 border-black px-6 py-4">
       <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <span class="font-mono text-xs uppercase tracking-brutal font-bold">Display Mode</span>
-        <div class="flex">
+        <div class="flex flex-wrap">
           <button data-chart-target="modeToggle"
                   data-mode="absolute"
                   data-action="click->chart#toggleMode"
                   class="font-mono text-xs uppercase tracking-brutal px-4 py-2 border-2 border-black border-r-0 bg-black text-white hover:bg-[#0066FF] hover:border-[#0066FF] transition-colors">
             Absolute Values
+          </button>
+          <button data-chart-target="modeToggle"
+                  data-mode="absolute_change"
+                  data-action="click->chart#toggleMode"
+                  class="font-mono text-xs uppercase tracking-brutal px-4 py-2 border-2 border-black border-r-0 bg-white hover:bg-black hover:text-white transition-colors">
+            Change from Start
           </button>
           <button data-chart-target="modeToggle"
                   data-mode="relative"
