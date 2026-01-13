@@ -176,6 +176,84 @@ namespace :metrics do
     puts "✅ Configuration reloaded"
     puts "   #{MetricImporter.configs.size} metrics configured"
   end
+
+  desc "Diagnose data issues for a metric"
+  task :diagnose, [ :metric_name ] => :environment do |_t, args|
+    metric_name = args[:metric_name] || "healthy_life_expectancy"
+
+    puts "\n" + "=" * 70
+    puts "🔍 DIAGNOSTIC REPORT: #{metric_name}"
+    puts "=" * 70
+
+    # Check database records
+    total_records = Metric.where(metric_name: metric_name).count
+    puts "\n📊 Database Status:"
+    puts "   Total records: #{total_records}"
+
+    if total_records > 0
+      countries_with_data = Metric.where(metric_name: metric_name).distinct.pluck(:country)
+      years_range = Metric.where(metric_name: metric_name).pluck(:year).minmax
+      puts "   Countries with data: #{countries_with_data.count}"
+      puts "   Year range: #{years_range[0]} - #{years_range[1]}"
+
+      # Check key countries
+      key_countries = %w[europe european_union usa india china germany france italy spain netherlands belgium austria ireland portugal greece slovakia slovenia finland]
+      puts "\n📍 Key Country Status:"
+      key_countries.each do |country|
+        record = Metric.where(metric_name: metric_name, country: country).order(:year).last
+        if record
+          puts "   ✅ #{country.ljust(20)} #{record.year}: #{record.metric_value.round(2)}"
+        else
+          puts "   ❌ #{country.ljust(20)} NO DATA"
+        end
+      end
+    end
+
+    # Test OWID fetch
+    puts "\n🌐 Testing OWID Data Fetch:"
+    config = MetricImporter.configs[metric_name]
+    if config && config[:owid_slug]
+      begin
+        result = OurWorldInDataService.fetch_chart_data(config[:owid_slug], start_year: 2020, end_year: 2021)
+        countries_fetched = result[:countries].count { |_, d| d[:data].any? }
+        puts "   OWID slug: #{config[:owid_slug]}"
+        puts "   Countries with data from OWID: #{countries_fetched}"
+
+        # Show sample for missing countries
+        missing = %w[ireland portugal greece slovakia slovenia].select do |c|
+          Metric.where(metric_name: metric_name, country: c).none?
+        end
+
+        if missing.any?
+          puts "\n   Sample data for missing countries:"
+          missing.each do |c|
+            data = result[:countries][c]
+            if data && data[:data].any?
+              puts "     #{c}: #{data[:data].inspect} (OWID has data!)"
+            else
+              puts "     #{c}: NOT IN OWID"
+            end
+          end
+        end
+      rescue => e
+        puts "   ❌ OWID fetch failed: #{e.message}"
+      end
+    else
+      puts "   ⚠️  No OWID config found for #{metric_name}"
+    end
+
+    puts "\n" + "=" * 70
+    puts "💡 RECOMMENDATIONS:"
+    if total_records == 0
+      puts "   Run: rails metrics:import_one[#{metric_name}]"
+    elsif Metric.where(metric_name: metric_name, country: "usa").none?
+      puts "   USA/India/China data missing - reimport with:"
+      puts "   rails metrics:import_one[#{metric_name}]"
+    else
+      puts "   Data looks complete!"
+    end
+    puts "=" * 70
+  end
 end
 
 # Convenience aliases
