@@ -2,11 +2,16 @@ require "ostruct"
 
 class StatisticsController < ApplicationController
   def index
+    # Prevent caching to ensure fresh data
+    set_no_cache_headers
     # Get all unique metric names and group them by category
     @statistics = group_metrics_by_category
   end
 
   def show
+    # Prevent caching to ensure fresh data
+    set_no_cache_headers
+
     # Get the metric name from params
     id = params[:id]
 
