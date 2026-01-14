@@ -5,8 +5,9 @@ Rails.application.config.after_initialize do
   # Only run in production
   next unless Rails.env.production?
 
-  # Skip during asset precompilation or rake tasks
-  next if defined?(Rake) || ENV["SKIP_SEED_LOAD"].present?
+  # Skip during rake tasks (but not rails server)
+  # $0 contains the program name - for rake it ends with 'rake'
+  next if $0.end_with?('rake') || ENV["SKIP_SEED_LOAD"].present?
 
   seed_file = Rails.root.join("db/seeds/metrics.json")
 
