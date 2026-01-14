@@ -44,6 +44,13 @@ namespace :metrics do
     puts "📥 LOADING METRICS FROM SEED FILE"
     puts "=" * 70
 
+    # Check if table exists (might run before db:prepare completes)
+    unless ActiveRecord::Base.connection.table_exists?(:metrics)
+      puts "⏳ Metrics table not yet created, waiting for db:prepare..."
+      puts "   (This is normal on first deploy)"
+      exit 0
+    end
+
     unless File.exist?(SEED_FILE)
       puts "❌ Seed file not found at #{SEED_FILE}"
       puts "   Run 'rails metrics:export' locally first, then commit the file."
