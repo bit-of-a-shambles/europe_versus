@@ -350,3 +350,14 @@ low_carbon_energy_share:
   category: environment
   aggregation_method: population_weighted
   enabled: true
+
+co2_emissions_per_capita:
+  source: owid
+  owid_slug: co2-per-capita
+  start_year: 1990
+  end_year: 2024
+  unit: "tonnes per person"
+  description: "Annual carbon dioxide emissions from burning fossil fuels and producing cement, measured in tonnes per person. Includes emissions from coal, oil, and gas consumption. A core indicator of a country's contribution to climate change relative to its population size."
+  category: environment
+  aggregation_method: population_weighted
+  enabled: true
