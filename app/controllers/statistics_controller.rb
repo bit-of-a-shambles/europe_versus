@@ -24,6 +24,13 @@ class StatisticsController < ApplicationController
     # Convert hyphens to underscores for database lookup
     @metric_name = id.tr("-", "_")
     chart_name = id # Keep hyphenated version for OWID URLs
+    # OWID retired old CO2 slugs; map legacy inputs to the canonical chart slug.
+    owid_chart_name = case chart_name
+    when "co2-per-capita", "co2-emissions-per-capita"
+      "co-emissions-per-capita"
+    else
+      chart_name
+    end
 
     # Build chart data based on metric name
     if chart_name == "population"
@@ -63,8 +70,8 @@ class StatisticsController < ApplicationController
       @chart_name = config&.dig(:owid_slug) || chart_name
     else
       # Use Our World in Data for charts not in our database
-      @chart_data = OurWorldInDataService.fetch_chart_data(chart_name, start_year: 2000, end_year: 2024)
-      @chart_name = chart_name
+      @chart_data = OurWorldInDataService.fetch_chart_data(owid_chart_name, start_year: 2000, end_year: 2024)
+      @chart_name = owid_chart_name
     end
 
     Rails.logger.info "CHART DEBUG - Metric name: #{@metric_name}, Chart name: #{chart_name}"
@@ -190,7 +197,7 @@ class StatisticsController < ApplicationController
       "economy" => [ "gdp_per_capita_ppp", "gni_per_capita", "unemployment_rate" ],
       "social" => [ "population", "life_expectancy", "birth_rate", "death_rate" ],
       "development" => [ "child_mortality_rate", "electricity_access" ],
-      "environment" => [ "co2_emissions", "renewable_energy", "forest_area" ],
+      "environment" => [ "co2_emissions_per_capita", "renewable_energy", "forest_area" ],
       "innovation" => [ "research_development", "patents", "internet_users" ]
     }
 

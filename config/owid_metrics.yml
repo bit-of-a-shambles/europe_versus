@@ -217,7 +217,7 @@ homicide_rate:
   enabled: true
 
 co2_emissions_per_capita:
-  owid_slug: co2-per-capita
+  owid_slug: co-emissions-per-capita
   start_year: 1990
   end_year: 2024
   unit: "tonnes per person"

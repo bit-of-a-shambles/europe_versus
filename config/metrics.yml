@@ -353,7 +353,7 @@ low_carbon_energy_share:
 
 co2_emissions_per_capita:
   source: owid
-  owid_slug: co2-per-capita
+  owid_slug: co-emissions-per-capita
   start_year: 1990
   end_year: 2024
   unit: "tonnes per person"
