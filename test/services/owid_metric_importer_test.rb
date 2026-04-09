@@ -214,6 +214,18 @@ class OwidMetricImporterTest < ActiveSupport::TestCase
     assert config[:start_year] >= 2000, "Should have reasonable start year"
   end
 
+  test "co2_emissions_per_capita should have correct configuration" do
+    config = @importer.get_config("co2_emissions_per_capita")
+
+    assert config.present?, "co2_emissions_per_capita should exist in config"
+    assert_equal "co2-per-capita", config[:owid_slug]
+    assert_equal "tonnes per person", config[:unit]
+    assert_equal :population_weighted, config[:aggregation_method]
+    assert_equal "environment", config[:category]
+    assert config[:start_year] >= 1990, "Should have reasonable start year"
+    assert config[:description].present?, "Should have a description"
+  end
+
   # Test all_configs includes both YAML and runtime
   test "all_configs should merge yaml and runtime configs" do
     # Add a runtime config
