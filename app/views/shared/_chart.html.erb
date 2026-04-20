@@ -286,7 +286,7 @@
         <summary class="flex items-center justify-between cursor-pointer list-none">
           <div class="flex items-center gap-2 md:gap-3">
             <span class="font-mono text-[10px] md:text-xs uppercase tracking-brutal font-bold">Select Countries</span>
-            <span data-chart-target="selectionCount" class="font-mono text-[10px] md:text-xs bg-[#0066FF] text-white px-1.5 md:px-2 py-0.5">4 selected</span>
+            <span data-chart-target="selectionCount" class="font-mono text-[10px] md:text-xs bg-[#0066FF] text-white px-1.5 md:px-2 py-0.5">0 selected</span>
           </div>
           <svg class="w-4 h-4 md:w-5 md:h-5 transition-transform group-open:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
@@ -306,8 +306,7 @@
                              data-country="<%= country[:key] %>"
                              data-category="<%= country[:category] %>"
                              data-action="change->chart#toggleCountry"
-                             class="w-3.5 h-3.5 md:w-4 md:h-4 border-2 border-black accent-[#0066FF]"
-                             <%= ['europe', 'usa', 'china', 'india'].include?(country[:key]) ? 'checked' : '' %>>
+                             class="w-3.5 h-3.5 md:w-4 md:h-4 border-2 border-black accent-[#0066FF]">
                       <span class="text-sm md:text-base"><%= country[:flag] %></span>
                       <span class="font-mono text-[10px] md:text-xs"><%= country[:name] %></span>
                     </label>
