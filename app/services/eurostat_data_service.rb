@@ -22,6 +22,11 @@ class EurostatDataService
   # ONS median gross annual earnings 2024 (full-time employees, UK)
   UK_ONS_GROSS_GBP_2024 = 37_439.0
 
+  # Turkey redenominated the lira in 2005 (1,000,000 old TRY = 1 new TRY).
+  # Some pre-2005 earn_nt_net observations appear in old TRY scale.
+  TURKEY_OLD_TRY_FACTOR = 1_000_000.0
+  TURKEY_REDENOM_CUTOFF_YEAR = 2003
+
   # Eurostat geo codes → project country keys
   GEO_TO_COUNTRY = {
     "AT" => "austria",
@@ -230,6 +235,7 @@ class EurostatDataService
 
       # Apply country-specific corrections
       apply_bulgaria_correction!(result)
+      apply_turkey_pre_2005_correction!(result)
       apply_uk_proxy!(result)
 
       countries_found = result.values.flat_map(&:keys).uniq.sort
@@ -262,6 +268,29 @@ class EurostatDataService
       end
 
       Rails.logger.info "Eurostat: Corrected #{corrected_count} Bulgaria EUR values (BGN → EUR, ÷#{BGN_PER_EUR})"
+    end
+
+    # Some Turkey pre-2005 values are reported in old TRY scale in this dataset.
+    # Normalize those early years by dividing by 1,000,000.
+    def apply_turkey_pre_2005_correction!(result)
+      corrected_count = 0
+
+      %w[EUR PPS].each do |currency|
+        tr_series = result.dig(currency, "turkey")
+        next unless tr_series&.any?
+
+        tr_series.each do |year, value|
+          next unless year <= TURKEY_REDENOM_CUTOFF_YEAR
+          next unless value && value > 1_000_000
+
+          tr_series[year] = (value / TURKEY_OLD_TRY_FACTOR).round(2)
+          corrected_count += 1
+        end
+      end
+
+      return if corrected_count.zero?
+
+      Rails.logger.info "Eurostat: Corrected #{corrected_count} Turkey pre-2005 values (old TRY scale ÷#{TURKEY_OLD_TRY_FACTOR.to_i})"
     end
 
     # UK stopped reporting to Eurostat after Brexit (2019 is last year).

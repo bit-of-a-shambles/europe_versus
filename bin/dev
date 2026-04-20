@@ -1,8 +1,17 @@
 #!/usr/bin/env sh
 
-if ! gem list foreman -i --silent; then
-  echo "Installing foreman..."
-  gem install foreman
+if ! command -v foreman >/dev/null 2>&1; then
+  echo "Installing foreman to user gem directory..."
+  gem install --user-install foreman
+
+  GEM_USER_BIN="$(ruby -r rubygems -e 'print Gem.user_dir')/bin"
+  export PATH="$GEM_USER_BIN:$PATH"
+fi
+
+if ! command -v foreman >/dev/null 2>&1; then
+  echo "Could not find foreman after installation."
+  echo "Try running: export PATH=\"$(ruby -r rubygems -e 'print Gem.user_dir')/bin:$PATH\""
+  exit 1
 fi
 
 # Default to port 3000 if not specified

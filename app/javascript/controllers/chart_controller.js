@@ -113,6 +113,27 @@ export default class extends Controller {
     if (!this.hasCountryCheckboxTarget) return
     
     const availableCountries = Object.keys(this.dataValue.countries || {})
+    const availableSet = new Set(availableCountries)
+
+    // Remove any preselected countries that are not available for this metric.
+    this.selectedCountries.forEach(country => {
+      if (!availableSet.has(country)) {
+        this.selectedCountries.delete(country)
+      }
+    })
+
+    // If nothing remains selected, choose sensible defaults from available countries.
+    if (this.selectedCountries.size === 0) {
+      const fallbackOrder = ["europe", "european_union", "usa", "china", "india"]
+      fallbackOrder.forEach(country => {
+        if (availableSet.has(country)) this.selectedCountries.add(country)
+      })
+
+      // Last resort: select the first available country.
+      if (this.selectedCountries.size === 0 && availableCountries.length > 0) {
+        this.selectedCountries.add(availableCountries[0])
+      }
+    }
     
     this.countryCheckboxTargets.forEach(checkbox => {
       const country = checkbox.dataset.country
@@ -536,7 +557,9 @@ export default class extends Controller {
   updateSelectionCount() {
     if (!this.hasSelectionCountTarget) return
     
-    const count = this.selectedCountries.size
+    // Count only currently available checkbox targets so UI count matches what user can see/select.
+    const visibleSelectedCount = this.countryCheckboxTargets.filter(cb => cb.checked && !cb.disabled).length
+    const count = visibleSelectedCount
     this.selectionCountTarget.textContent = `${count} selected`
   }
 
