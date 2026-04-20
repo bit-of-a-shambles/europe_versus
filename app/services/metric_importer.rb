@@ -17,7 +17,7 @@ class MetricImporter
   CONFIG_FILE = Rails.root.join("config", "metrics.yml")
 
   # Supported data sources
-  SOURCES = %i[owid ilo worldbank].freeze
+  SOURCES = %i[owid ilo worldbank eurostat oecd csv].freeze
 
   # SQLite retry configuration
   MAX_RETRIES = 5
@@ -98,6 +98,10 @@ class MetricImporter
         results[:total_records] += result[:stored_count] || 0
       end
 
+      # Compute derived metrics (per-hour rates from Eurostat earnings + OWID working hours)
+      computed = NetEarningsImporter.import_all(verbose: verbose)
+      results[:total_records] += computed[:stored_count] || 0
+
       if verbose
         puts "=" * 70
         puts "✅ Import complete: #{results[:total_records]} total records"
@@ -146,6 +150,14 @@ class MetricImporter
         import_ilo_metric(metric_name, config, verbose: verbose)
       when :worldbank
         import_worldbank_metric(metric_name, config, verbose: verbose)
+      when :eurostat
+        import_eurostat_metric(metric_name, config, verbose: verbose)
+      when :oecd
+        import_oecd_metric(metric_name, config, verbose: verbose)
+      when :csv
+        # CSV metrics are imported via their dedicated importer (e.g., NetEarningsImporter)
+        # Skip individual import here; they are batch-imported in import_all
+        { success: true, stored_count: 0, source: :csv, note: "CSV metrics imported via dedicated importer" }
       else
         error_msg = "Unknown source '#{source}' for metric #{metric_name}"
         puts "❌ #{error_msg}" if verbose
@@ -228,8 +240,12 @@ class MetricImporter
       {
         source: config["source"]&.to_sym,
         owid_slug: config["owid_slug"],
+        owid_params: config["owid_params"],
         ilo_indicator: config["ilo_indicator"]&.to_sym,
         worldbank_indicator: config["worldbank_indicator"]&.to_sym,
+        eurostat_dataset: config["eurostat_dataset"],
+        eurostat_currency: config["eurostat_currency"],
+        oecd_indicator: config["oecd_indicator"]&.to_sym,
         start_year: config["start_year"] || 2000,
         end_year: config["end_year"] || 2024,
         unit: config["unit"],
@@ -253,7 +269,8 @@ class MetricImporter
       result = OurWorldInDataService.fetch_chart_data(
         config[:owid_slug],
         start_year: config[:start_year],
-        end_year: config[:end_year]
+        end_year: config[:end_year],
+        params: config[:owid_params]
       )
 
       return { error: result[:error] } if result[:error]
@@ -328,6 +345,69 @@ class MetricImporter
 
       puts "   ✅ #{metric_name}: #{stored_count} records" if verbose
       { success: true, stored_count: stored_count, source: :worldbank }
+    end
+
+    # Import from Eurostat source (JSON-stat API)
+    def import_eurostat_metric(metric_name, config, verbose: true)
+      puts "🇪🇺 [Eurostat] Importing #{metric_name}..." if verbose
+
+      dataset = config[:eurostat_dataset]
+      unless dataset
+        return { error: "Missing eurostat_dataset for #{metric_name}" }
+      end
+
+      currency = config[:eurostat_currency] || "EUR"
+
+      # Fetch data from Eurostat
+      result = EurostatDataService.fetch_annual_net_earnings(
+        start_year: config[:start_year],
+        end_year: config[:end_year]
+      )
+
+      return { error: result[:error] } if result[:error]
+
+      # Extract data for the requested currency
+      currency_data = result[:data][currency]
+      unless currency_data
+        return { error: "No #{currency} data in Eurostat response for #{metric_name}" }
+      end
+
+      # Store the data
+      stored_count = store_eurostat_data(currency_data, metric_name, config, verbose)
+
+      # Calculate aggregates
+      calculate_aggregates(metric_name, config, verbose) if stored_count > 0
+
+      puts "   ✅ #{metric_name}: #{stored_count} records" if verbose
+      { success: true, stored_count: stored_count, source: :eurostat }
+    end
+
+    # Import from OECD SDMX source
+    def import_oecd_metric(metric_name, config, verbose: true)
+      puts "📈 [OECD] Importing #{metric_name}..." if verbose
+
+      indicator = config[:oecd_indicator]
+      unless indicator
+        return { error: "Missing oecd_indicator for #{metric_name}" }
+      end
+
+      # Fetch data from OECD
+      result = OecdDataService.fetch_indicator(
+        indicator,
+        start_year: config[:start_year],
+        end_year: config[:end_year]
+      )
+
+      return { error: result[:error] } if result[:error]
+
+      # Store the data
+      stored_count = store_generic_data(result[:data], metric_name, config, "OECD", verbose)
+
+      # Calculate aggregates
+      calculate_aggregates(metric_name, config, verbose) if stored_count > 0
+
+      puts "   ✅ #{metric_name}: #{stored_count} records" if verbose
+      { success: true, stored_count: stored_count, source: :oecd }
     end
 
     def store_owid_data(result, metric_name, config, verbose)
@@ -477,6 +557,102 @@ class MetricImporter
       end
 
       countries_count = result[:countries]&.length || result[:data].keys.length
+      puts "   → Stored #{stored_count} records across #{countries_count} countries" if verbose
+      stored_count
+    end
+
+    # Store Eurostat data (country → { year → value } structure)
+    def store_eurostat_data(currency_data, metric_name, config, verbose)
+      stored_count = 0
+      unit = config[:unit] || "€"
+
+      records = []
+      currency_data.each do |country_key, years|
+        years.each do |year, value|
+          next if value.nil?
+
+          records << {
+            country: country_key,
+            metric_name: metric_name,
+            year: year,
+            metric_value: value.to_f,
+            unit: unit,
+            source: "Eurostat",
+            description: config[:description]
+          }
+        end
+      end
+
+      records.each_slice(100) do |batch|
+        with_retry do
+          Metric.transaction do
+            batch.each do |attrs|
+              metric = Metric.find_or_initialize_by(
+                country: attrs[:country],
+                metric_name: attrs[:metric_name],
+                year: attrs[:year]
+              )
+              metric.assign_attributes(attrs)
+              begin
+                metric.save!
+                stored_count += 1
+              rescue ActiveRecord::RecordInvalid => e
+                puts "   ⚠️ Failed: #{attrs[:country]} #{attrs[:year]}: #{e.message}" if verbose
+              end
+            end
+          end
+        end
+      end
+
+      countries_count = currency_data.keys.length
+      puts "   → Stored #{stored_count} records across #{countries_count} countries" if verbose
+      stored_count
+    end
+
+    # Generic store for country → { year → value } data (used by OECD and others)
+    def store_generic_data(data, metric_name, config, source_name, verbose)
+      stored_count = 0
+      unit = config[:unit] || "units"
+
+      records = []
+      data.each do |country_key, years|
+        years.each do |year, value|
+          next if value.nil?
+
+          records << {
+            country: country_key,
+            metric_name: metric_name,
+            year: year,
+            metric_value: value.to_f,
+            unit: unit,
+            source: source_name,
+            description: config[:description]
+          }
+        end
+      end
+
+      records.each_slice(100) do |batch|
+        with_retry do
+          Metric.transaction do
+            batch.each do |attrs|
+              metric = Metric.find_or_initialize_by(
+                country: attrs[:country],
+                metric_name: attrs[:metric_name],
+                year: attrs[:year]
+              )
+              metric.assign_attributes(attrs)
+              begin
+                metric.save!
+                stored_count += 1
+              rescue ActiveRecord::RecordInvalid => e
+                puts "   ⚠️ Failed: #{attrs[:country]} #{attrs[:year]}: #{e.message}" if verbose
+              end
+            end
+          end
+        end
+      end
+
+      countries_count = data.keys.length
       puts "   → Stored #{stored_count} records across #{countries_count} countries" if verbose
       stored_count
     end

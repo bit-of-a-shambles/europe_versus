@@ -198,7 +198,10 @@ class StatisticsController < ApplicationController
       "social" => [ "population", "life_expectancy", "birth_rate", "death_rate" ],
       "development" => [ "child_mortality_rate", "electricity_access" ],
       "environment" => [ "co2_emissions_per_capita", "renewable_energy", "forest_area" ],
-      "innovation" => [ "research_development", "patents", "internet_users" ]
+      "health" => [ "health_expenditure_gdp_percent", "healthy_life_expectancy" ],
+      "innovation" => [ "research_development", "patents", "internet_users" ],
+      "safety" => [ "homicide_rate", "incarceration_rate", "gun_death_rate" ],
+      "governance" => [ "corruption_perceptions_index", "democracy_index", "rule_of_law_index" ]
     }
 
     # Merge unified and hardcoded mappings

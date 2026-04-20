@@ -38,6 +38,18 @@ class WorldBankDataService
       code: "SP.POP.TOTL",
       name: "Population, total",
       unit: "people"
+    },
+    # Youth unemployment rate (% of total labor force ages 15-24)
+    youth_unemployment: {
+      code: "SL.UEM.1524.ZS",
+      name: "Unemployment, youth total (% of total labor force ages 15-24)",
+      unit: "%"
+    },
+    # High-technology exports (% of manufactured exports)
+    high_tech_exports: {
+      code: "TX.VAL.TECH.MF.ZS",
+      name: "High-technology exports (% of manufactured exports)",
+      unit: "%"
     }
   }.freeze
 

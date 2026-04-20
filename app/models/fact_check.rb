@@ -17,7 +17,9 @@ class FactCheck
   CONTENT_PATH = Rails.root.join("content", "fact_checks")
 
   attr_reader :slug, :title, :subtitle, :description, :og_description,
-              :metrics, :published, :created_at, :updated_at, :body
+              :metrics, :published, :created_at, :updated_at, :body,
+              :claim, :verdict_rating, :verdict_summary, :tweets, :quick_stats,
+              :section_summaries
 
   def initialize(slug, frontmatter, body)
     @slug = slug
@@ -29,6 +31,12 @@ class FactCheck
     @published = frontmatter.fetch("published", true)
     @created_at = frontmatter["created_at"]
     @updated_at = frontmatter["updated_at"]
+    @claim = frontmatter["claim"]
+    @verdict_rating = frontmatter["verdict_rating"]
+    @verdict_summary = frontmatter["verdict_summary"]
+    @tweets = frontmatter["tweets"] || []
+    @quick_stats = frontmatter["quick_stats"] || []
+    @section_summaries = frontmatter["section_summaries"] || {}
     @body = body
   end
 
@@ -55,6 +63,19 @@ class FactCheck
     @published
   end
 
+  # Rating configuration shared by model and views
+  RATING_CONFIG = {
+    "false" => { label: "False", color: "#DC2626", icon: "✗" },
+    "mostly_false" => { label: "Mostly False", color: "#EA580C", icon: "⚠" },
+    "mixed" => { label: "Mixed", color: "#CA8A04", icon: "◐" },
+    "mostly_true" => { label: "Mostly True", color: "#0066FF", icon: "◑" },
+    "true" => { label: "True", color: "#16A34A", icon: "✓" }
+  }.freeze
+
+  def verdict_config
+    RATING_CONFIG[@verdict_rating] || RATING_CONFIG["mixed"]
+  end
+
   # Render the markdown body to HTML, processing custom tags
   def render_html(view_context)
     # Pre-process: Replace verdict tags with placeholders before Kramdown
@@ -73,6 +94,9 @@ class FactCheck
 
     # Wrap tables in responsive container
     html = wrap_tables_for_responsive(html)
+
+    # Wrap H2 sections in collapsible accordion elements (server-side, no JS)
+    html = wrap_sections_in_accordions(html)
 
     html.html_safe
   end
@@ -204,6 +228,48 @@ class FactCheck
   def wrap_tables_for_responsive(html)
     # Wrap standalone tables in a responsive wrapper div
     html.gsub(/<table>/, '<div class="table-wrapper"><table>').gsub(/<\/table>/, "</table></div>")
+  end
+
+  def wrap_sections_in_accordions(html)
+    # Split at each <h2> boundary (keeping the h2 with its following content)
+    parts = html.split(/(?=<h2[\s>])/)
+    return html if parts.length <= 1
+
+    result = parts.first.to_s
+
+    parts.drop(1).each do |section|
+      h2_match = section.match(/<h2[^>]*>(.*?)<\/h2>/mi)
+      unless h2_match
+        result += section
+        next
+      end
+
+      title_plain = h2_match[1].gsub(/<[^>]+>/, "").strip
+
+      # Skip the "Our Verdict" section — the verdict card is already rendered at the top of the page
+      if title_plain.downcase.include?("verdict")
+        next
+      end
+
+      summary_text = section_summaries[title_plain].to_s
+      content_after_h2 = section[h2_match.end(0)..]
+
+      summary_para = summary_text.present? ? %(<p class="fact-check-section-preview">#{ERB::Util.html_escape(summary_text)}</p>) : ""
+
+      result += <<~HTML
+        <details class="fact-check-section">
+          <summary class="fact-check-section-summary">
+            <div class="fact-check-section-heading">#{title_plain}</div>
+            #{summary_para}
+          </summary>
+          <div class="fact-check-section-body">
+            #{content_after_h2}
+          </div>
+        </details>
+      HTML
+    end
+
+    result
   end
 
   def metric_config(metric_name)

@@ -13,8 +13,8 @@ Rails.application.routes.draw do
 
   # Fact-check articles (markdown-based deep dives)
   get "/facts", to: "fact_checks#index", as: :facts
-  get "/facts/:slug", to: "fact_checks#show", as: :fact_check, constraints: { slug: /[^\/]+(?<!\.png)/ }
   get "/facts/:slug.png", to: "fact_checks#image", as: :fact_check_image, format: false
+  get "/facts/:slug", to: "fact_checks#show", as: :fact_check
   get "/embed/facts/:slug", to: "fact_checks#embed", as: :embed_fact
 
   # Redirect contribute to GitHub since we use Our World in Data
