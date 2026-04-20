@@ -14,7 +14,7 @@ metrics:
   - incarceration_rate
   - terrorism_deaths
 tweets:
-  - "\"Europe has become dangerous\" — Europe's homicide rate: 2.2 per 100K. United States: 5.8. Core EU (Germany, France, Italy, etc.): 0.9. Europe is literally 2-6× safer depending on the comparison. Source: UNODC"
+  - "\"Europe has become dangerous\" - Europe's homicide rate: 2.2 per 100K. United States: 5.8. Core EU (Germany, France, Italy, etc.): 0.9. Depending on the grouping, rates are lower by roughly 2-6x. Source: UNODC"
   - "Firearm homicides per 100K people: Europe 0.14, United States 4.42. That's a 31× difference. The US has more gun homicides in a week than most European countries see in a year. Source: UNODC"
   - "The US incarcerates 542 people per 100K. Europe: 136. Core EU: 97. If mass incarceration solved crime, the US would be the safest country on Earth. It isn't. Source: World Prison Brief"
   - "Terrorism deaths in Europe have declined dramatically since the 1970s-80s. Annual risk of dying in a terrorist attack in Europe is roughly 1 in 10 million. You're more likely to be struck by lightning."
@@ -32,7 +32,7 @@ section_summaries:
   "The Safety Narrative": "Social media and cable news create the impression that Europe is descending into chaos. The data tells the opposite story."
   "Homicide Rates": "Europe's homicide rate is roughly one-third of the US rate and has been declining for decades. Core EU countries like Germany, France, and the Netherlands have rates below 1 per 100,000."
   "Gun Violence": "With firearm homicide rates 31× lower than the US, Europe demonstrates that strict gun regulation dramatically reduces lethal violence."
-  "Incarceration": "The US imprisons 4× as many people per capita as Europe — without achieving better safety outcomes. Europe's approach of rehabilitation over punishment produces lower recidivism and lower crime."
+  "Incarceration": "The US imprisons 4× as many people per capita as Europe - without achieving better safety outcomes. Europe's approach of rehabilitation over punishment produces lower recidivism and lower crime."
   "Terrorism": "Terrorism deaths in Europe peaked in the 1970s-80s and have declined dramatically. The annual risk is vanishingly small compared to everyday causes of death."
 ---
 
@@ -40,11 +40,11 @@ section_summaries:
 
 Scroll through social media or watch cable news and you'll encounter a persistent narrative: **Europe is becoming dangerous.** Crime is rising, cities are unsafe, and terrorism is an ever-present threat.
 
-This narrative rarely comes with data — and for good reason. The data tells an entirely different story.
+This narrative rarely comes with data - and for good reason. The data tells an entirely different story.
 
 ## Homicide Rates
 
-The most fundamental measure of safety is the homicide rate — intentional killings per 100,000 people:
+The most fundamental measure of safety is the homicide rate - intentional killings per 100,000 people:
 
 {{metric:homicide_rate}}
 
@@ -54,9 +54,9 @@ The numbers are stark:
 - **Europe overall**: **2.2** per 100,000 (pulled up by a few Eastern European outliers)
 - **United States**: **5.8** per 100,000
 
-The US homicide rate is roughly **2.6× higher than the European average** and **6× higher than the Core EU**. This isn't a recent divergence — it's been true for decades.
+The US homicide rate is roughly **2.6× higher than the European average** and **6× higher than the Core EU**. This isn't a recent divergence - it's been true for decades.
 
-Even Europe's highest rates (in some Eastern European and Balkan countries) are comparable to or lower than the US rate. And the trend across Europe is consistently downward — homicide rates have been falling since the 1990s.
+Even Europe's highest rates (in some Eastern European and Balkan countries) are comparable to or lower than the US rate. And the trend across Europe is consistently downward - homicide rates have been falling since the 1990s.
 
 ## Gun Violence
 
@@ -80,7 +80,7 @@ If high incarceration rates were the answer to crime, the US would be the safest
 
 {{metric:incarceration_rate}}
 
-The United States incarcerates **542 people per 100,000** — roughly **4× the European rate** of 136, and **5.6× the Core EU rate** of 97. Yet as we've already seen, the US has far higher rates of violent crime.
+The United States incarcerates **542 people per 100,000** - roughly **4× the European rate** of 136, and **5.6× the Core EU rate** of 97. Yet as we've already seen, the US has far higher rates of violent crime.
 
 European criminal justice systems generally emphasize:
 - **Rehabilitation** over punishment
@@ -92,7 +92,7 @@ The Nordic model is particularly instructive: countries like Norway and Finland 
 
 ## Terrorism
 
-The fear of terrorism in Europe is real and understandable — but the actual risk is extraordinarily small:
+The fear of terrorism in Europe is real and understandable - but the actual risk is extraordinarily small:
 
 {{metric:terrorism_deaths}}
 
@@ -107,9 +107,9 @@ Terrorism is a legitimate security concern that European intelligence services w
 
 ## Conclusion
 
-By virtually every measure of violent crime, Europe is among the safest places on Earth — and significantly safer than the United States. Homicide rates are a fraction of US levels. Gun deaths are 31× lower. Incarceration is 4× lower while achieving better safety outcomes.
+By virtually every measure of violent crime, Europe is among the safest places on Earth - and significantly safer than the United States. Homicide rates are a fraction of US levels. Gun deaths are 31× lower. Incarceration is 4× lower while achieving better safety outcomes.
 
-The "dangerous Europe" narrative doesn't survive contact with the data. It's driven by media attention to spectacular events (terrorism, high-profile crimes) rather than the statistical reality of daily life. An average European is far safer walking their streets than an average American — and the gap has been widening in Europe's favor for decades.
+The "dangerous Europe" narrative is not supported by the available comparative data. Media coverage often emphasizes high-profile incidents, while long-run indicators point to lower average violent-crime risk in most European countries than in the United States.
 
 ## Our Verdict
 
