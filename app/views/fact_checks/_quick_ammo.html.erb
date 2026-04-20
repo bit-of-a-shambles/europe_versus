@@ -1,0 +1,94 @@
+<%# Key Facts Bar - stat bar for fast copy-paste %>
+<%# Usage: render partial: "fact_checks/quick_ammo", locals: { quick_stats: @fact_check.quick_stats, fact_check: @fact_check } %>
+<% if quick_stats.any? %>
+<div class="bg-black border-b-4 border-[#0066FF] not-prose" id="key-facts-bar">
+  <div class="max-w-7xl mx-auto px-4 md:px-6 py-3">
+    <div class="flex items-center gap-3 overflow-x-auto scrollbar-thin">
+      <span class="shrink-0 font-mono text-[10px] uppercase tracking-brutal text-white/40">Key Facts</span>
+      <% quick_stats.each_with_index do |stat, idx| %>
+        <div class="shrink-0 flex items-center gap-1">
+          <button onclick="copyQuickStat(<%= idx %>)"
+                  class="flex items-center gap-2 px-3 py-2 border border-white/20 hover:border-white/60 hover:bg-white/10 transition-colors group">
+            <span class="font-mono text-sm md:text-base font-bold text-[#0066FF]"><%= stat["value"] %></span>
+            <span class="font-mono text-[10px] uppercase tracking-brutal text-white/60 whitespace-nowrap"><%= stat["label"] %></span>
+            <svg class="w-3.5 h-3.5 text-white/30 group-hover:text-white/70 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/>
+            </svg>
+          </button>
+          <button onclick="downloadStatCard(<%= idx %>)"
+                  class="px-2 py-2 border border-white/10 hover:border-[#0066FF] hover:bg-[#0066FF]/10 transition-colors"
+                  title="Download as image">
+            <svg class="w-3.5 h-3.5 text-white/30 hover:text-[#0066FF]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v2a2 2 0 002 2h12a2 2 0 002-2v-2m-4-4l-4 4m0 0l-4-4m4 4V4"/>
+            </svg>
+          </button>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>
+
+<!-- Hidden stat cards for image download -->
+<div id="stat-cards-offscreen" aria-hidden="true" style="position:absolute;left:-9999px;top:0;">
+  <% quick_stats.each_with_index do |stat, idx| %>
+    <div id="stat-card-<%= idx %>" style="width:1200px;height:675px;background:#000;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:80px;font-family:Inter,system-ui,sans-serif;box-sizing:border-box;border:6px solid #0066FF;">
+      <div style="font-family:'Space Mono',monospace;font-size:13px;letter-spacing:0.12em;text-transform:uppercase;color:#0066FF;margin-bottom:48px;">EUROPE<span style="color:#fff;">VERSUS</span> · KEY FACT</div>
+      <div style="font-size:96px;font-weight:900;color:#0066FF;line-height:1;margin-bottom:24px;font-family:'Space Mono',monospace;"><%= stat["value"] %></div>
+      <div style="font-size:28px;font-weight:700;color:#fff;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:16px;"><%= stat["label"] %></div>
+      <% if stat["source"] %>
+        <div style="font-family:'Space Mono',monospace;font-size:14px;color:rgba(255,255,255,0.4);letter-spacing:0.12em;">Source: <%= stat["source"] %></div>
+      <% end %>
+      <div style="position:absolute;bottom:40px;right:60px;font-family:'Space Mono',monospace;font-size:13px;letter-spacing:0.12em;color:rgba(255,255,255,0.3);">europeversus.eu</div>
+    </div>
+  <% end %>
+</div>
+
+<script>
+  var quickStats = <%= raw quick_stats.to_json %>;
+
+  function copyQuickStat(idx) {
+    var stat = quickStats[idx];
+    var text = stat['value'] + ' — ' + stat['label'];
+    if (stat['source']) text += ' (Source: ' + stat['source'] + ')';
+    navigator.clipboard.writeText(text).then(function() {
+      if (typeof showCopyToast === 'function') {
+        showCopyToast('Stat copied!');
+      }
+    });
+  }
+
+  function downloadStatCard(idx) {
+    var card = document.getElementById('stat-card-' + idx);
+    if (!card) return;
+    var container = document.getElementById('stat-cards-offscreen');
+    container.style.left = '0';
+    container.style.position = 'fixed';
+    container.style.top = '0';
+    container.style.zIndex = '-1';
+    container.style.opacity = '0';
+
+    import('https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.esm.js').then(function(mod) {
+      var html2canvas = mod.default;
+      html2canvas(card, { scale: 2, useCORS: true, backgroundColor: '#000000' }).then(function(canvas) {
+        container.style.left = '-9999px';
+        container.style.position = 'absolute';
+        container.style.zIndex = '';
+        container.style.opacity = '';
+        var link = document.createElement('a');
+        link.download = 'europeversus-stat-' + (idx + 1) + '.png';
+        link.href = canvas.toDataURL('image/png');
+        link.click();
+        if (typeof showCopyToast === 'function') {
+          showCopyToast('Stat image downloaded!');
+        }
+      }).catch(function() {
+        container.style.left = '-9999px';
+        container.style.position = 'absolute';
+        if (typeof showCopyToast === 'function') {
+          showCopyToast('Download failed — try again');
+        }
+      });
+    });
+  }
+</script>
+<% end %>

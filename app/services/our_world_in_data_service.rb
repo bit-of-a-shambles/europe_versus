@@ -73,16 +73,16 @@ class OurWorldInDataService
     "china" => "China"
   }.freeze
 
-  def self.fetch_chart_data(chart_name, start_year: 2000, end_year: 2024)
+  def self.fetch_chart_data(chart_name, start_year: 2000, end_year: 2024, params: nil)
     begin
       # Fetch CSV data
-      csv_response = fetch_csv_data(chart_name)
+      csv_response = fetch_csv_data(chart_name, params: params)
 
       if csv_response.code == "200"
         Rails.logger.info "CSV Response body preview: #{csv_response.body[0..200]}"
         data = parse_csv_data(csv_response.body)
         Rails.logger.info "Parsed data sample: #{data.first(2)}"
-        metadata = fetch_chart_metadata(chart_name)
+        metadata = fetch_chart_metadata(chart_name, params: params)
 
         process_chart_data(data, metadata, start_year, end_year, chart_name)
       else
@@ -103,13 +103,21 @@ class OurWorldInDataService
 
   private
 
-  def self.fetch_csv_data(chart_name)
+  def self.fetch_csv_data(chart_name, params: nil)
     uri = URI("#{BASE_URL}/#{chart_name}.csv")
+    if params
+      query = URI.encode_www_form(params)
+      uri.query = uri.query ? "#{uri.query}&#{query}" : query
+    end
     Net::HTTP.get_response(uri)
   end
 
-  def self.fetch_chart_metadata(chart_name)
+  def self.fetch_chart_metadata(chart_name, params: nil)
     uri = URI("#{BASE_URL}/#{chart_name}.metadata.json")
+    if params
+      query = URI.encode_www_form(params)
+      uri.query = uri.query ? "#{uri.query}&#{query}" : query
+    end
     response = Net::HTTP.get_response(uri)
 
     if response.code == "200"

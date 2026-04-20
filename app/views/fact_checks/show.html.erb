@@ -19,6 +19,59 @@
   <meta name="twitter:image" content="<%= fact_check_image_url(slug: @fact_check.slug) %>">
 <% end %>
 
+<%
+  # Get verdict configuration
+  vc = @fact_check.verdict_config
+%>
+
+<!-- VERDICT-FIRST HERO -->
+<% if @fact_check.claim.present? && @fact_check.verdict_rating.present? %>
+<section class="bg-black text-white border-b-[6px] border-[#0066FF]">
+  <div class="max-w-3xl mx-auto px-4 md:px-6 py-10 md:py-14">
+    <span class="font-mono text-[10px] uppercase tracking-[0.14em] bg-[#0066FF] text-white px-3 py-1.5 inline-block mb-5">
+      Fact Check
+    </span>
+
+    <!-- The myth, struck through -->
+    <p class="text-2xl md:text-4xl lg:text-[42px] font-black leading-[1.05] tracking-tight text-white/25 line-through decoration-[#DC2626] decoration-[3px] mb-5">
+      "<%= @fact_check.claim %>"
+    </p>
+
+    <!-- Verdict stamp + summary -->
+    <div class="flex items-center gap-3 flex-wrap mb-5">
+      <span class="font-mono text-xs font-bold uppercase tracking-[0.08em] px-4 py-2 border-2"
+            style="border-color: <%= vc[:color] %>; color: <%= vc[:color] %>;">
+        <%= vc[:icon] %> <%= vc[:label] %>
+      </span>
+    </div>
+
+    <% if @fact_check.verdict_summary.present? %>
+      <p class="text-base md:text-lg text-white/65 max-w-[55ch] leading-relaxed">
+        <%= @fact_check.verdict_summary %>
+      </p>
+    <% end %>
+
+    <!-- CTAs -->
+    <div class="flex flex-wrap gap-3 mt-6">
+      <a href="https://twitter.com/intent/tweet?text=<%= CGI.escape("#{@fact_check.title}") %>&url=<%= CGI.escape(fact_check_url(slug: @fact_check.slug)) %>"
+         target="_blank"
+         rel="noopener noreferrer"
+         class="inline-flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.08em] font-bold px-5 py-3 bg-white text-black border-2 border-white hover:bg-white/90 transition-colors">
+        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+        Share on X
+      </a>
+      <a href="#full-article"
+         class="font-mono text-[11px] uppercase tracking-[0.08em] font-bold px-5 py-3 border-2 border-white text-white hover:bg-white hover:text-black transition-colors">
+        Read Full Analysis ↓
+      </a>
+    </div>
+  </div>
+</section>
+<% end %>
+
+<!-- KEY FACTS BAR -->
+<%= render partial: "fact_checks/quick_ammo", locals: { quick_stats: @fact_check.quick_stats, fact_check: @fact_check } %>
+
 <div class="max-w-7xl mx-auto px-4 md:px-6">
   <!-- Floating Share Sidebar (Desktop) -->
   <aside class="hidden lg:block fixed left-8 top-1/2 -translate-y-1/2 z-50" data-controller="share-sidebar">
@@ -61,7 +114,7 @@
     </div>
   </aside>
 
-  <article class="max-w-3xl mx-auto py-8 md:py-12">
+  <article class="max-w-4xl mx-auto py-8 md:py-12" id="full-article">
     <!-- Breadcrumb -->
     <nav class="mb-6 md:mb-8">
       <%= link_to facts_path, class: "font-mono text-xs uppercase tracking-brutal text-black/60 hover:text-[#0066FF] transition-colors" do %>
@@ -72,7 +125,7 @@
     <!-- Article Header -->
     <header class="border-b-4 border-black pb-8 mb-10">
       <span class="font-mono text-xs uppercase tracking-brutal bg-[#0066FF] text-white px-3 py-1 inline-block mb-6">
-        Fact Check
+        Full Analysis
       </span>
       
       <h1 class="text-3xl md:text-5xl lg:text-6xl font-black tracking-tight mb-4 leading-tight">
@@ -97,6 +150,11 @@
         </span>
       </div>
     </header>
+
+    <!-- Verdict Card (rendered at top) -->
+    <% if @fact_check.verdict_rating.present? %>
+      <%= render partial: "fact_checks/fact_check_verdict", locals: { rating: @fact_check.verdict_rating, summary: @fact_check.verdict_summary } %>
+    <% end %>
 
     <!-- Article Body with improved typography -->
     <div class="fact-check-content">
@@ -153,6 +211,14 @@
       <% end %>
     </footer>
   </article>
+
+  <!-- SHARE THESE INSIGHTS (at bottom) -->
+  <% if @fact_check.tweets.any? %>
+    <div class="max-w-4xl mx-auto" id="tweet-arsenal">
+      <%= render partial: "fact_checks/tweet_arsenal", locals: { tweets: @fact_check.tweets, fact_check: @fact_check } %>
+    </div>
+  <% end %>
+
 </div>
 
 <!-- Improved Typography Styles -->
@@ -374,6 +440,88 @@
     .line-clamp-3 {
       -webkit-line-clamp: unset;
     }
+  }
+
+  /* Collapsible sections */
+  .fact-check-section {
+    margin-top: 2rem;
+    border-bottom: 3px solid #000;
+  }
+
+  @media (min-width: 640px) {
+    .fact-check-section {
+      margin-top: 3rem;
+    }
+  }
+
+  .fact-check-section-summary {
+    cursor: pointer;
+    list-style: none;
+    padding-bottom: 0.75rem;
+  }
+
+  .fact-check-section-summary::-webkit-details-marker,
+  .fact-check-section-summary::marker {
+    display: none;
+    content: '';
+  }
+
+  .fact-check-section-summary .fact-check-section-heading {
+    font-size: 1.5rem;
+    font-weight: 900;
+    letter-spacing: -0.025em;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+  }
+
+  .fact-check-section-summary .fact-check-section-heading::after {
+    content: '+';
+    font-family: 'Space Mono', monospace;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #0066FF;
+    flex-shrink: 0;
+    transition: transform 0.2s ease;
+  }
+
+  .fact-check-section[open] > .fact-check-section-summary .fact-check-section-heading::after {
+    content: '−';
+  }
+
+  @media (min-width: 640px) {
+    .fact-check-section-summary .fact-check-section-heading {
+      font-size: 1.875rem;
+    }
+  }
+
+  @media (min-width: 768px) {
+    .fact-check-section-summary .fact-check-section-heading {
+      font-size: 2.25rem;
+    }
+  }
+
+  .fact-check-section-preview {
+    margin-top: 0.5rem;
+    color: rgba(0, 0, 0, 0.55);
+    font-size: 0.95rem;
+    line-height: 1.6;
+  }
+
+  @media (min-width: 640px) {
+    .fact-check-section-preview {
+      font-size: 1.05rem;
+    }
+  }
+
+  .fact-check-section[open] .fact-check-section-preview {
+    display: none;
+  }
+
+  .fact-check-section-body {
+    padding-top: 1rem;
+    padding-bottom: 0.5rem;
   }
 </style>
 

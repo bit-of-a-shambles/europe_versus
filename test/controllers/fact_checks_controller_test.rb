@@ -22,7 +22,7 @@ class FactChecksControllerTest < ActionDispatch::IntegrationTest
   test "should get index" do
     get facts_url
     assert_response :success
-    assert_select "h1", /FACT/
+    assert_select "h1", /Myths busted/
   end
 
   test "should get show for existing article" do

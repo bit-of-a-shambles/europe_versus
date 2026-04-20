@@ -4,13 +4,15 @@
 #   - owid: Our World in Data (ourworldindata.org)
 #   - ilo: International Labour Organization (ilostat.ilo.org)
 #   - worldbank: World Bank Open Data (data.worldbank.org)
+#   - eurostat: Eurostat (ec.europa.eu/eurostat) — JSON-stat API
+#   - oecd: OECD (sdmx.oecd.org) — SDMX REST API
 #
 # ============================================================================
 # FORMAT:
 # ============================================================================
 #
 #   metric_name:
-#     source: owid | ilo | worldbank
+#     source: owid | ilo | worldbank | eurostat | oecd
 #     
 #     # For OWID sources:
 #     owid_slug: the-slug-from-owid-url
@@ -20,6 +22,13 @@
 #
 #     # For World Bank sources:
 #     worldbank_indicator: gdp_nominal | gdp_ppp | gni_nominal | gni_ppp | population
+#
+#     # For Eurostat sources:
+#     eurostat_dataset: earn_nt_net
+#     eurostat_currency: EUR | PPS
+#
+#     # For OECD sources:
+#     oecd_indicator: ppp_price_level | avg_tax_rate
 #     
 #     # Common fields:
 #     start_year: 2000
@@ -77,100 +86,11 @@ labor_productivity_per_hour:
   unit: "2021 PPP $ per hour"
   description: "GDP generated per hour worked, measured in constant 2021 international dollars adjusted for purchasing power parity. This captures how efficiently an economy converts labor time into economic output, accounting for price differences between countries."
   category: economy
-  aggregation_method: population_weighted
   enabled: true
   preferred: true  # Use this over OWID for labor productivity
 
 labor_productivity_per_worker:
   source: ilo
-  ilo_indicator: labor_productivity_per_worker
-  start_year: 2000
-  end_year: 2025
-  unit: "2015 USD per worker"
-  description: "GDP generated per employed person, measured in constant 2015 US dollars. This measures economic output per worker regardless of hours worked, reflecting both productivity and working patterns."
-  category: economy
-  aggregation_method: population_weighted
-  enabled: true
-
-# =============================================================================
-# WORLD BANK METRICS - ECONOMY
-# =============================================================================
-
-gdp_per_capita_nominal:
-  source: worldbank
-  worldbank_indicator: gdp_nominal
-  start_year: 1990
-  end_year: 2024
-  unit: "current US$"
-  description: "Gross domestic product per person in current US dollars at market exchange rates. Unlike PPP-adjusted figures, this reflects actual market values and is useful for comparing financial or trade-related metrics, though it doesn't account for differences in local purchasing power."
-  category: economy
-  aggregation_method: population_weighted
-  enabled: true
-
-# =============================================================================
-# OWID METRICS - ECONOMY
-# =============================================================================
-
-gdp_per_capita_ppp:
-  source: owid
-  owid_slug: gdp-per-capita-worldbank
-  start_year: 1990
-  end_year: 2024
-  unit: "international $"
-  description: "Gross domestic product per person, adjusted for price differences between countries using purchasing power parity (PPP). Expressed in constant 2017 international dollars to allow comparisons across time and between countries."
-  category: economy
-  aggregation_method: population_weighted
-  enabled: true
-
-median_income_daily:
-  source: owid
-  owid_slug: daily-median-income
-  start_year: 1990
-  end_year: 2024
-  unit: "$ per day"
-  description: "The daily income level that divides the population in half—50% earn more and 50% earn less. Adjusted for purchasing power parity to account for price differences between countries, providing a measure of typical living standards."
-  category: economy
-  aggregation_method: population_weighted
-  enabled: true
-
-# =============================================================================
-# OWID METRICS - HEALTH
-# =============================================================================
-
-health_expenditure_gdp_percent:
-  source: owid
-  owid_slug: total-healthcare-expenditure-gdp
-  start_year: 2000
-  end_year: 2024
-  unit: "% of GDP"
-  description: "Total spending on healthcare—including both public and private expenditure—as a share of the economy. This includes hospital care, physician services, medicines, and preventive care."
-  category: health
-  aggregation_method: population_weighted
-  enabled: true
-
-healthy_life_expectancy:
-  source: owid
-  owid_slug: healthy-life-expectancy-at-birth
-  start_year: 1990
-  end_year: 2024
-  unit: "years"
-  description: "Average number of years a newborn can expect to live in full health, accounting for years lived with illness or disability. Unlike standard life expectancy, this measures quality-adjusted years of life."
-  category: health
-  aggregation_method: population_weighted
-  enabled: true
-
-medical_rcts_published:
-  source: owid
-  owid_slug: total-number-of-rcts-published-in-high-ranked-medical-journals
-  start_year: 1990
-  end_year: 2024
-  unit: "trials"
-  description: "Cumulative number of randomized controlled trials (RCTs) published in high-ranked medical journals. RCTs are the gold standard for medical research, providing the strongest evidence for treatment effectiveness. Counted by country of the first author's institution."
-  category: health
-  aggregation_method: sum
-  enabled: true
-
-# =============================================================================
 # OWID METRICS - SOCIAL
 # =============================================================================
 
@@ -359,5 +279,479 @@ co2_emissions_per_capita:
   unit: "tonnes per person"
   description: "Annual carbon dioxide emissions from burning fossil fuels and producing cement, measured in tonnes per person. Includes emissions from coal, oil, and gas consumption. A core indicator of a country's contribution to climate change relative to its population size."
   category: environment
+  aggregation_method: population_weighted
+  enabled: true
+
+renewable_energy_share:
+  source: owid
+  owid_slug: share-electricity-renewables
+  start_year: 1990
+  end_year: 2024
+  unit: "%"
+  description: "Percentage of electricity generation from renewable sources including hydropower, solar, wind, geothermal, biomass, and wave/tidal. Measures progress in decarbonizing the electricity sector."
+  category: environment
+  aggregation_method: population_weighted
+  enabled: true
+
+air_pollution_death_rate:
+  source: owid
+  owid_slug: death-rate-from-air-pollution
+  start_year: 1990
+  end_year: 2024
+  unit: "per 100,000 people"
+  description: "Estimated annual deaths attributable to air pollution per 100,000 people, including both indoor and outdoor air pollution. Reflects air quality, environmental regulation, and public health infrastructure."
+  category: environment
+  aggregation_method: population_weighted
+  enabled: false  # IHME license restricts CSV download from OWID
+
+forest_area_share:
+  source: owid
+  owid_slug: forest-area-as-share-of-land-area
+  start_year: 1990
+  end_year: 2024
+  unit: "%"
+  description: "Forest area as a percentage of total land area. Forests provide carbon sequestration, biodiversity habitat, and ecosystem services. Trends indicate whether a country is reforesting or deforesting."
+  category: environment
+  aggregation_method: population_weighted
+  enabled: true
+
+# =============================================================================
+# OWID METRICS - SAFETY & CRIME
+# =============================================================================
+
+incarceration_rate:
+  source: owid
+  owid_slug: prison-population-rate
+  start_year: 2000
+  end_year: 2025
+  unit: "per 100,000 people"
+  description: "Number of prisoners, including pre-trial and remand detainees, per 100,000 people. Higher rates may indicate higher crime, harsher sentencing, or systemic issues in the justice system. The US rate is roughly 5-10x that of most European countries."
+  category: safety
+  aggregation_method: population_weighted
+  enabled: true
+
+gun_death_rate:
+  source: owid
+  owid_slug: homicide-rates-from-firearms
+  start_year: 1990
+  end_year: 2024
+  unit: "per 100,000 people"
+  description: "Annual number of homicides committed with firearms per 100,000 people, as recorded by the UN Office on Drugs and Crime. A direct measure of gun violence and the lethal consequences of firearm availability."
+  category: safety
+  aggregation_method: population_weighted
+  enabled: true
+
+terrorism_deaths:
+  source: owid
+  owid_slug: terrorism-deaths
+  start_year: 1970
+  end_year: 2024
+  unit: "deaths"
+  description: "Confirmed deaths from terrorist attacks, including all victims and attackers who died because of the incident. Provides context for security concerns relative to other causes of death."
+  category: safety
+  aggregation_method: sum
+  enabled: true
+
+# =============================================================================
+# OWID METRICS - ECONOMY (ADDITIONAL)
+# =============================================================================
+
+unemployment_rate:
+  source: owid
+  owid_slug: unemployment-rate
+  start_year: 1990
+  end_year: 2024
+  unit: "%"
+  description: "Share of the labor force that is without work but available for and seeking employment. Based on ILO modeled estimates that standardize measurement across countries."
+  category: economy
+  aggregation_method: population_weighted
+  enabled: true
+
+youth_unemployment_rate:
+  source: worldbank
+  worldbank_indicator: youth_unemployment
+  start_year: 1990
+  end_year: 2024
+  unit: "%"
+  description: "Share of the labor force aged 15-24 that is without work but available for and seeking employment. Youth unemployment is a critical indicator of economic opportunity and social inclusion for young people."
+  category: economy
+  aggregation_method: population_weighted
+  enabled: true
+
+gini_coefficient:
+  source: owid
+  owid_slug: economic-inequality-gini-index
+  start_year: 1990
+  end_year: 2024
+  unit: "index (0-1)"
+  description: "The Gini coefficient measures income inequality on a scale from 0 (perfect equality) to 1 (perfect inequality). Values typically range from 0.25 (Nordics) to 0.60 (most unequal countries). Measured after taxes and benefits where available."
+  category: economy
+  aggregation_method: population_weighted
+  enabled: true
+
+poverty_rate:
+  source: owid
+  owid_slug: share-of-population-in-extreme-poverty
+  start_year: 1990
+  end_year: 2024
+  unit: "%"
+  description: "Share of the population living below the International Poverty Line of $3 per day, adjusted for inflation and differences in living costs between countries. Measures absolute deprivation."
+  category: economy
+  aggregation_method: population_weighted
+  enabled: true
+
+annual_working_hours:
+  source: owid
+  owid_slug: annual-working-hours-per-worker
+  start_year: 1950
+  end_year: 2024
+  unit: "hours per year"
+  description: "Average annual working hours per employed person, including both full-time and part-time workers. Reflects work-life balance choices, labor market structure, and social policy. Europeans typically work 200-400 fewer hours per year than Americans."
+  category: economy
+  aggregation_method: population_weighted
+  enabled: true
+
+income_share_top_10:
+  source: owid
+  owid_slug: income-share-of-the-top-10-pip
+  start_year: 1990
+  end_year: 2024
+  unit: "%"
+  description: "Share of total post-tax income or consumption received by the richest 10% of the population. A higher share indicates greater income concentration at the top. European countries typically have lower top-10 shares than the US."
+  category: economy
+  aggregation_method: population_weighted
+  enabled: true
+
+income_share_bottom_50:
+  source: owid
+  owid_slug: income-share-of-the-poorest-50
+  start_year: 1990
+  end_year: 2024
+  unit: "%"
+  description: "Share of total pre-tax national income received by the bottom 50% of the population. Higher values indicate a more equitable distribution of income. European countries typically score higher than the US."
+  category: economy
+  aggregation_method: population_weighted
+  enabled: false  # OWID chart slug removed/restructured, no CSV available
+
+social_spending_gdp:
+  source: owid
+  owid_slug: social-spending-oecd-longrun
+  start_year: 1990
+  end_year: 2024
+  unit: "% of GDP"
+  description: "Public social spending as a percentage of GDP, covering pensions, health care, income support, housing assistance, and other social programs. Measures the scale of the welfare state and social safety net."
+  category: economy
+  aggregation_method: population_weighted
+  enabled: true
+
+# =============================================================================
+# OWID METRICS - HEALTH (ADDITIONAL)
+# =============================================================================
+
+life_expectancy:
+  source: owid
+  owid_slug: life-expectancy
+  start_year: 1990
+  end_year: 2024
+  unit: "years"
+  description: "Period life expectancy at birth—average number of years a newborn would live if current age-specific death rates applied throughout their life. A fundamental measure of population health and healthcare system effectiveness."
+  category: health
+  aggregation_method: population_weighted
+  enabled: true
+
+infant_mortality_rate:
+  source: owid
+  owid_slug: infant-mortality
+  start_year: 1990
+  end_year: 2024
+  unit: "per 1,000 live births"
+  description: "Number of deaths of infants under one year of age per 1,000 live births. A sensitive indicator of healthcare access, maternal health, nutrition, and overall development."
+  category: health
+  aggregation_method: population_weighted
+  enabled: true
+
+maternal_mortality_ratio:
+  source: owid
+  owid_slug: maternal-mortality
+  start_year: 1990
+  end_year: 2024
+  unit: "per 100,000 live births"
+  description: "Estimated number of women who die from pregnancy-related causes per 100,000 live births. Reflects healthcare quality, access to obstetric care, and women's health infrastructure."
+  category: health
+  aggregation_method: population_weighted
+  enabled: true
+
+obesity_prevalence:
+  source: owid
+  owid_slug: share-of-adults-defined-as-obese
+  start_year: 1990
+  end_year: 2024
+  unit: "%"
+  description: "Estimated share of adults with a body mass index (BMI) of 30 or greater. Obesity is a major risk factor for cardiovascular disease, diabetes, and premature death. Prevalence reflects diet, lifestyle, and public health policy."
+  category: health
+  aggregation_method: population_weighted
+  enabled: true
+
+suicide_rate:
+  source: owid
+  owid_slug: suicide-death-rates
+  start_year: 1990
+  end_year: 2024
+  unit: "per 100,000 people"
+  description: "Estimated annual number of suicides per 100,000 people. Adjusted for underreporting using global modeling. Reflects mental health infrastructure, social support systems, and societal wellbeing."
+  category: health
+  aggregation_method: population_weighted
+  enabled: false  # IHME license restricts CSV download from OWID
+
+out_of_pocket_health_expenditure:
+  source: owid
+  owid_slug: out-of-pocket-expenditure-per-capita-on-healthcare
+  start_year: 2000
+  end_year: 2024
+  unit: "$ per capita"
+  description: "Annual out-of-pocket healthcare spending per person in current international dollars. Measures the direct financial burden of healthcare on individuals, excluding insurance-covered or government-funded care."
+  category: health
+  aggregation_method: population_weighted
+  enabled: true
+
+# =============================================================================
+# OWID METRICS - GOVERNANCE & FREEDOM
+# =============================================================================
+
+corruption_perceptions_index:
+  source: owid
+  owid_slug: ti-corruption-perception-index
+  start_year: 2012
+  end_year: 2024
+  unit: "score (0-100)"
+  description: "Average score across expert and business surveys on the extent of public sector corruption. Ranges from 0 (highly corrupt) to 100 (very clean). Published by Transparency International. European nations consistently dominate the top of global rankings."
+  category: governance
+  aggregation_method: population_weighted
+  enabled: true
+
+democracy_index:
+  source: owid
+  owid_slug: democracy-index-eiu
+  start_year: 2006
+  end_year: 2024
+  unit: "score (0-10)"
+  description: "Expert estimates of the extent to which citizens can choose their political leaders in free elections, enjoy civil liberties, prefer democracy, participate in politics, and have functioning government. Ranges from 0 to 10. Published by the Economist Intelligence Unit."
+  category: governance
+  aggregation_method: population_weighted
+  enabled: true
+
+electoral_democracy_index:
+  source: owid
+  owid_slug: electoral-democracy-index
+  start_year: 1990
+  end_year: 2024
+  unit: "score (0-1)"
+  description: "Expert estimates of the extent to which political leaders are elected under comprehensive voting rights in free and fair elections, with guaranteed freedoms of association and expression. Ranges from 0 to 1. Published by V-Dem."
+  category: governance
+  aggregation_method: population_weighted
+  enabled: true
+
+rule_of_law_index:
+  source: owid
+  owid_slug: rule-of-law-index
+  start_year: 1990
+  end_year: 2024
+  unit: "score (0-1)"
+  description: "Expert estimates of the extent to which the government complies with the law, courts are independent, laws are transparent, justice is accessible, corruption is absent, and bureaucracy is impartial. Ranges from 0 to 1 (most rule-based). Published by V-Dem."
+  category: governance
+  aggregation_method: population_weighted
+  enabled: true
+
+freedom_of_expression:
+  source: owid
+  owid_slug: freedom-of-expression-score-bti
+  start_year: 2005
+  end_year: 2025
+  unit: "score (1-10)"
+  description: "Expert estimates of the extent to which individuals, groups, and the press can express their views free from government interference. Scores range from 1 to 10 (most free). Published by the Bertelsmann Transformation Index."
+  category: governance
+  aggregation_method: population_weighted
+  enabled: true
+
+# =============================================================================
+# OWID METRICS - INNOVATION (ADDITIONAL)
+# =============================================================================
+
+patent_applications:
+  source: owid
+  owid_slug: patent-applications-per-million
+  start_year: 1990
+  end_year: 2024
+  unit: "per million people"
+  description: "Number of patent applications filed per million inhabitants. Measures inventive activity and the capacity of an economy to translate R&D into commercially relevant innovations."
+  category: innovation
+  aggregation_method: population_weighted
+  enabled: true
+
+internet_users_share:
+  source: owid
+  owid_slug: share-of-individuals-using-the-internet
+  start_year: 1990
+  end_year: 2024
+  unit: "%"
+  description: "Percentage of the population using the internet. Measures digital connectivity, infrastructure development, and participation in the digital economy."
+  category: innovation
+  aggregation_method: population_weighted
+  enabled: true
+
+high_tech_exports:
+  source: worldbank
+  worldbank_indicator: high_tech_exports
+  start_year: 1990
+  end_year: 2024
+  unit: "%"
+  description: "High-technology exports as a percentage of manufactured exports. Includes aerospace, computers, pharmaceuticals, scientific instruments, and electrical machinery. Indicates the technological sophistication of a country's export base."
+  category: innovation
+  aggregation_method: population_weighted
+  enabled: true
+
+# =============================================================================
+# OWID METRICS - DEVELOPMENT (ADDITIONAL)
+# =============================================================================
+
+tertiary_enrollment:
+  source: owid
+  owid_slug: school-enrolment
+  owid_params:
+    enrolment_type: gross_enrolment
+    level: tertiary
+    sex: both
+  start_year: 1990
+  end_year: 2024
+  unit: "%"
+  description: "Total enrollment in tertiary education as a percentage of the age group that typically corresponds to tertiary education, regardless of age. Can exceed 100% due to early or late enrollment. Measures access to higher education."
+  category: development
+  aggregation_method: population_weighted
+  enabled: true
+
+education_spending_gdp:
+  source: owid
+  owid_slug: education-spending
+  owid_params:
+    spending_type: gdp_share
+    level: all
+  start_year: 1990
+  end_year: 2024
+  unit: "% of GDP"
+  description: "Total government expenditure on education as a percentage of GDP. Includes spending on public institutions, administration, and transfers to private entities. Measures public investment in human capital."
+  category: development
+  aggregation_method: population_weighted
+  enabled: true
+
+expected_years_of_schooling:
+  source: owid
+  owid_slug: years-of-schooling
+  owid_params:
+    metric_type: expected_years_schooling
+    level: all
+    sex: both
+  start_year: 1990
+  end_year: 2024
+  unit: "years"
+  description: "Number of years a child of school entrance age can expect to receive if current age-specific enrollment rates persist throughout their school life. Measures the quantity of education a child can expect to obtain."
+  category: development
+  aggregation_method: population_weighted
+  enabled: true
+
+# =============================================================================
+# OWID METRICS - SOCIAL (ADDITIONAL)
+# =============================================================================
+
+median_age:
+  source: owid
+  owid_slug: median-age
+  start_year: 1990
+  end_year: 2024
+  unit: "years"
+  description: "Age that divides the population into two numerically equal halves. A key indicator of population aging: higher median ages reflect lower fertility and longer lifespans. Most developed countries have rising median ages."
+  category: social
+  aggregation_method: population_weighted
+  enabled: true
+
+net_migration_rate:
+  source: owid
+  owid_slug: net-migration-rate
+  start_year: 1990
+  end_year: 2024
+  unit: "per 1,000 people"
+  description: "Net migration rate per 1,000 inhabitants over a five-year period. Positive values indicate more immigration than emigration. A key indicator of economic attractiveness and demographic sustainability."
+  category: social
+  aggregation_method: population_weighted
+  enabled: false  # OWID chart slug removed/restructured into explorer, no CSV available
+
+# =============================================================================
+# OWID METRICS - DEFENSE
+# =============================================================================
+
+military_spending_gdp:
+  source: owid
+  owid_slug: military-spending-as-a-share-of-gdp-sipri
+  start_year: 1990
+  end_year: 2024
+  unit: "% of GDP"
+  description: "Total military expenditure as a share of GDP, including armed forces, defense ministries, paramilitary forces, and military space activities. Reflects defense priorities and security posture."
+  category: governance
+  aggregation_method: population_weighted
+  enabled: true
+
+# =============================================================================
+# EUROSTAT METRICS - EARNINGS (fetched directly from Eurostat API)
+# =============================================================================
+# Dataset: earn_nt_net — Annual net earnings
+# Case: P1_NCH_AW100 — Single person, no children, 100% of average wage
+# Coverage: EU-27 + EFTA + UK + Turkey + US + Japan, years 2000–2024
+
+annual_net_earnings_nominal:
+  source: eurostat
+  eurostat_dataset: earn_nt_net
+  eurostat_currency: EUR
+  start_year: 2000
+  end_year: 2024
+  unit: "€"
+  description: "Annual net earnings of a single person without children at 100% of the average wage, in nominal euros. Based on Eurostat earn_nt_net. Covers takehome pay after income tax and social contributions. Does not adjust for cost-of-living differences."
+  category: economy
+  aggregation_method: population_weighted
+  enabled: true
+
+annual_net_earnings_pps:
+  source: eurostat
+  eurostat_dataset: earn_nt_net
+  eurostat_currency: PPS
+  start_year: 2000
+  end_year: 2024
+  unit: "PPS (EU27=100)"
+  description: "Annual net earnings of a single person without children at 100% of the average wage, in purchasing power standard. Adjusts for price-level differences between countries so values are directly comparable in terms of real purchasing power."
+  category: economy
+  aggregation_method: population_weighted
+  enabled: true
+
+# =============================================================================
+# OECD METRICS - PRICE LEVELS & TAX RATES (fetched directly from OECD API)
+# =============================================================================
+
+ppp_price_level:
+  source: oecd
+  oecd_indicator: ppp_price_level
+  start_year: 2000
+  end_year: 2024
+  unit: "Index (OECD=100)"
+  description: "Comparative price level index for household final consumption expenditure. OECD average = 100. Higher values mean higher prices. Used to convert nominal values to purchasing-power-adjusted comparisons."
+  category: economy
+  aggregation_method: population_weighted
+  enabled: true
+
+avg_tax_rate:
+  source: oecd
+  oecd_indicator: avg_tax_rate
+  start_year: 2000
+  end_year: 2024
+  unit: "% of gross wage"
+  description: "Average combined personal income tax and employee social security contribution rate for a single person with no children earning 100% of the average wage. Shows the tax wedge on labor income."
+  category: economy
   aggregation_method: population_weighted
   enabled: true

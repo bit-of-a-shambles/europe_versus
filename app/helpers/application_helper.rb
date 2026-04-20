@@ -64,9 +64,9 @@ module ApplicationHelper
       return "#{number_with_precision(value, precision: 1)} years"
     end
 
-    # Handle people/population - use compact format for large numbers
+    # Handle people/population with full delimiters for readability and consistency
     if unit_str == "people" || unit_str.include?("population")
-      return format_compact_number(value)
+      return number_with_delimiter(value.round(0))
     end
 
     # Handle births per woman
