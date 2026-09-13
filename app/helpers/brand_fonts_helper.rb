@@ -2,10 +2,10 @@ require "base64"
 
 module BrandFontsHelper
   BRAND_FONT_FILES = {
-    besley_roman_latin_ext: "besley-roman-latin-ext-v22.woff2",
-    besley_roman_latin: "besley-roman-latin-v22.woff2",
-    besley_italic_latin_ext: "besley-italic-latin-ext-v22.woff2",
-    besley_italic_latin: "besley-italic-latin-v22.woff2",
+    instrument_serif_roman_latin_ext: "instrument-serif-roman-latin-ext.woff2",
+    instrument_serif_roman_latin: "instrument-serif-roman-latin.woff2",
+    instrument_serif_italic_latin_ext: "instrument-serif-italic-latin-ext.woff2",
+    instrument_serif_italic_latin: "instrument-serif-italic-latin.woff2",
     public_sans_roman_latin_ext: "public-sans-roman-latin-ext-v21.woff2",
     public_sans_roman_latin: "public-sans-roman-latin-v21.woff2"
   }.freeze

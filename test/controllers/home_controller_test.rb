@@ -21,7 +21,7 @@ class HomeControllerTest < ActionDispatch::IntegrationTest
     get root_url
 
     assert_response :success
-    assert_select 'link[rel="preload"][href*="besley-roman-latin-v22"]', count: 1
+    assert_select 'link[rel="preload"][href*="instrument-serif-roman-latin"]', count: 1
     assert_select 'link[rel="preload"][href*="public-sans-roman-latin-v21"]', count: 1
     assert_select 'link[href*="fonts.googleapis.com"]', count: 0
   end

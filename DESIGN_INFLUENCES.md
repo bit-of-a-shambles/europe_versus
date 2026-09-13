@@ -96,9 +96,8 @@ claim, generous whitespace, no chrome. Adopted:
 
 - The hero's entrance choreography (see transitions.dev) focuses attention on
   the claim; the chart arrives 70ms later as the co-star.
-- Kicker, headline, deck and byline rhythm was audited rather than restyled —
-  the existing Besley 500 clamp(40–61px) headline already follows this
-  discipline and stays.
+- Kicker, headline, deck and byline rhythm was audited rather than restyled;
+  the display serif headline already follows this discipline and stays.
 
 **Where:** homepage lead block, unchanged markup, new entrance motion.
 
@@ -107,8 +106,8 @@ claim, generous whitespace, no chrome. Adopted:
 A footer gallery whose editor's choices favour oversized wordmarks, grouped
 links and colophons. Adopted:
 
-- **Big wordmark** → "Common Values" closes the page at up to 104px Besley —
-  the publication signing its work.
+- **Big wordmark** → "Common Values" closes the page at up to 104px in the
+  display serif — the publication signing its work.
 - **Tagline beside link groups** → the editorial promise sits left of three
   small groups: Read, Method and data, Project.
 - **Colophon** → a bottom rule with copyright, cadence ("One chart every
@@ -149,3 +148,46 @@ A section gallery with a dedicated hover-effects collection. Adopted:
 - Full minitest suite plus rubocop, brakeman and importmap audit (CI parity).
 - Reduced-motion check: entrances and menu animation disabled under
   `prefers-reduced-motion: reduce`.
+
+## Second pass (September 2026, v1.4)
+
+### Typeface change: Instrument Serif
+
+The editorial serif moved from Besley to [Instrument
+Serif](https://fonts.google.com/specimen/Instrument+Serif), at the
+publication owner's direction. Besley is retired from the system.
+
+- Self-hosted WOFF2 subsets (roman and italic, Latin and Latin Extended,
+  ~47 KB total) in `app/assets/fonts/` with the SIL OFL licence file.
+  The combined webfont payload drops from ~130 KB to ~92 KB.
+- Instrument Serif ships one weight — 400 roman, 400 italic — so every
+  serif context (wordmark, headlines, chart headlines, footer wordmark)
+  now renders at 400. The faux-bold trap is documented in
+  `BRAND_GUIDELINES.md` §6: hierarchy comes from scale, spacing and
+  position, never from weight.
+- Chart and social-image exports embed the new faces as data URIs through
+  `brand_fonts_helper.rb`; web and export render the same family.
+
+### Extended transitions.dev suite
+
+After owner feedback ("a lot more elements from transitions.dev"), the
+motion vocabulary grew from four effects to the full set below. Every
+entrance still sits behind `prefers-reduced-motion: no-preference`, and
+the global reduce override now also zeroes delays and iteration counts
+so no content is ever hidden from reduced-motion readers.
+
+| transitions.dev effect | Where it landed |
+| --- | --- |
+| Text states swap (blur) | Masthead taglines cycle through the three editorial promises |
+| Number pop-in | Provenance-strip values pop in, staggered |
+| (data-native) draw-in | Chart series lines plot themselves; bars grow from zero; marks and direct values pop after |
+| Page transition | Every Turbo visit rises softly into place |
+| Tabs sliding | A burgundy pill glides between data-library categories (`library_nav_controller.js`) |
+| Card hover lift (as row step) | Archive and edition rows take one 5px step toward the reader |
+| Icon swap | An arrow slides into the subscribe pill on hover |
+| Texts reveal (on scroll) | Archive rows reveal in stagger as they enter the viewport (`scroll_reveal_controller.js`) |
+
+Still rejected on editorial grounds: confetti, gooey physics, shimmer
+(gradient-based), skeleton loaders (everything is server-rendered),
+notification badges (brand bans metadata pills) and error shakes (no
+forms on site).

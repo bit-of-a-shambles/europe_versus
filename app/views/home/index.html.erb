@@ -76,9 +76,9 @@
         <%= link_to "View the archive", editions_path %>
       </div>
 
-      <ol class="headline-story-list">
+      <ol class="headline-story-list" data-controller="scroll-reveal">
         <% @archive.each do |edition| %>
-          <li>
+          <li data-scroll-reveal-target="item">
             <%= link_to edition_path(edition.slug) do %>
               <span class="headline-story-number"><%= edition.issue_number.to_s.rjust(2, "0") %></span>
               <span class="headline-story-copy">

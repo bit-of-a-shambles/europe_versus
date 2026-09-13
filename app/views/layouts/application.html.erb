@@ -15,7 +15,7 @@
     <link rel="manifest" href="<%= pwa_manifest_path(format: :json) %>">
     <meta name="theme-color" content="<%= content_for(:theme_color) || "#f3efe5" %>">
 
-    <link rel="preload" href="<%= asset_path("besley-roman-latin-v22.woff2") %>" as="font" type="font/woff2" crossorigin>
+    <link rel="preload" href="<%= asset_path("instrument-serif-roman-latin.woff2") %>" as="font" type="font/woff2" crossorigin>
     <link rel="preload" href="<%= asset_path("public-sans-roman-latin-v21.woff2") %>" as="font" type="font/woff2" crossorigin>
 
     <%= stylesheet_link_tag "tailwind", "application", "data-turbo-track": "reload" %>
@@ -46,7 +46,11 @@
 
   <header class="site-header" data-controller="mobile-menu">
     <div class="masthead">
-      <p class="masthead-note">One chart a week on Europe’s progress</p>
+      <p class="masthead-note">
+        <span>One chart a week on Europe’s progress</span>
+        <span>Progress when the evidence shows it</span>
+        <span>Problems when it doesn’t</span>
+      </p>
 
       <%= link_to root_path, class: "wordmark", aria: { label: "Common Values, home" } do %>
         <span>Common Values</span>
@@ -55,7 +59,7 @@
       <div class="masthead-actions">
         <%= link_to "Method", methodology_path %>
         <% substack_url = ENV.fetch("SUBSTACK_PUBLICATION_URL", editions_path) %>
-        <a class="nav-subscribe" href="<%= substack_url %>">Subscribe</a>
+        <a class="nav-subscribe" href="<%= substack_url %>">Subscribe <span class="link-arrow" aria-hidden="true">→</span></a>
       </div>
 
       <button class="nav-toggle" data-action="click->mobile-menu#toggle" aria-label="Open navigation" aria-expanded="false" aria-controls="mobile-nav">

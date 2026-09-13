@@ -7,7 +7,7 @@
 </header>
 
 <% if @statistics.any? %>
-  <nav class="library-nav page-shell" aria-label="Data categories">
+  <nav class="library-nav page-shell" data-controller="library-nav" aria-label="Data categories">
     <% @statistics.keys.each do |category| %>
       <%= link_to category.humanize, "#category-#{category}" %>
     <% end %>

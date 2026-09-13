@@ -1,8 +1,8 @@
 # Common Values — brand guidelines
 
 **Status:** Canonical  
-**Version:** 1.3  
-**Last updated:** 13 September 2026  
+**Version:** 1.4  
+**Last updated:** 13 September 2026 (second pass)  
 **Applies to:** the website, weekly editions, Substack, chart exports, social images and editorial partnerships
 
 Common Values is an editorial data publication, not a dashboard and not a campaign. Every edition makes one consequential claim about Europe with one carefully reported chart.
@@ -170,14 +170,13 @@ The palette takes its character from European civic print—burgundy passports, 
 
 The type system has two families and clear jobs.
 
-### Besley — editorial voice
+### Instrument Serif — editorial voice
 
-Use Besley for the wordmark, major headlines, chart headlines and considered long-form emphasis.
+Use Instrument Serif for the wordmark, major headlines, chart headlines and considered long-form emphasis. It replaced Besley in September 2026 (v1.4); Besley is retired from the system.
 
-- Default headline weight: 500
-- Wordmark weight: 600
-- Use 400 for italic kickers or literary emphasis
-- Avoid 700 except at very small sizes where it has a functional reason
+- The family ships a single weight: 400 roman and 400 italic. Never ask it for 500, 600 or 700 — browsers would synthesise an ugly faux bold. Hierarchy comes from scale, spacing and position alone.
+- Use the italic for kickers and literary emphasis.
+- Instrument Serif is drawn for large display sizes; keep it out of running body text.
 
 ### Public Sans — information voice
 
@@ -193,9 +192,9 @@ These are starting ranges, not a licence to create many styles.
 
 | Role | Typeface | Desktop | Phone | Line height |
 | --- | --- | ---: | ---: | ---: |
-| Publication wordmark | Besley 600 | 25px | 22–24px | 1.0 |
-| Edition headline | Besley 500 | 40–61px | 35–43px | 1.01–1.08 |
-| Section heading | Besley 500 | 28–36px | 26–32px | 1.1–1.2 |
+| Publication wordmark | Instrument Serif 400 | 25px | 22–24px | 1.0 |
+| Edition headline | Instrument Serif 400 | 44–88px | 35–43px | 0.99–1.08 |
+| Section heading | Instrument Serif 400 | 28–36px | 26–32px | 1.1–1.2 |
 | Deck | Public Sans 400 | 16–19px | 16–18px | 1.45–1.6 |
 | Article body | Public Sans 400 | 18–21px | 17–19px | 1.6–1.75 |
 | Navigation | Public Sans 500 | 12–13px | 13–15px | 1.3 |
@@ -210,16 +209,16 @@ These are starting ranges, not a licence to create many styles.
 - Use tabular numerals for aligned values and tables.
 - Keep weights mostly at 400 and 500. Hierarchy should come from scale, spacing and position.
 - Self-host the approved WOFF2 files from `app/assets/fonts`; do not depend on Google Fonts or another third-party font CDN at render time.
-- Load only the weights used in production, use `font-display: swap`, and keep the combined webfont payload under 200 KB where practical. The current Latin and Latin Extended files total approximately 130 KB.
+- Load only the weights used in production, use `font-display: swap`, and keep the combined webfont payload under 200 KB where practical. The current Latin and Latin Extended files total approximately 92 KB.
 - The fallback stack must remain usable if webfonts fail.
 
 ### Production font delivery
 
-- Besley and Public Sans are the approved production faces. Inter, Lora, Space Mono and browser-default substitutes are not part of the publication identity.
+- Instrument Serif and Public Sans are the approved production faces. Besley is retired (September 2026); Inter, Lora, Space Mono and browser-default substitutes remain outside the publication identity.
 - Ship both Latin and Latin Extended WOFF2 subsets so names and labels retain European diacritics.
-- Preload the Latin roman files for Besley and Public Sans in the document head. Load Besley italic and Latin Extended only when the page uses them.
+- Preload the Latin roman files for Instrument Serif and Public Sans in the document head. Load Instrument Serif italic and the Latin Extended subsets only when the page uses them.
 - Serve browser fonts through the Rails asset pipeline with fingerprinted filenames and a one-year immutable cache policy.
-- Use `font-display: swap`. The fallback stacks are `Besley, Georgia, serif` and `Public Sans, Helvetica Neue, Arial, sans-serif`.
+- Use `font-display: swap`. The fallback stacks are `Instrument Serif, Georgia, serif` and `Public Sans, Helvetica Neue, Arial, sans-serif`.
 - Generated chart and social-image HTML must embed the same font files as data URIs; image exports must never depend on a remote font request.
 - Keep `-webkit-text-size-adjust: 100%` on the root element so iOS Safari does not silently inflate selected text and alter editorial line breaks.
 - Every production typography change requires a phone capture at 390×844 and a direct-font request check. Before launch, also open the live URL in current iOS Safari on physical hardware.
@@ -230,7 +229,7 @@ These are starting ranges, not a licence to create many styles.
 
 ## 7. Wordmark
 
-The wordmark is the text **Common Values** set in Besley 600.
+The wordmark is the text **Common Values** set in Instrument Serif 400.
 
 - Use ink on paper or paper on ink.
 - Preserve the original proportions and letter spacing.
@@ -381,7 +380,7 @@ The website is the canonical edition. Substack receives a native draft and chart
 - Header and title treatment: editorial serif, sentence case
 - Body and information treatment: neutral sans serif, sentence case
 
-Substack cannot reproduce a self-hosted web type system exactly inside every email client. Choose its closest restrained editorial serif for the publication title and post titles, and a plain sans serif for body text. Do not introduce a third display face, all-caps headings or decorative cover art to compensate for the platform limits. The Common Values wordmark and exported charts carry the exact Besley/Public Sans system.
+Substack cannot reproduce a self-hosted web type system exactly inside every email client. Choose its closest restrained editorial serif for the publication title and post titles, and a plain sans serif for body text. Do not introduce a third display face, all-caps headings or decorative cover art to compensate for the platform limits. The Common Values wordmark and exported charts carry the exact Instrument Serif/Public Sans system.
 
 ### Native issue structure
 
@@ -420,7 +419,7 @@ Avoid stock handshakes, heroic flag imagery, generic skylines, decorative maps a
 
 Use icons only when they improve navigation or comprehension. Motion, where the web supports it, should explain a transition in the data and respect reduced-motion preferences. Never animate merely to signal modernity.
 
-The approved motion vocabulary (September 2026) is deliberately small: one orchestrated homepage entrance (kicker, chart and headline block rising 9px with a 60ms stagger, once per load), a 2px burgundy reading-progress rule on canonical editions, a 180ms origin-aware open for the mobile menu, 150ms colour eases on hover states, and one 3px forward step for CTA arrows. Every entrance sits behind `prefers-reduced-motion: no-preference`. The origins of this vocabulary are documented in [`DESIGN_INFLUENCES.md`](DESIGN_INFLUENCES.md).
+The approved motion vocabulary (September 2026) covers two passes. The first: one orchestrated homepage entrance (kicker, chart and headline block rising 9px with a 60ms stagger), a 2px burgundy reading-progress rule on canonical editions, a 180ms origin-aware open for the mobile menu, 150ms colour eases on hover states, and one 3px forward step for CTA arrows. The second (transitions.dev suite): masthead taglines cycling with a blur text-swap, provenance values popping in with a stagger, chart series drawing themselves and bars growing from zero, every page visit rising softly into place, a burgundy pill that glides between data-library categories, archive rows stepping toward the reader on hover, an arrow sliding into the subscribe pill, and archive rows revealing in stagger as they scroll into view. Everything sits behind `prefers-reduced-motion: no-preference`, and the global reduce override also zeroes delays and iteration counts so no content is ever hidden. The origins are documented in [`DESIGN_INFLUENCES.md`](DESIGN_INFLUENCES.md).
 
 ## 13. Pre-publication checklist
 
@@ -448,7 +447,7 @@ The approved motion vocabulary (September 2026) is deliberately small: one orche
 ### Design
 
 - [ ] Headings and labels use sentence case.
-- [ ] Besley and Public Sans are performing their defined roles.
+- [ ] Instrument Serif and Public Sans are performing their defined roles.
 - [ ] No gradient, glow, shadow, generic card or decorative pill has appeared.
 - [ ] Headline wrapping and prose measure are deliberate.
 - [ ] Focus states and contrast remain visible.
@@ -457,7 +456,7 @@ The approved motion vocabulary (September 2026) is deliberately small: one orche
 
 - [ ] Web edition passes at 320px, 360px and 390px.
 - [ ] Live production URL has been opened in current iOS Safari at 390px or narrower.
-- [ ] Besley roman, Besley italic and Public Sans return as local WOFF2 assets; no request is made to Google Fonts.
+- [ ] Instrument Serif roman, Instrument Serif italic and Public Sans return as local WOFF2 assets; no request is made to Google Fonts.
 - [ ] The exported chart is legible at 320px without zoom.
 - [ ] No information depends on hover.
 - [ ] Substack subject and preview text do different jobs.

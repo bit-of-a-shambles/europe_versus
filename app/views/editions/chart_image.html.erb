@@ -4,30 +4,30 @@
   <meta charset="utf-8">
   <style>
     @font-face {
-      font-family: "Besley";
+      font-family: "Instrument Serif";
       font-style: normal;
-      font-weight: 400 700;
-      src: url("<%= embedded_brand_font(:besley_roman_latin_ext) %>") format("woff2");
+      font-weight: 400;
+      src: url("<%= embedded_brand_font(:instrument_serif_roman_latin_ext) %>") format("woff2");
       unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
     }
     @font-face {
-      font-family: "Besley";
+      font-family: "Instrument Serif";
       font-style: normal;
-      font-weight: 400 700;
-      src: url("<%= embedded_brand_font(:besley_roman_latin) %>") format("woff2");
+      font-weight: 400;
+      src: url("<%= embedded_brand_font(:instrument_serif_roman_latin) %>") format("woff2");
       unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
     }
     @font-face {
       font-family: "Public Sans";
       font-style: normal;
-      font-weight: 400 700;
+      font-weight: 400;
       src: url("<%= embedded_brand_font(:public_sans_roman_latin_ext) %>") format("woff2");
       unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
     }
     @font-face {
       font-family: "Public Sans";
       font-style: normal;
-      font-weight: 400 700;
+      font-weight: 400;
       src: url("<%= embedded_brand_font(:public_sans_roman_latin) %>") format("woff2");
       unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
     }
@@ -35,10 +35,10 @@
     html, body { width: 1200px; height: <%= @chart.image_height %>px; margin: 0; overflow: hidden; }
     body { padding: 38px 50px 34px; background: #f3efe5; color: #1b1d1e; font-family: "Public Sans", sans-serif; }
     .image-brand { display: flex; justify-content: space-between; align-items: center; padding-bottom: 18px; border-bottom: 2px solid #1b1d1e; font-size: 30px; }
-    .image-brand strong { font-family: "Besley", Georgia, serif; font-size: 42px; font-weight: 600; letter-spacing: -1px; }
+    .image-brand strong { font-family: "Instrument Serif", Georgia, serif; font-size: 42px; font-weight: 400; letter-spacing: -1px; }
     .editorial-chart { margin: 34px 0 0; }
     .chart-heading { margin-bottom: 26px; }
-    .chart-heading h2 { max-width: 1080px; margin: 0; font-family: "Besley", Georgia, serif; font-size: 64px; font-weight: 500; letter-spacing: -1.8px; line-height: 1.04; }
+    .chart-heading h2 { max-width: 1080px; margin: 0; font-family: "Instrument Serif", Georgia, serif; font-size: 64px; font-weight: 400; letter-spacing: -1.8px; line-height: 1.04; }
     .chart-heading p { max-width: 1060px; margin: 10px 0 0; color: #67635d; font-size: 38px; line-height: 1.25; }
     .chart-heading .chart-key { margin-top: 14px; font-size: 36px; }
     .chart-kicker, .chart-issue { display: none; }
