@@ -187,7 +187,7 @@ class WorldBankDataService
 
       request = Net::HTTP::Get.new(uri)
       request["Accept"] = "application/json"
-      request["User-Agent"] = "EuropeVersus/1.0"
+      request["User-Agent"] = "Common Values/1.0"
 
       response = http.request(request)
 

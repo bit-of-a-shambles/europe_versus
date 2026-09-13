@@ -1,14 +1,11 @@
-<div class="max-w-7xl mx-auto px-6">
-  <!-- Hero Section -->
-  <section class="py-20 border-b-2 border-black">
-    <h1 class="text-6xl md:text-9xl font-black tracking-tighter mb-8">
-      METHOD<br>
-      <span class="text-[#0066FF]">OLOGY</span>
-    </h1>
-    <p class="text-xl text-black/60 max-w-2xl">
-      Understanding how we calculate Europe's aggregate statistics for accurate, transparent comparisons
-    </p>
-  </section>
+<% content_for :title, "Methodology — Common Values" %>
+
+<div class="methodology-page page-shell">
+  <header class="methodology-header">
+    <p class="kicker">Methodology</p>
+    <h1>Aggregates without hand-waving.</h1>
+    <p>How we define Europe, match every measure to its real denominator and disclose the limits of the underlying data.</p>
+  </header>
 
   <!-- Overview Section -->
   <section class="py-16 border-b-2 border-black">
@@ -22,9 +19,9 @@
           When comparing Europe with single countries like the USA, India, or China, we need a single aggregate number for Europe. 
           This requires careful calculation to ensure accuracy and fairness.
         </p>
-        <div class="border-l-2 border-[#0066FF] pl-6">
+        <div class="border-l-2 border-[#71394D] pl-6">
           <p class="text-black font-bold">The key principle:</p>
-          <p class="text-black/70">All metrics are <strong class="text-black">population-weighted</strong> to reflect the true European experience. A simple average would give Luxembourg the same weight as Germany, which wouldn't be representative.</p>
+          <p class="text-black/70">Every aggregate must match the metric’s real denominator. Per-person measures use population weights; totals are summed; rates based on hours, workers, energy or another denominator require that underlying quantity. Editions disclose the exact method and avoid an aggregate when the necessary denominator is unavailable.</p>
         </div>
       </div>
     </div>
@@ -41,12 +38,12 @@
       <div class="border-2 border-black p-8">
         <h3 class="font-mono text-sm uppercase tracking-brutal font-bold mb-6 pb-4 border-b border-black">Countries Included</h3>
         <p class="text-black/70 mb-6">
-          We include <strong class="text-[#0066FF]"><%= @european_countries.size %> European countries</strong> in our calculations, 
-          representing a total population of <strong class="text-[#0066FF]"><%= number_to_human(@population_data.dig(:countries, 'europe', :value) || 0, precision: 3, format: '%n%u', units: { million: 'M', billion: 'B' }) %> people</strong>.
+          We include <strong class="text-[#71394D]"><%= @european_countries.size %> European countries</strong> in our calculations,
+          representing a total population of <strong class="text-[#71394D]"><%= number_to_human(@population_data.dig(:countries, 'europe', :value) || 0, precision: 3, format: '%n%u', units: { million: 'M', billion: 'B' }) %> people</strong>.
         </p>
 
         <% if @coverage.present? %>
-          <div class="p-4 border-2 border-black mb-6 <%= @coverage[:with_both].size == @coverage[:total_european_countries] ? 'bg-[#F5F5F5]' : 'bg-[#FFCC00]/20' %>">
+          <div class="p-4 border-2 border-black mb-6 <%= @coverage[:with_both].size == @coverage[:total_european_countries] ? 'bg-[#E8E0D3]' : 'bg-[#FFCC00]/20' %>">
             <% total = @coverage[:total_european_countries] %>
             <% with_both = @coverage[:with_both].size %>
             <% missing_gdp = @coverage[:missing_gdp] %>
@@ -78,11 +75,11 @@
             <h4 class="font-mono text-xs uppercase tracking-brutal text-black/50 mb-4">Population Distribution</h4>
             <div class="space-y-1 max-h-80 overflow-y-auto">
               <% @european_countries_with_population.each do |country| %>
-                <div class="flex items-center justify-between py-2 border-b border-black/10 hover:bg-[#F5F5F5] transition-colors">
+                <div class="flex items-center justify-between py-2 border-b border-black/10 hover:bg-[#E8E0D3] transition-colors">
                   <span class="font-mono text-sm"><%= country[:name] %></span>
                   <div class="flex items-center gap-4">
                     <span class="font-mono text-xs text-black/50"><%= number_to_human(country[:population], precision: 2, format: '%n%u', units: { million: 'M', billion: 'B' }) %></span>
-                    <span class="font-mono text-xs font-bold text-[#0066FF] w-12 text-right"><%= number_to_percentage(country[:percentage], precision: 1) %></span>
+                    <span class="font-mono text-xs font-bold text-[#71394D] w-12 text-right"><%= number_to_percentage(country[:percentage], precision: 1) %></span>
                   </div>
                 </div>
               <% end %>
@@ -94,8 +91,8 @@
       <div class="border-2 border-black border-l-0 p-8">
         <h3 class="font-mono text-sm uppercase tracking-brutal font-bold mb-6 pb-4 border-b border-black">Why These Countries?</h3>
         <div class="space-y-6">
-          <div class="border-l-2 border-[#0066FF] pl-4">
-            <div class="font-mono text-xs uppercase tracking-brutal text-[#0066FF] mb-2">Geographic Definition</div>
+          <div class="border-l-2 border-[#71394D] pl-4">
+            <div class="font-mono text-xs uppercase tracking-brutal text-[#71394D] mb-2">Geographic Definition</div>
             <p class="text-sm text-black/60">All countries geographically located in Europe, including both EU and non-EU nations</p>
           </div>
           
@@ -129,11 +126,11 @@
           <!-- Legend -->
           <div class="flex justify-center gap-8 mt-4 pt-4 border-t border-black/20">
             <div class="flex items-center gap-2">
-              <div class="w-4 h-4 bg-[#0066FF] border border-black"></div>
+              <div class="w-4 h-4 bg-[#71394D] border border-black"></div>
               <span class="font-mono text-xs">European Countries (100%)</span>
             </div>
             <div class="flex items-center gap-2">
-              <div class="w-4 h-4 bg-[#0066FF]/75 border border-black"></div>
+              <div class="w-4 h-4 bg-[#71394D]/75 border border-black"></div>
               <span class="font-mono text-xs">Transcontinental (RU 77%, TR 14%, AZ 30%)</span>
             </div>
           </div>
@@ -161,7 +158,7 @@
       </div>
       
       <div class="bg-black text-white p-6 font-mono text-sm mb-8">
-        <div class="text-[#0066FF] text-xs uppercase tracking-brutal mb-2">Formula</div>
+        <div class="text-[#71394D] text-xs uppercase tracking-brutal mb-2">Formula</div>
         Europe Population = Σ(Population of each European country)
       </div>
 
@@ -169,7 +166,7 @@
         <div class="grid md:grid-cols-2 gap-0">
           <div class="border-2 border-black p-6">
             <div class="font-mono text-xs uppercase tracking-brutal text-black/50 mb-2">Total Europe Population (<%= @population_data[:year] %>)</div>
-            <div class="font-mono text-5xl font-bold text-[#0066FF]">
+            <div class="font-mono text-5xl font-bold text-[#71394D]">
               <%= number_with_delimiter((@population_data[:countries]['europe'][:value].to_i / 1_000_000.0).round(1)) %>M
             </div>
             <div class="font-mono text-xs text-black/40 mt-2">
@@ -187,14 +184,14 @@
         
         <% if @population_data[:european_countries] %>
           <details class="mt-6 group">
-            <summary class="cursor-pointer font-mono text-sm uppercase tracking-brutal hover:text-[#0066FF] transition-colors list-none flex items-center gap-2">
+            <summary class="cursor-pointer font-mono text-sm uppercase tracking-brutal hover:text-[#71394D] transition-colors list-none flex items-center gap-2">
               <span class="group-open:rotate-90 transition-transform">▶</span>
               View breakdown by country
             </summary>
             <div class="mt-4 grid md:grid-cols-3 gap-2 max-h-96 overflow-y-auto border-t-2 border-black pt-4">
               <% @population_data[:european_countries].sort.each do |country| %>
                 <% if @population_data[:countries][country] %>
-                  <div class="flex justify-between items-center p-2 bg-[#F5F5F5] font-mono text-xs">
+                  <div class="flex justify-between items-center p-2 bg-[#E8E0D3] font-mono text-xs">
                     <span><%= EuropeanCountriesHelper.country_name(country) %></span>
                     <span class="font-bold">
                       <%= number_with_delimiter((@population_data[:countries][country][:value].to_i / 1_000_000.0).round(1)) %>M
@@ -220,29 +217,29 @@
       
       <div class="space-y-2 mb-8">
         <div class="bg-black text-white p-4 font-mono text-sm">
-          <span class="text-[#0066FF]">Step 1:</span> Country Total GDP = GDP per capita × Population
+          <span class="text-[#71394D]">Step 1:</span> Country Total GDP = GDP per capita × Population
         </div>
         <div class="bg-black text-white p-4 font-mono text-sm">
-          <span class="text-[#0066FF]">Step 2:</span> Europe Total GDP = Σ(Country Total GDP)
+          <span class="text-[#71394D]">Step 2:</span> Europe Total GDP = Σ(Country Total GDP)
         </div>
         <div class="bg-black text-white p-4 font-mono text-sm">
-          <span class="text-[#0066FF]">Step 3:</span> Europe GDP per capita = Europe Total GDP ÷ Europe Population
+          <span class="text-[#71394D]">Step 3:</span> Europe GDP per capita = Europe Total GDP ÷ Europe Population
         </div>
       </div>
 
-      <div class="border-2 border-black p-6 bg-[#F5F5F5] mb-8">
+      <div class="border-2 border-black p-6 bg-[#E8E0D3] mb-8">
         <h4 class="font-mono text-sm uppercase tracking-brutal font-bold mb-4">Why Population-Weighted?</h4>
         <div class="space-y-3 text-sm text-black/70">
           <div class="flex items-start gap-3">
-            <span class="text-[#0066FF] font-bold">—</span>
+            <span class="text-[#71394D] font-bold">—</span>
             <span><strong class="text-black">Accurate representation:</strong> Reflects that Germany's economy affects more people than Luxembourg's</span>
           </div>
           <div class="flex items-start gap-3">
-            <span class="text-[#0066FF] font-bold">—</span>
+            <span class="text-[#71394D] font-bold">—</span>
             <span><strong class="text-black">Fair comparison:</strong> Comparable to how USA, China, and India report national averages</span>
           </div>
           <div class="flex items-start gap-3">
-            <span class="text-[#0066FF] font-bold">—</span>
+            <span class="text-[#71394D] font-bold">—</span>
             <span><strong class="text-black">Realistic picture:</strong> Shows the economic reality for the average European resident</span>
           </div>
         </div>
@@ -252,7 +249,7 @@
         <div class="grid md:grid-cols-2 gap-0 mb-8">
           <div class="border-2 border-black p-6">
             <div class="font-mono text-xs uppercase tracking-brutal text-black/50 mb-2">Europe GDP per Capita PPP (<%= @gdp_data[:year] %>)</div>
-            <div class="font-mono text-5xl font-bold text-[#0066FF]">
+            <div class="font-mono text-5xl font-bold text-[#71394D]">
               $<%= number_with_delimiter(@gdp_data[:countries]['europe'][:value].round(0)) %>
             </div>
             <div class="font-mono text-xs text-black/40 mt-2">
@@ -281,11 +278,11 @@
         <!-- Detailed Calculation -->
         <% if @gdp_data[:european_countries] && @population_data[:countries] %>
           <details class="border-2 border-black group">
-            <summary class="cursor-pointer p-4 font-mono text-sm uppercase tracking-brutal hover:bg-[#F5F5F5] transition-colors list-none flex items-center gap-2">
+            <summary class="cursor-pointer p-4 font-mono text-sm uppercase tracking-brutal hover:bg-[#E8E0D3] transition-colors list-none flex items-center gap-2">
               <span class="group-open:rotate-90 transition-transform">▶</span>
               View detailed calculation (All <%= @european_countries.size %> Countries)
             </summary>
-            <div class="p-6 border-t-2 border-black bg-[#F5F5F5]">
+            <div class="p-6 border-t-2 border-black bg-[#E8E0D3]">
               <% 
                 available_gdp_keys = (@gdp_data[:countries] || {}).keys
                 available_pop_keys = (@population_data[:countries] || {}).keys
@@ -315,12 +312,12 @@
                         pop = @population_data[:countries][country][:value]
                         weighted = gdp * pop
                       %>
-                      <div class="flex justify-between items-center py-1 border-b border-black/10 hover:bg-[#F5F5F5]">
+                      <div class="flex justify-between items-center py-1 border-b border-black/10 hover:bg-[#E8E0D3]">
                         <span class="text-black/40 w-6"><%= index + 1 %>.</span>
                         <span class="flex-grow"><%= EuropeanCountriesHelper.country_name(country) %></span>
                         <span class="text-right text-black/50">
                           $<%= number_with_delimiter(gdp.round(0)) %> × <%= number_to_human(pop, precision: 2) %> 
-                          = <span class="font-bold text-[#0066FF]">$<%= number_to_human(weighted, precision: 3, format: '%n%u', units: { thousand: 'K', million: 'M', billion: 'B', trillion: 'T' }) %></span>
+                          = <span class="font-bold text-[#71394D]">$<%= number_to_human(weighted, precision: 3, format: '%n%u', units: { thousand: 'K', million: 'M', billion: 'B', trillion: 'T' }) %></span>
                         </span>
                       </div>
                     <% end %>
@@ -331,7 +328,7 @@
                   <div class="text-black/50 uppercase tracking-brutal mb-2">Step 2: Sum</div>
                   <div>
                     Total weighted GDP: 
-                    <span class="font-bold text-[#0066FF]">
+                    <span class="font-bold text-[#71394D]">
                       $<%= number_to_human(@gdp_data[:total_weighted_gdp] || total_weighted_gdp, precision: 3, format: '%n%u', units: { thousand: 'K', million: 'M', billion: 'B', trillion: 'T', quadrillion: 'Q' }) %>
                     </span>
                   </div>
@@ -344,7 +341,7 @@
                     <div class="pt-2 border-t border-black">
                       $<%= number_to_human(@gdp_data[:total_weighted_gdp] || total_weighted_gdp, precision: 3, format: '%n%u', units: { quadrillion: 'Q', trillion: 'T' }) %> 
                       ÷ <%= number_to_human(@population_data.dig(:countries, 'europe', :value) || 0, precision: 3) %>
-                      = <span class="font-bold text-[#0066FF] text-lg">$<%= number_with_delimiter((@gdp_data.dig(:countries, 'europe', :value) || 0).round(0)) %></span>
+                      = <span class="font-bold text-[#71394D] text-lg">$<%= number_with_delimiter((@gdp_data.dig(:countries, 'europe', :value) || 0).round(0)) %></span>
                     </div>
                   </div>
                 </div>
@@ -366,7 +363,7 @@
       </div>
       
       <div class="bg-black text-white p-6 font-mono text-sm mb-8">
-        <div class="text-[#0066FF] text-xs uppercase tracking-brutal mb-2">Standard Formula</div>
+        <div class="text-[#71394D] text-xs uppercase tracking-brutal mb-2">Standard Formula</div>
         Europe Average = Σ(Country Value × Country Population) ÷ Europe Total Population
       </div>
 
@@ -374,7 +371,7 @@
         <% if @child_mortality_data && !@child_mortality_data[:error] && @child_mortality_data[:countries]['europe'] %>
           <div class="border-2 border-black p-6">
             <div class="font-mono text-xs uppercase tracking-brutal text-black/50 mb-2">Child Mortality Rate (<%= @child_mortality_data.dig(:countries, 'europe', :year) || '-' %>)</div>
-            <div class="font-mono text-4xl font-bold text-[#0066FF]">
+            <div class="font-mono text-4xl font-bold text-[#71394D]">
               <%= @child_mortality_data[:countries]['europe'][:value].round(2) %>%
             </div>
             <div class="font-mono text-xs text-black/40 mt-2">
@@ -386,7 +383,7 @@
         <% if @electricity_access_data && !@electricity_access_data[:error] && @electricity_access_data[:countries]['europe'] %>
           <div class="border-2 border-black <%= @child_mortality_data ? 'border-l-0' : '' %> p-6">
             <div class="font-mono text-xs uppercase tracking-brutal text-black/50 mb-2">Electricity Access (<%= @electricity_access_data.dig(:countries, 'europe', :year) || '-' %>)</div>
-            <div class="font-mono text-4xl font-bold text-[#0066FF]">
+            <div class="font-mono text-4xl font-bold text-[#71394D]">
               <%= @electricity_access_data[:countries]['europe'][:value].round(1) %>%
             </div>
             <div class="font-mono text-xs text-black/40 mt-2">
@@ -424,8 +421,8 @@
       <div class="border-2 border-black border-l-0 p-8">
         <h3 class="font-mono text-sm uppercase tracking-brutal font-bold mb-6 pb-4 border-b border-black">Our Solution</h3>
         <div class="space-y-6">
-          <div class="border-l-2 border-[#0066FF] pl-4">
-            <div class="font-mono text-xs uppercase tracking-brutal text-[#0066FF] mb-2">Forward-Fill</div>
+          <div class="border-l-2 border-[#71394D] pl-4">
+            <div class="font-mono text-xs uppercase tracking-brutal text-[#71394D] mb-2">Forward-Fill</div>
             <p class="text-sm text-black/60">
               When a country lacks data for a specific year, we use the most recent available value. 
               This assumes metrics change gradually rather than disappearing.
@@ -452,12 +449,12 @@
         <div>
           <h4 class="font-mono text-sm font-bold mb-4">In Charts</h4>
           <div class="space-y-4">
-            <div class="flex items-center gap-4 p-4 bg-[#F5F5F5]">
-              <div class="w-24 h-1 bg-[#0066FF]"></div>
+            <div class="flex items-center gap-4 p-4 bg-[#E8E0D3]">
+              <div class="w-24 h-1 bg-[#71394D]"></div>
               <span class="text-sm text-black/70"><strong>Solid line:</strong> ≥70% of European population has data for that year</span>
             </div>
-            <div class="flex items-center gap-4 p-4 bg-[#F5F5F5]">
-              <div class="w-24 h-0 border-t-2 border-dashed border-[#0066FF]"></div>
+            <div class="flex items-center gap-4 p-4 bg-[#E8E0D3]">
+              <div class="w-24 h-0 border-t-2 border-dashed border-[#71394D]"></div>
               <span class="text-sm text-black/70"><strong>Dotted line:</strong> <70% of population has data (incomplete)</span>
             </div>
           </div>
@@ -466,12 +463,12 @@
         <div>
           <h4 class="font-mono text-sm font-bold mb-4">In Data Tables</h4>
           <div class="space-y-4">
-            <div class="flex items-center gap-4 p-4 bg-[#F5F5F5]">
-              <span class="text-[#0066FF] font-bold font-mono">42,500</span>
+            <div class="flex items-center gap-4 p-4 bg-[#E8E0D3]">
+              <span class="text-[#71394D] font-bold font-mono">42,500</span>
               <span class="text-sm text-black/70">Normal value: Complete data</span>
             </div>
-            <div class="flex items-center gap-4 p-4 bg-[#F5F5F5]">
-              <span class="text-[#0066FF] font-bold font-mono border-b border-dashed border-current">42,500<sup class="text-xs">*</sup></span>
+            <div class="flex items-center gap-4 p-4 bg-[#E8E0D3]">
+              <span class="text-[#71394D] font-bold font-mono border-b border-dashed border-current">42,500<sup class="text-xs">*</sup></span>
               <span class="text-sm text-black/70">Asterisk: Incomplete data (<70% population coverage)</span>
             </div>
           </div>
@@ -480,7 +477,7 @@
     </div>
 
     <!-- Thresholds -->
-    <div class="border-2 border-black p-8 bg-[#F5F5F5]">
+    <div class="border-2 border-black p-8 bg-[#E8E0D3]">
       <h3 class="font-mono text-sm uppercase tracking-brutal font-bold mb-6">Coverage Thresholds</h3>
       <div class="grid md:grid-cols-3 gap-6">
         <div class="border-2 border-black bg-white p-6">
@@ -527,7 +524,7 @@
           Primary source for most metrics. A scientific online publication that focuses on large global problems.
         </p>
         <a href="https://ourworldindata.org" target="_blank" rel="noopener" 
-           class="inline-flex items-center gap-2 font-mono text-sm uppercase tracking-brutal underline underline-offset-4 hover:text-[#0066FF] transition-colors">
+           class="inline-flex items-center gap-2 font-mono text-sm uppercase tracking-brutal underline underline-offset-4 hover:text-[#71394D] transition-colors">
           ourworldindata.org
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
@@ -541,7 +538,7 @@
           UN agency for labour statistics. Source for employment, wages, and working conditions data.
         </p>
         <a href="https://ilostat.ilo.org" target="_blank" rel="noopener" 
-           class="inline-flex items-center gap-2 font-mono text-sm uppercase tracking-brutal underline underline-offset-4 hover:text-[#0066FF] transition-colors">
+           class="inline-flex items-center gap-2 font-mono text-sm uppercase tracking-brutal underline underline-offset-4 hover:text-[#71394D] transition-colors">
           ilostat.ilo.org
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
@@ -553,19 +550,19 @@
         <h3 class="font-mono text-sm uppercase tracking-brutal font-bold mb-6 pb-4 border-b border-black">Quality Standards</h3>
         <ul class="space-y-3 text-sm text-black/60">
           <li class="flex items-start gap-3">
-            <span class="text-[#0066FF] font-bold">—</span>
+            <span class="text-[#71394D] font-bold">—</span>
             <span>Data from peer-reviewed sources</span>
           </li>
           <li class="flex items-start gap-3">
-            <span class="text-[#0066FF] font-bold">—</span>
+            <span class="text-[#71394D] font-bold">—</span>
             <span>Regularly updated with latest figures</span>
           </li>
           <li class="flex items-start gap-3">
-            <span class="text-[#0066FF] font-bold">—</span>
+            <span class="text-[#71394D] font-bold">—</span>
             <span>Transparent methodology and sources</span>
           </li>
           <li class="flex items-start gap-3">
-            <span class="text-[#0066FF] font-bold">—</span>
+            <span class="text-[#71394D] font-bold">—</span>
             <span>Consistent definitions across countries</span>
           </li>
         </ul>
@@ -580,14 +577,14 @@
       <h2 class="text-4xl font-black tracking-tighter">OPEN SOURCE</h2>
     </div>
     
-    <div class="border-2 border-black p-8 bg-[#F5F5F5]">
+    <div class="border-2 border-black p-8 bg-[#E8E0D3]">
       <p class="text-lg text-black/70 mb-8 max-w-2xl">
         This project is <strong class="text-black">fully open source</strong>. You can review our code, data processing methods, 
         and contribute improvements on GitHub.
       </p>
       <div class="flex flex-wrap gap-4">
         <%= link_to "https://github.com/duartemartins/europeversus", target: "_blank", rel: "noopener",
-            class: "inline-flex items-center gap-4 bg-black text-white px-8 py-4 font-mono text-sm uppercase tracking-brutal hover:bg-[#0066FF] transition-colors" do %>
+            class: "inline-flex items-center gap-4 bg-black text-white px-8 py-4 font-mono text-sm uppercase tracking-brutal hover:bg-[#71394D] transition-colors" do %>
           <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
             <path fill-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" clip-rule="evenodd"></path>
           </svg>

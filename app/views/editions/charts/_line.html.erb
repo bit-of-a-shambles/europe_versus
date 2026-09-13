@@ -1,0 +1,44 @@
+<% { desktop: [1080, chart.desktop_height, chart.x_ticks, chart.y_ticks], mobile: [360, chart.mobile_height, chart.compact_x_ticks, chart.compact_y_ticks] }.each do |layout, dimensions| %>
+  <% width, height, x_ticks, y_ticks = dimensions %>
+  <% plot = layout == :desktop ? { left: 72, right: 890, top: 54, bottom: 532 } : { left: 38, right: 282, top: 28, bottom: 258 } %>
+  <% gap = chart.gap(layout: layout) %>
+  <svg class="editorial-chart-svg chart-<%= layout %>" viewBox="0 0 <%= width %> <%= height %>" role="img" aria-labelledby="chart-title-<%= edition.slug %>-<%= layout %> chart-desc-<%= edition.slug %>-<%= layout %>">
+    <title id="chart-title-<%= edition.slug %>-<%= layout %>"><%= edition.chart.fetch("title") %></title>
+    <desc id="chart-desc-<%= edition.slug %>-<%= layout %>"><%= edition.chart.fetch("description") %></desc>
+
+    <% y_ticks.each do |tick| %>
+      <line class="chart-gridline" x1="<%= plot[:left] %>" x2="<%= plot[:right] %>" y1="<%= chart.y(tick, layout: layout) %>" y2="<%= chart.y(tick, layout: layout) %>" />
+      <text class="chart-axis-label" x="<%= plot[:left] - (layout == :desktop ? 14 : 7) %>" y="<%= chart.y(tick, layout: layout) + 5 %>" text-anchor="end"><%= chart.formatted_tick(tick) %></text>
+    <% end %>
+
+    <% x_ticks.each do |tick| %>
+      <line class="chart-tick" x1="<%= chart.x(tick, layout: layout) %>" x2="<%= chart.x(tick, layout: layout) %>" y1="<%= plot[:bottom] %>" y2="<%= plot[:bottom] + 7 %>" />
+      <text class="chart-axis-label" x="<%= chart.x(tick, layout: layout) %>" y="<%= plot[:bottom] + (layout == :desktop ? 34 : 24) %>" text-anchor="middle"><%= tick %></text>
+    <% end %>
+
+    <path class="chart-gap-area" d="<%= chart.gap_area_path(layout: layout) %>" />
+
+    <% chart.series.each do |series| %>
+      <path class="chart-series-line" d="<%= chart.path_for(series, layout: layout) %>" stroke="<%= series.color %>" />
+      <% latest = chart.latest_value(series) %>
+      <% if latest %>
+        <circle cx="<%= chart.x(chart.latest_year(series), layout: layout) %>" cy="<%= chart.y(latest, layout: layout) %>" r="<%= layout == :desktop ? 6 : 3.5 %>" fill="<%= series.color %>" />
+        <text class="chart-direct-label" x="<%= layout == :desktop ? 916 : 271 %>" y="<%= chart.y(latest, layout: layout) - (layout == :desktop ? 4 : 2) %>" fill="<%= series.color %>" text-anchor="<%= layout == :desktop ? 'start' : 'end' %>"><%= series.label %></text>
+        <text class="chart-direct-value" x="<%= layout == :desktop ? 916 : 271 %>" y="<%= chart.y(latest, layout: layout) + (layout == :desktop ? 23 : 15) %>" fill="<%= series.color %>" text-anchor="<%= layout == :desktop ? 'start' : 'end' %>"><%= chart.formatted_value(latest) %></text>
+      <% end %>
+    <% end %>
+
+    <% if gap %>
+      <% bracket_x = layout == :desktop ? 866 : 273 %>
+      <line class="gap-bracket" x1="<%= bracket_x %>" x2="<%= bracket_x %>" y1="<%= gap[:y1] %>" y2="<%= gap[:y2] %>" />
+      <line class="gap-bracket" x1="<%= bracket_x - 6 %>" x2="<%= bracket_x + 6 %>" y1="<%= gap[:y1] %>" y2="<%= gap[:y1] %>" />
+      <line class="gap-bracket" x1="<%= bracket_x - 6 %>" x2="<%= bracket_x + 6 %>" y1="<%= gap[:y2] %>" y2="<%= gap[:y2] %>" />
+      <% if layout == :desktop %>
+        <text class="gap-label" x="848" y="<%= (gap[:y1] + gap[:y2]) / 2 - 4 %>" text-anchor="end"><%= gap[:label] %></text>
+        <text class="gap-label-sub" x="848" y="<%= (gap[:y1] + gap[:y2]) / 2 + 15 %>" text-anchor="end"><%= gap[:sublabel] %></text>
+      <% end %>
+    <% end %>
+
+    <text class="chart-unit-label" x="<%= plot[:left] %>" y="<%= layout == :desktop ? 25 : 14 %>"><%= edition.chart.fetch("unit_label", "International $ / hour") %></text>
+  </svg>
+<% end %>

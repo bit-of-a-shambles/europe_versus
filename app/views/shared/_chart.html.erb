@@ -142,7 +142,7 @@
   <!-- Chart Container (for export) -->
   <div data-chart-target="container" class="border-2 border-black bg-white">
     <!-- Chart Title Bar -->
-    <div class="border-b-2 border-black px-3 md:px-6 py-3 md:py-4 bg-[#F5F5F5]">
+    <div class="border-b-2 border-black px-3 md:px-6 py-3 md:py-4 bg-[#E8E0D3]">
       <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2">
         <div class="flex-1 min-w-0">
           <h3 class="text-base md:text-xl lg:text-2xl font-black tracking-tight uppercase truncate"><%= metric_name.to_s.humanize.titleize %></h3>
@@ -151,7 +151,7 @@
               <%= title %>
             </p>
           <% end %>
-          <p class="font-mono text-[10px] md:text-xs text-black/60 mt-1 md:mt-2">Source: EuropeVersus.com • <%= source %></p>
+          <p class="font-mono text-[10px] md:text-xs text-black/60 mt-1 md:mt-2">Source: Common Values • <%= source %></p>
         </div>
         <div class="font-mono text-[10px] md:text-xs text-black/60 hidden sm:block flex-shrink-0">
           europeversus.com
@@ -182,7 +182,7 @@
           <button data-chart-target="modeToggle"
                   data-mode="absolute"
                   data-action="click->chart#toggleMode"
-                  class="font-mono text-[10px] md:text-xs uppercase tracking-brutal px-2 md:px-4 py-1.5 md:py-2 border-2 border-black md:border-r-0 bg-black text-white hover:bg-[#0066FF] hover:border-[#0066FF] transition-colors">
+                  class="font-mono text-[10px] md:text-xs uppercase tracking-brutal px-2 md:px-4 py-1.5 md:py-2 border-2 border-black md:border-r-0 bg-black text-white hover:bg-[#71394D] hover:border-[#71394D] transition-colors">
             Absolute
           </button>
           <button data-chart-target="modeToggle"
@@ -286,7 +286,7 @@
         <summary class="flex items-center justify-between cursor-pointer list-none">
           <div class="flex items-center gap-2 md:gap-3">
             <span class="font-mono text-[10px] md:text-xs uppercase tracking-brutal font-bold">Select Countries</span>
-            <span data-chart-target="selectionCount" class="font-mono text-[10px] md:text-xs bg-[#0066FF] text-white px-1.5 md:px-2 py-0.5">4 selected</span>
+            <span data-chart-target="selectionCount" class="font-mono text-[10px] md:text-xs bg-[#71394D] text-white px-1.5 md:px-2 py-0.5">4 selected</span>
           </div>
           <svg class="w-4 h-4 md:w-5 md:h-5 transition-transform group-open:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
@@ -300,13 +300,13 @@
                 <h4 class="font-mono text-[10px] md:text-xs uppercase tracking-brutal text-black/60 mb-2 md:mb-3 pb-1.5 md:pb-2 border-b border-black/20"><%= group_name %></h4>
                 <div class="space-y-0.5 md:space-y-1">
                   <% countries.each do |country| %>
-                    <label class="flex items-center gap-1.5 md:gap-2 cursor-pointer hover:bg-[#F5F5F5] px-1.5 md:px-2 py-0.5 md:py-1 -mx-1.5 md:-mx-2 transition-colors">
+                    <label class="flex items-center gap-1.5 md:gap-2 cursor-pointer hover:bg-[#E8E0D3] px-1.5 md:px-2 py-0.5 md:py-1 -mx-1.5 md:-mx-2 transition-colors">
                       <input type="checkbox" 
                              data-chart-target="countryCheckbox"
                              data-country="<%= country[:key] %>"
                              data-category="<%= country[:category] %>"
                              data-action="change->chart#toggleCountry"
-                             class="w-3.5 h-3.5 md:w-4 md:h-4 border-2 border-black accent-[#0066FF]"
+                             class="w-3.5 h-3.5 md:w-4 md:h-4 border-2 border-black accent-[#71394D]"
                              <%= ['europe', 'usa', 'china', 'india'].include?(country[:key]) ? 'checked' : '' %>>
                       <span class="text-sm md:text-base"><%= country[:flag] %></span>
                       <span class="font-mono text-[10px] md:text-xs"><%= country[:name] %></span>

@@ -75,7 +75,7 @@
 <div class="max-w-7xl mx-auto px-6">
   <!-- Navigation -->
   <div class="py-8 border-b-2 border-black">
-    <%= link_to statistics_path, class: "inline-flex items-center font-mono text-sm uppercase tracking-brutal hover:text-[#0066FF] transition-colors group" do %>
+    <%= link_to statistics_path, class: "inline-flex items-center font-mono text-sm uppercase tracking-brutal hover:text-[#71394D] transition-colors group" do %>
       <svg class="w-4 h-4 mr-3 group-hover:-translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
       </svg>
@@ -98,7 +98,7 @@
     <h1 class="text-5xl md:text-7xl font-black tracking-tighter mb-8 uppercase"><%= @statistic&.metric || @chart_name&.humanize %></h1>
     
     <% if @statistic&.description.present? %>
-      <div class="border-l-2 border-[#0066FF] pl-6 max-w-2xl">
+      <div class="border-l-2 border-[#71394D] pl-6 max-w-2xl">
         <p class="text-lg text-black/70 leading-relaxed"><%= @statistic.description %></p>
       </div>
     <% end %>
@@ -141,7 +141,7 @@
           latest_country_year = country_data.keys.max
           value = latest_country_year ? country_data[latest_country_year] : nil
         %>
-        <div class="border-2 border-black p-6 <%= index > 0 ? 'border-l-0' : '' %> <%= region[:highlight] ? 'bg-[#0066FF] text-white' : '' %>">
+        <div class="border-2 border-black p-6 <%= index > 0 ? 'border-l-0' : '' %> <%= region[:highlight] ? 'bg-[#71394D] text-white' : '' %>">
           <div class="flex items-center gap-3 mb-4">
             <span class="text-2xl"><%= region[:flag] %></span>
             <div>
@@ -168,7 +168,7 @@
       
       <!-- Filter Controls -->
       <div class="flex flex-wrap gap-2">
-        <button data-filter="all" class="filter-btn active font-mono text-xs uppercase tracking-brutal px-4 py-2 border-2 border-black bg-black text-white hover:bg-[#0066FF] hover:border-[#0066FF] transition-colors">
+        <button data-filter="all" class="filter-btn active font-mono text-xs uppercase tracking-brutal px-4 py-2 border-2 border-black bg-black text-white hover:bg-[#71394D] hover:border-[#71394D] transition-colors">
           All
         </button>
         <button data-filter="eu-27" class="filter-btn font-mono text-xs uppercase tracking-brutal px-4 py-2 border-2 border-black bg-white hover:bg-black hover:text-white transition-colors">
@@ -196,8 +196,8 @@
       <div class="overflow-x-auto border-2 border-black">
         <table class="w-full">
           <thead>
-            <tr class="border-b-2 border-black bg-[#F5F5F5]">
-              <th class="sticky left-0 z-10 bg-[#F5F5F5] text-left py-3 px-4 font-mono text-xs uppercase tracking-brutal border-r-2 border-black">Year</th>
+            <tr class="border-b-2 border-black bg-[#E8E0D3]">
+              <th class="sticky left-0 z-10 bg-[#E8E0D3] text-left py-3 px-4 font-mono text-xs uppercase tracking-brutal border-r-2 border-black">Year</th>
               <% key_countries.each do |country| %>
                 <th class="country-column text-right py-3 px-4 font-mono text-xs uppercase tracking-brutal whitespace-nowrap" 
                     data-category="<%= country[:category] %>" 
@@ -209,7 +209,7 @@
           </thead>
           <tbody>
             <% @chart_data[:years].sort.reverse.first(15).each_with_index do |year, row_idx| %>
-              <tr class="border-b border-black/20 hover:bg-[#F5F5F5] transition-colors">
+              <tr class="border-b border-black/20 hover:bg-[#E8E0D3] transition-colors">
                 <td class="sticky left-0 z-10 bg-white py-3 px-4 font-mono text-sm font-bold border-r-2 border-black"><%= year %></td>
                 <% key_countries.each do |country| %>
                   <% 
@@ -223,7 +223,7 @@
                       data-country="<%= country[:key] %>"
                       <% if is_incomplete %>title="<%= (coverage * 100).round(0) %>% data coverage - some countries using forward-filled values"<% end %>>
                     <% if value %>
-                      <span class="<%= country[:category] == 'aggregates' || country[:key] == 'europe' ? 'text-[#0066FF] font-bold' : '' %> <%= is_incomplete ? 'border-b border-dashed border-current' : '' %>">
+                      <span class="<%= country[:category] == 'aggregates' || country[:key] == 'europe' ? 'text-[#71394D] font-bold' : '' %> <%= is_incomplete ? 'border-b border-dashed border-current' : '' %>">
                         <%= format_value_with_unit(value, @chart_data&.dig(:metadata, :unit) || @statistic&.unit, decimals: 1) %><% if is_incomplete %><sup class="text-xs ml-0.5">*</sup><% end %>
                       </span>
                     <% else %>
@@ -260,7 +260,7 @@
       # Get values from chart data for comparison bars
       latest_year = @chart_data[:years]&.max if @chart_data
       bar_regions = [
-        { key: 'europe', flag: '🇪🇺', name: 'Europe', color: 'bg-[#0066FF]', highlight: true },
+        { key: 'europe', flag: '🇪🇺', name: 'Europe', color: 'bg-[#71394D]', highlight: true },
         { key: 'usa', flag: '🇺🇸', name: 'USA', color: 'bg-black' },
         { key: 'india', flag: '🇮🇳', name: 'India', color: 'bg-black/70' },
         { key: 'china', flag: '🇨🇳', name: 'China', color: 'bg-black/50' }
@@ -279,11 +279,11 @@
             <span class="font-mono text-sm uppercase tracking-brutal <%= region[:highlight] ? 'font-bold' : '' %>">
               <%= region[:flag] %> <%= region[:name] %>
             </span>
-            <span class="font-mono text-lg font-bold <%= region[:highlight] ? 'text-[#0066FF]' : '' %>">
+            <span class="font-mono text-lg font-bold <%= region[:highlight] ? 'text-[#71394D]' : '' %>">
               <%= format_value_with_unit(region[:value], @chart_data&.dig(:metadata, :unit) || @statistic&.unit, decimals: 2) %>
             </span>
           </div>
-          <div class="w-full h-10 bg-[#F5F5F5] border-2 border-black">
+          <div class="w-full h-10 bg-[#E8E0D3] border-2 border-black">
             <% percentage = (region[:value] / max_value * 100).round(1) %>
             <div class="<%= region[:color] %> h-full transition-all duration-700 flex items-center justify-end pr-4" 
                  style="width: <%= percentage %>%">
@@ -307,7 +307,7 @@
         <div class="border-2 border-black p-6">
           <div class="font-mono text-xs uppercase tracking-brutal text-black/50 mb-4">EUR vs USA</div>
           <% diff_us = ((@statistic.europe_value - @statistic.us_value) / @statistic.us_value * 100).round(1) %>
-          <div class="font-mono text-3xl md:text-4xl font-bold <%= diff_us >= 0 ? 'text-[#0066FF]' : 'text-black' %>">
+          <div class="font-mono text-3xl md:text-4xl font-bold <%= diff_us >= 0 ? 'text-[#71394D]' : 'text-black' %>">
             <%= diff_us >= 0 ? '+' : '' %><%= diff_us %>%
           </div>
         </div>
@@ -317,7 +317,7 @@
         <div class="border-2 border-black border-l-0 p-6">
           <div class="font-mono text-xs uppercase tracking-brutal text-black/50 mb-4">EUR vs IND</div>
           <% diff_india = ((@statistic.europe_value - @statistic.india_value) / @statistic.india_value * 100).round(1) %>
-          <div class="font-mono text-3xl md:text-4xl font-bold <%= diff_india >= 0 ? 'text-[#0066FF]' : 'text-black' %>">
+          <div class="font-mono text-3xl md:text-4xl font-bold <%= diff_india >= 0 ? 'text-[#71394D]' : 'text-black' %>">
             <%= diff_india >= 0 ? '+' : '' %><%= diff_india %>%
           </div>
         </div>
@@ -327,7 +327,7 @@
         <div class="border-2 border-black border-l-0 p-6">
           <div class="font-mono text-xs uppercase tracking-brutal text-black/50 mb-4">EUR vs CHN</div>
           <% diff_china = ((@statistic.europe_value - @statistic.china_value) / @statistic.china_value * 100).round(1) %>
-          <div class="font-mono text-3xl md:text-4xl font-bold <%= diff_china >= 0 ? 'text-[#0066FF]' : 'text-black' %>">
+          <div class="font-mono text-3xl md:text-4xl font-bold <%= diff_china >= 0 ? 'text-[#71394D]' : 'text-black' %>">
             <%= diff_china >= 0 ? '+' : '' %><%= diff_china %>%
           </div>
         </div>
@@ -340,7 +340,7 @@
       %>
         <div class="border-2 border-black border-l-0 p-6">
           <div class="font-mono text-xs uppercase tracking-brutal text-black/50 mb-4">Best Performer</div>
-          <div class="font-mono text-3xl md:text-4xl font-bold <%= best == 'EU' ? 'text-[#0066FF]' : 'text-black' %>"><%= best %></div>
+          <div class="font-mono text-3xl md:text-4xl font-bold <%= best == 'EU' ? 'text-[#71394D]' : 'text-black' %>"><%= best %></div>
         </div>
       <% end %>
     </div>

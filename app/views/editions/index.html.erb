@@ -1,0 +1,11 @@
+<% content_for :title, "Archive — Common Values" %>
+
+<header class="archive-header page-shell">
+  <p class="kicker">Every edition</p>
+  <h1>One chart.<br>Once a week.</h1>
+  <p class="archive-intro">A growing visual record of Europe’s progress, weaknesses and choices—reported from the underlying data.</p>
+</header>
+
+<section class="archive-page page-shell" aria-label="Edition archive">
+  <%= render "archive_list", editions: @editions %>
+</section>

@@ -1,0 +1,70 @@
+<article class="edition">
+  <header class="edition-header page-shell">
+    <div class="edition-index">
+      <span>Issue <%= edition.issue_number.to_s.rjust(2, "0") %></span>
+      <span><%= edition.category %></span>
+      <time datetime="<%= edition.published_at.iso8601 %>"><%= edition.published_at.strftime("%d %B %Y") %></time>
+    </div>
+
+    <h1><%= edition.title %></h1>
+    <p class="edition-dek"><%= edition.dek %></p>
+  </header>
+
+  <section class="chart-field" aria-label="This week’s chart">
+    <div class="page-shell chart-field-inner">
+      <%= render "editions/chart", edition: edition, chart: chart %>
+    </div>
+  </section>
+
+  <div class="edition-story page-shell">
+    <aside class="story-rail" aria-label="Edition details">
+      <div>
+        <span class="rail-label">Geography</span>
+        <p><%= edition.geography %></p>
+      </div>
+      <div>
+        <span class="rail-label">Measure</span>
+        <p><%= edition.chart.fetch("measure") %></p>
+      </div>
+      <div>
+        <span class="rail-label">Get the numbers</span>
+        <%= link_to "Download CSV", edition_data_path(edition.slug) %>
+      </div>
+    </aside>
+
+    <div class="story-copy">
+      <%= edition.render_html %>
+    </div>
+  </div>
+
+  <section class="source-drawer page-shell" aria-labelledby="source-heading">
+    <div class="source-title">
+      <p class="kicker">Evidence record</p>
+      <h2 id="source-heading">Source and method</h2>
+    </div>
+    <div class="source-details">
+      <dl>
+        <div>
+          <dt><%= edition.sources.one? ? "Source" : "Sources" %></dt>
+          <dd>
+            <ul class="source-list">
+              <% edition.sources.each do |source| %>
+                <li><a href="<%= source.fetch("url") %>"><%= source.fetch("name") %> ↗</a></li>
+              <% end %>
+            </ul>
+          </dd>
+        </div>
+        <div><dt>Accessed</dt><dd><%= edition.sources.map { |source| source.fetch("accessed") }.uniq.join(", ") %></dd></div>
+        <div><dt>Geography</dt><dd><%= edition.geography %></dd></div>
+      </dl>
+      <p><%= edition.methodology %></p>
+    </div>
+  </section>
+
+  <section class="edition-cta page-shell">
+    <p class="kicker">Every Friday</p>
+    <h2>The next chart goes straight to your inbox.</h2>
+    <% substack_url = ENV.fetch("SUBSTACK_PUBLICATION_URL", editions_path) %>
+    <a class="text-link" href="<%= substack_url %>">Get the weekly chart <span class="link-arrow" aria-hidden="true">→</span></a>
+  </section>
+</article>

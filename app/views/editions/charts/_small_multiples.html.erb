@@ -1,0 +1,34 @@
+<% { desktop: [1080, chart.desktop_height], mobile: [360, chart.mobile_height] }.each do |layout, dimensions| %>
+  <% width, height = dimensions %>
+  <svg class="editorial-chart-svg chart-<%= layout %>" viewBox="0 0 <%= width %> <%= height %>" role="img" aria-labelledby="chart-title-<%= edition.slug %>-<%= layout %> chart-desc-<%= edition.slug %>-<%= layout %>">
+    <title id="chart-title-<%= edition.slug %>-<%= layout %>"><%= edition.chart.fetch("title") %></title>
+    <desc id="chart-desc-<%= edition.slug %>-<%= layout %>"><%= edition.chart.fetch("description") %></desc>
+
+    <% chart.series.each_with_index do |series, index| %>
+      <% panel = chart.small_panel(index, layout: layout) %>
+      <% latest = chart.latest_value(series) %>
+      <% first = series.values.values.first %>
+      <% change = latest - first %>
+      <text class="chart-panel-title" x="<%= panel[:left] %>" y="<%= panel[:top] - (layout == :desktop ? 13 : 9) %>"><%= series.label %></text>
+      <text class="chart-panel-change" x="<%= panel[:right] %>" y="<%= panel[:top] - (layout == :desktop ? 13 : 9) %>" text-anchor="end"><%= format('%+.2f', change) %> since 1990</text>
+
+      <% edition.chart.fetch("y_ticks").each do |tick| %>
+        <% if tick.to_f == edition.chart.fetch("reference_value").to_f %>
+          <line class="chart-reference-line" x1="<%= panel[:left] %>" x2="<%= panel[:right] %>" y1="<%= chart.small_y(index, tick, layout: layout) %>" y2="<%= chart.small_y(index, tick, layout: layout) %>" />
+        <% end %>
+        <text class="chart-axis-label" x="<%= panel[:left] - (layout == :desktop ? 10 : 5) %>" y="<%= chart.small_y(index, tick, layout: layout) + 4 %>" text-anchor="end"><%= format('%.1f', tick) %></text>
+      <% end %>
+      <% if index.zero? %>
+        <text class="chart-reference-label" x="<%= panel[:left] + 6 %>" y="<%= chart.small_y(index, edition.chart.fetch('reference_value'), layout: layout) + (layout == :desktop ? 17 : 12) %>">Approx. replacement level</text>
+      <% end %>
+
+      <path class="chart-series-line" d="<%= chart.small_path_for(series, index, layout: layout) %>" stroke="<%= series.color %>" />
+      <circle cx="<%= chart.small_x(index, chart.latest_year(series), layout: layout) %>" cy="<%= chart.small_y(index, latest, layout: layout) %>" r="<%= layout == :desktop ? 6 : 3.5 %>" fill="<%= series.color %>" />
+      <text class="chart-value-label" x="<%= chart.small_x(index, chart.latest_year(series), layout: layout) - 5 %>" y="<%= chart.small_y(index, latest, layout: layout) - (layout == :desktop ? 10 : 6) %>" text-anchor="end"><%= chart.formatted_value(latest) %></text>
+
+      <% [chart.start_year, chart.end_year].each do |year| %>
+        <text class="chart-axis-label" x="<%= chart.small_x(index, year, layout: layout) %>" y="<%= panel[:bottom] + (layout == :desktop ? 24 : 16) %>" text-anchor="<%= year == chart.start_year ? 'start' : 'end' %>"><%= year %></text>
+      <% end %>
+    <% end %>
+  </svg>
+<% end %>

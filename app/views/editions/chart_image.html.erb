@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <style>
+    @font-face {
+      font-family: "Besley";
+      font-style: normal;
+      font-weight: 400 700;
+      src: url("<%= embedded_brand_font(:besley_roman_latin_ext) %>") format("woff2");
+      unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+    }
+    @font-face {
+      font-family: "Besley";
+      font-style: normal;
+      font-weight: 400 700;
+      src: url("<%= embedded_brand_font(:besley_roman_latin) %>") format("woff2");
+      unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+    }
+    @font-face {
+      font-family: "Public Sans";
+      font-style: normal;
+      font-weight: 400 700;
+      src: url("<%= embedded_brand_font(:public_sans_roman_latin_ext) %>") format("woff2");
+      unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+    }
+    @font-face {
+      font-family: "Public Sans";
+      font-style: normal;
+      font-weight: 400 700;
+      src: url("<%= embedded_brand_font(:public_sans_roman_latin) %>") format("woff2");
+      unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+    }
+    * { box-sizing: border-box; }
+    html, body { width: 1200px; height: <%= @chart.image_height %>px; margin: 0; overflow: hidden; }
+    body { padding: 38px 50px 34px; background: #f3efe5; color: #1b1d1e; font-family: "Public Sans", sans-serif; }
+    .image-brand { display: flex; justify-content: space-between; align-items: center; padding-bottom: 18px; border-bottom: 2px solid #1b1d1e; font-size: 30px; }
+    .image-brand strong { font-family: "Besley", Georgia, serif; font-size: 42px; font-weight: 600; letter-spacing: -1px; }
+    .editorial-chart { margin: 34px 0 0; }
+    .chart-heading { margin-bottom: 26px; }
+    .chart-heading h2 { max-width: 1080px; margin: 0; font-family: "Besley", Georgia, serif; font-size: 64px; font-weight: 500; letter-spacing: -1.8px; line-height: 1.04; }
+    .chart-heading p { max-width: 1060px; margin: 10px 0 0; color: #67635d; font-size: 38px; line-height: 1.25; }
+    .chart-heading .chart-key { margin-top: 14px; font-size: 36px; }
+    .chart-kicker, .chart-issue { display: none; }
+    .chart-scroll { overflow: visible; }
+    .chart-desktop { display: none; }
+    .editorial-chart-svg.chart-mobile { display: block; width: 100%; min-width: 0; height: auto; overflow: visible; }
+    .chart-gridline { stroke: rgba(18,18,18,.17); stroke-width: 1; }
+    .chart-tick, .chart-axis-line, .chart-zero-line { stroke: #1b1d1e; stroke-width: 1; }
+    .chart-axis-label { fill: #67635d; font-family: "Public Sans", sans-serif; font-size: 11px; }
+    .chart-unit-label, .chart-axis-title { fill: #67635d; font-family: "Public Sans", sans-serif; font-size: 10px; font-weight: 500; }
+    .chart-gap-area { fill: rgba(113,57,77,.08); }
+    .chart-series-line { fill: none; stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; }
+    .chart-direct-label { font-family: "Public Sans", sans-serif; font-size: 11px; font-weight: 600; }
+    .chart-direct-value { font-family: "Public Sans", sans-serif; font-size: 13px; font-weight: 600; }
+    .gap-bracket { stroke: #1b1d1e; stroke-width: 1.5; }
+    .chart-category-label, .chart-value-label, .chart-point-label, .chart-panel-title, .chart-panel-change, .chart-reference-label { fill: #1b1d1e; font-family: "Public Sans", sans-serif; }
+    .chart-category-label { font-size: 11px; }
+    .chart-category-label.is-highlight { font-weight: 600; }
+    .chart-ranked-bar { opacity: .72; }
+    .chart-ranked-bar.is-highlight { opacity: 1; }
+    .chart-ranked-value { fill: #67635d; font-family: "Public Sans", sans-serif; font-size: 10px; font-variant-numeric: tabular-nums; }
+    .chart-ranked-value.is-highlight { fill: #1b1d1e; font-weight: 600; }
+    .chart-change-line { stroke: #67635d; stroke-width: 2; opacity: .72; }
+    .chart-change-line.is-highlight { stroke: #71394d; stroke-width: 3; opacity: 1; }
+    .chart-hollow-dot { fill: #f3efe5; stroke: #67635d; stroke-width: 2; }
+    .chart-hollow-dot.is-highlight { stroke: #71394d; }
+    .chart-solid-dot { fill: #1b1d1e; }
+    .chart-solid-dot.is-highlight, .chart-point.is-highlight { fill: #71394d; }
+    .chart-value-label, .chart-point-label { font-size: 10px; font-weight: 500; }
+    .chart-value-start, .chart-panel-change, .chart-reference-label { fill: #67635d; }
+    .chart-trend-line, .chart-reference-line { stroke: #67635d; stroke-width: 1.5; stroke-dasharray: 4 5; opacity: .55; }
+    .chart-point { fill: #67635d; opacity: .62; }
+    .chart-point-label.is-highlight { fill: #71394d; font-weight: 600; }
+    .chart-panel-title { font-size: 13px; font-weight: 600; }
+    .chart-panel-change { font-size: 10px; }
+    .chart-reference-label { font-size: 9px; }
+    .chart-footer { display: block; padding-top: 18px; border-top: 2px solid rgba(27,29,30,.24); color: #67635d; font-size: 34px; line-height: 1.25; }
+    .chart-footer p { margin: 0; }
+    .chart-footer p + p { margin-top: 8px; }
+  </style>
+</head>
+<body>
+  <div class="image-brand"><strong>Common Values</strong><span>Issue <%= @edition.issue_number.to_s.rjust(2, "0") %> · <%= @edition.published_at.strftime("%d %b %Y") %></span></div>
+  <%= render "editions/chart", edition: @edition, chart: @chart %>
+</body>
+</html>

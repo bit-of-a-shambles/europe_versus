@@ -1,0 +1,56 @@
+<figure class="editorial-chart headline-chart">
+  <figcaption class="headline-chart-caption">
+    <h2><%= edition.chart.fetch("title") %></h2>
+    <p><%= edition.chart.fetch("subtitle") %></p>
+  </figcaption>
+
+  <% if chart.empty? %>
+    <div class="chart-empty">The chart data is being refreshed.</div>
+  <% elsif chart.type == "ranked_bar" %>
+    <svg class="headline-chart-svg" viewBox="0 0 640 340" role="img" aria-labelledby="lead-chart-title lead-chart-desc">
+      <title id="lead-chart-title"><%= edition.chart.fetch("title") %></title>
+      <desc id="lead-chart-desc"><%= edition.chart.fetch("description") %></desc>
+      <% zero_x = chart.homepage_ranked_x(0) %>
+      <% chart.ranked_bar_ticks.each do |tick| %>
+        <line class="chart-gridline" x1="<%= chart.homepage_ranked_x(tick) %>" x2="<%= chart.homepage_ranked_x(tick) %>" y1="18" y2="304" />
+        <text class="headline-axis-label" x="<%= chart.homepage_ranked_x(tick) %>" y="328" text-anchor="middle"><%= chart.formatted_tick(tick) %></text>
+      <% end %>
+      <% chart.homepage_series.each_with_index do |series, index| %>
+        <% value = chart.ranked_value(series) %>
+        <% value_x = chart.homepage_ranked_x(value) %>
+        <% row_y = chart.homepage_ranked_y(index) %>
+        <text class="headline-ranked-label <%= 'is-highlight' if series.highlight %>" x="126" y="<%= row_y + 5 %>" text-anchor="end"><%= series.label %></text>
+        <rect class="headline-ranked-bar" x="<%= [zero_x, value_x].min %>" y="<%= row_y - 8 %>" width="<%= [(value_x - zero_x).abs, 1].max %>" height="16" fill="<%= series.color %>" />
+        <text class="headline-ranked-value <%= 'is-highlight' if series.highlight %>" x="<%= value.negative? ? zero_x + 7 : value_x + 7 %>" y="<%= row_y + 5 %>" text-anchor="start"><%= chart.formatted_value(value) %></text>
+      <% end %>
+    </svg>
+  <% else %>
+    <svg class="headline-chart-svg" viewBox="0 0 640 390" role="img" aria-labelledby="lead-chart-title lead-chart-desc">
+      <title id="lead-chart-title"><%= edition.chart.fetch("title") %></title>
+      <desc id="lead-chart-desc"><%= edition.chart.fetch("description") %></desc>
+
+      <% chart.compact_y_ticks.each do |tick| %>
+        <line class="chart-gridline" x1="48" x2="515" y1="<%= chart.compact_y(tick) %>" y2="<%= chart.compact_y(tick) %>" />
+        <text class="headline-axis-label" x="38" y="<%= chart.compact_y(tick) + 6 %>" text-anchor="end">$<%= tick.to_i %></text>
+      <% end %>
+
+      <% chart.compact_x_ticks.each do |tick| %>
+        <text class="headline-axis-label" x="<%= chart.compact_x(tick) %>" y="354" text-anchor="middle"><%= tick %></text>
+      <% end %>
+
+      <path class="headline-gap-area" d="<%= chart.compact_gap_area_path %>" />
+
+      <% chart.series.each do |series| %>
+        <path class="headline-series-line" d="<%= chart.compact_path_for(series) %>" stroke="<%= series.color %>" />
+        <% latest = chart.latest_value(series) %>
+        <% if latest %>
+          <circle cx="<%= chart.compact_x(chart.latest_year(series)) %>" cy="<%= chart.compact_y(latest) %>" r="4.5" fill="<%= series.color %>" />
+          <text class="headline-direct-label" x="535" y="<%= chart.compact_y(latest) - 3 %>" fill="<%= series.color %>"><%= series.label %></text>
+          <text class="headline-direct-value" x="535" y="<%= chart.compact_y(latest) + 22 %>" fill="<%= series.color %>"><%= chart.formatted_value(latest) %></text>
+        <% end %>
+      <% end %>
+    </svg>
+  <% end %>
+
+  <p class="headline-chart-source">Source: <%= edition.source.fetch("name") %></p>
+</figure>

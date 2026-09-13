@@ -31,7 +31,7 @@
   <!-- Header -->
   <div class="border-b-4 border-black p-4 md:p-6 flex flex-col md:flex-row md:items-start md:justify-between gap-2">
     <div class="flex-1">
-      <span class="font-mono text-xs uppercase tracking-brutal bg-[#0066FF] text-white px-3 py-1 inline-block">
+      <span class="font-mono text-xs uppercase tracking-brutal bg-[#71394D] text-white px-3 py-1 inline-block">
         Data Point
       </span>
       <h3 class="text-xl md:text-2xl font-black tracking-tight uppercase mt-2">
@@ -54,16 +54,16 @@
       <h4 class="font-mono text-xs uppercase tracking-brutal text-black/50 mb-4">European Groupings</h4>
       <div class="grid grid-cols-2 md:grid-cols-<%= [european_regions.size, 5].min %> gap-3">
         <% european_regions.each_with_index do |region, index| %>
-          <div class="<%= region[:highlight] ? 'border-2 border-[#0066FF] bg-[#0066FF]/5' : 'border border-black/20' %> p-3 md:p-4">
+          <div class="<%= region[:highlight] ? 'border-2 border-[#71394D] bg-[#71394D]/5' : 'border border-black/20' %> p-3 md:p-4">
             <div class="flex items-center gap-2 mb-2">
               <span class="text-xl"><%= region[:flag] %></span>
               <div>
-                <span class="font-mono text-xs uppercase tracking-brutal <%= region[:highlight] ? 'text-[#0066FF] font-bold' : 'text-black/60' %>">
+                <span class="font-mono text-xs uppercase tracking-brutal <%= region[:highlight] ? 'text-[#71394D] font-bold' : 'text-black/60' %>">
                   <%= region[:name] %>
                 </span>
               </div>
             </div>
-            <div class="font-mono text-base md:text-lg lg:text-xl font-bold <%= region[:highlight] ? 'text-[#0066FF]' : '' %> break-all leading-tight">
+            <div class="font-mono text-base md:text-lg lg:text-xl font-bold <%= region[:highlight] ? 'text-[#71394D]' : '' %> break-all leading-tight">
               <%= format_value_with_unit(region[:metric].metric_value, unit, decimals: 1) %>
             </div>
           </div>
@@ -93,12 +93,12 @@
   <% end %>
 
   <!-- Footer with link to full statistics -->
-  <div class="border-t-2 border-black/20 p-3 md:p-4 flex items-center justify-between bg-[#F5F5F5]">
+  <div class="border-t-2 border-black/20 p-3 md:p-4 flex items-center justify-between bg-[#E8E0D3]">
     <span class="font-mono text-xs text-black/50">
       Source: <%= data[:europe]&.source || data[:european_union]&.source || "Our World in Data" %>
     </span>
     <%= link_to statistic_path(metric_name.tr("_", "-")), 
-        class: "font-mono text-xs uppercase tracking-brutal text-[#0066FF] hover:underline" do %>
+        class: "font-mono text-xs uppercase tracking-brutal text-[#71394D] hover:underline" do %>
       View full data →
     <% end %>
   </div>

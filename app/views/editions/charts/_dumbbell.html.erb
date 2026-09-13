@@ -1,0 +1,28 @@
+<% { desktop: [1080, chart.desktop_height], mobile: [360, chart.mobile_height] }.each do |layout, dimensions| %>
+  <% width, height = dimensions %>
+  <% axis_y = layout == :desktop ? 540 : 402 %>
+  <svg class="editorial-chart-svg chart-<%= layout %>" viewBox="0 0 <%= width %> <%= height %>" role="img" aria-labelledby="chart-title-<%= edition.slug %>-<%= layout %> chart-desc-<%= edition.slug %>-<%= layout %>">
+    <title id="chart-title-<%= edition.slug %>-<%= layout %>"><%= edition.chart.fetch("title") %></title>
+    <desc id="chart-desc-<%= edition.slug %>-<%= layout %>"><%= edition.chart.fetch("description") %></desc>
+
+    <% chart.dumbbell_ticks.each do |tick| %>
+      <text class="chart-axis-label" x="<%= chart.dumbbell_x(tick, layout: layout) %>" y="<%= axis_y + (layout == :desktop ? 28 : 18) %>" text-anchor="middle"><%= chart.formatted_tick(tick) %></text>
+      <line class="chart-tick" x1="<%= chart.dumbbell_x(tick, layout: layout) %>" x2="<%= chart.dumbbell_x(tick, layout: layout) %>" y1="<%= axis_y %>" y2="<%= axis_y + 6 %>" />
+    <% end %>
+    <line class="chart-axis-line" x1="<%= chart.dumbbell_x(chart.x_domain.first, layout: layout) %>" x2="<%= chart.dumbbell_x(chart.x_domain.last, layout: layout) %>" y1="<%= axis_y %>" y2="<%= axis_y %>" />
+
+    <% chart.series.each_with_index do |series, index| %>
+      <% row_y = chart.dumbbell_y(index, layout: layout) %>
+      <% start_value = chart.series_start(series) %>
+      <% end_value = chart.series_end(series) %>
+      <text class="chart-category-label <%= 'is-highlight' if series.highlight %>" x="<%= layout == :desktop ? 164 : 70 %>" y="<%= row_y + 5 %>" text-anchor="end"><%= series.label %></text>
+      <line class="chart-change-line <%= 'is-highlight' if series.highlight %>" x1="<%= chart.dumbbell_x(start_value, layout: layout) %>" x2="<%= chart.dumbbell_x(end_value, layout: layout) %>" y1="<%= row_y %>" y2="<%= row_y %>" />
+      <circle class="chart-hollow-dot <%= 'is-highlight' if series.highlight %>" cx="<%= chart.dumbbell_x(start_value, layout: layout) %>" cy="<%= row_y %>" r="<%= layout == :desktop ? 6 : 4 %>" />
+      <circle class="chart-solid-dot <%= 'is-highlight' if series.highlight %>" cx="<%= chart.dumbbell_x(end_value, layout: layout) %>" cy="<%= row_y %>" r="<%= layout == :desktop ? 7 : 4.5 %>" />
+      <text class="chart-value-label chart-value-start" x="<%= chart.dumbbell_x(start_value, layout: layout) %>" y="<%= row_y - (layout == :desktop ? 12 : 8) %>" text-anchor="middle"><%= chart.formatted_value(start_value) %></text>
+      <text class="chart-value-label" x="<%= chart.dumbbell_x(end_value, layout: layout) %>" y="<%= row_y + (layout == :desktop ? 24 : 15) %>" text-anchor="middle"><%= chart.formatted_value(end_value) %></text>
+    <% end %>
+
+    <text class="chart-unit-label" x="<%= layout == :desktop ? 180 : 78 %>" y="<%= layout == :desktop ? 24 : 17 %>">Share of total energy supply</text>
+  </svg>
+<% end %>

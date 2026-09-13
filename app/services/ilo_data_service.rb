@@ -159,7 +159,7 @@ class IloDataService
 
       request = Net::HTTP::Get.new(uri)
       request["Accept"] = "application/vnd.sdmx.data+json;version=1.0"
-      request["User-Agent"] = "EuropeVersus/1.0 (Rails Application)"
+      request["User-Agent"] = "Common Values/1.0 (Rails application)"
 
       response = http.request(request)
 

@@ -1,0 +1,12 @@
+<ol class="edition-list">
+  <% editions.each do |edition| %>
+    <li>
+      <%= link_to edition_path(edition.slug), class: "edition-list-link" do %>
+        <span class="edition-list-number">№ <%= edition.issue_number.to_s.rjust(2, "0") %></span>
+        <span class="edition-list-title"><%= edition.title %></span>
+        <span class="edition-list-meta"><%= edition.category %> · <%= edition.published_at.strftime("%d %b %Y") %></span>
+        <span class="edition-list-arrow" aria-hidden="true">↗</span>
+      <% end %>
+    </li>
+  <% end %>
+</ol>

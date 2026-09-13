@@ -1,18 +1,25 @@
-# EuropeVersus 🇪🇺
+# Common Values
 
 ![Tests](https://img.shields.io/badge/tests-256%20passing-brightgreen)
 ![Test Coverage](https://img.shields.io/badge/coverage-79.47%25-brightgreen)
 
-An **open source** Rails 8 web application that provides evidence-based comparisons between European statistics and those of the United States, India, and China. This project aims to counter negative narratives about Europe by presenting factual data in an accessible, visual format.
+An **open source** Rails 8 publication that reports one consequential European dataset in one carefully designed chart every week. The website is the canonical interactive edition; Substack receives a chart image and native draft from the same source file.
+
+See the [brand guidelines](BRAND_GUIDELINES.md) for the publication's editorial voice, visual system, chart standards, mobile rules and Substack format.
+
+The first four-edition run is documented in the [launch-month calendar](LAUNCH_MONTH.md).
 
 ## Mission
 
-EuropeVersus promotes data-driven understanding of European performance across multiple dimensions. Too often, discussions about Europe focus on challenges without acknowledging the continent's remarkable achievements in quality of life, social progress, and sustainable development.
+Common Values is pro-progress and pro-Europe, but not at the expense of accuracy. It reports gains, weaknesses, uncertainty and conflicting interpretations, with a preference for progress-oriented interpretations only where the evidence genuinely permits more than one reading.
 
 **This is an open source, community-driven project.** We believe that accurate data should be freely accessible and continuously improved by contributors worldwide.
 
 ## Features
 
+- **One chart per edition**: One finding, one visual argument, and no dashboard clutter
+- **Multi-format publishing**: Canonical web edition, PNG social/newsletter asset, CSV download, and Substack draft
+- **Editorial provenance**: Geography, source URL, access date, methodology, caveats, and metric definition travel with every edition
 - **Comprehensive Statistics**: Compare Europe with the US, India, and China across economics, social indicators, environment, and innovation
 - **Multiple European Groupings**: Compare Europe, EU-27, Core EU (founding members), Eurozone, Non-Euro EU, and Non-EU Europe
 - **Fact Check Articles**: In-depth, markdown-based articles examining common claims about Europe with embedded live data
@@ -21,6 +28,39 @@ EuropeVersus promotes data-driven understanding of European performance across m
 - **Mobile-First**: Optimized for all devices with Tailwind CSS
 - **Fast & Modern**: Built with Rails 8, Turbo, SQLite, and minimal JavaScript
 - **Evidence-Based**: All data sourced from official statistics and reputable international organizations
+
+## Publishing a Weekly Edition
+
+Editions live in `content/editions/` as Markdown with YAML frontmatter. The frontmatter contains the single chart specification, source, geography and methodology; the Markdown body contains the reported interpretation. The filename becomes the canonical URL slug.
+
+Each edition automatically provides:
+
+- `/editions/:slug` — canonical edition
+- `/editions/:slug/chart.png` — 1200px-wide, phone-first chart image with a chart-specific height for Substack and sharing
+- `/editions/:slug/data.csv` — the exact plotted observations
+
+To create a Substack draft after deploying the edition:
+
+```bash
+PUBLIC_BASE_URL=https://commonvalues.eu \
+SUBSTACK_API_URL=https://your-publication.substack.com/api/v1 \
+bin/rails "editions:substack_draft[edition-slug]"
+```
+
+Authentication can use `SUBSTACK_COOKIES_PATH`, or `SUBSTACK_EMAIL` and `SUBSTACK_PASSWORD` for initial login. Set `SUBSTACK_PUBLICATION_URL` to the reader-facing newsletter URL for the website subscribe links. The task only creates a draft; review and final publication remain manual.
+
+## Production domain
+
+`commonvalues.eu` is registered at Porkbun and points directly to the Kamal host:
+
+| Type | Host | Answer |
+| --- | --- | --- |
+| A | `@` | `128.140.78.94` |
+| CNAME | `www` | `commonvalues.eu` |
+
+Kamal Proxy terminates HTTPS for both names and renews their Let's Encrypt
+certificates automatically. The production names are the deployment default;
+`COMMON_VALUES_HOST` may still override them for a temporary preview.
 
 ## Tech Stack
 
@@ -163,7 +203,7 @@ The application uses a unified YAML configuration file (`config/metrics.yml`) th
 
 See [ADDING_METRICS_GUIDE.md](ADDING_METRICS_GUIDE.md) for complete instructions.
 
-## Fact Check Articles
+## Legacy Fact Check Articles
 
 The application supports in-depth fact-check articles written in Markdown with YAML frontmatter. Articles are stored in `content/fact_checks/` and support custom embed tags:
 
@@ -207,7 +247,7 @@ metrics:
 
 ## Contributing
 
-**EuropeVersus is an open source project that thrives on community contributions!** We welcome data contributions, code improvements, translations, and documentation updates.
+**Common Values is an open source project that thrives on community contributions!** We welcome data contributions, code improvements, translations, and documentation updates.
 
 ### Contributing Data Points
 
@@ -249,7 +289,7 @@ Before submitting data, ensure:
 
 ### Translation Contributions
 
-Help make EuropeVersus accessible to more people:
+Help make Common Values accessible to more people:
 - Translate the interface to other European languages
 - Add localised number formatting
 
@@ -315,6 +355,6 @@ This project is open source and available under the [GNU Public License](LICENSE
 
 ---
 
-**EuropeVersus** - An open source, evidence-based approach to understanding European performance 🇪🇺
+**Common Values** — An open source, evidence-based approach to understanding European performance
 
 *"Better data leads to better decisions. Better decisions lead to better outcomes."*

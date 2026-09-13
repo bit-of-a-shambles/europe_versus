@@ -1,0 +1,52 @@
+retrieved_at: "2026-09-01"
+publication: "Common Values"
+scope: "Launch issues 01–04"
+sources:
+  household_income:
+    publisher: "Eurostat"
+    dataset: "Adjusted gross disposable income of households in real terms per capita (2010=100)"
+    code: "nasa_10_ki"
+    api_url: "https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/nasa_10_ki?lang=en&na_item=B7G_R_HAB_2010&sector=S14_S15&time=2004&time=2024"
+    article_url: "https://ec.europa.eu/eurostat/web/products-eurostat-news/w/ddn-20251125-2"
+    raw_files:
+      - path: "raw/eurostat_household_income_2004_2024.json"
+        sha256: "38b909cc3ec935ee2f0fa4a0de38b07ba3b737cb2b0bb6704d37b227fb4dd802"
+      - path: "raw/eurostat_household_income_article.html"
+        sha256: "14eab8b8b09f0a06f776055a5e6cdd2d26aba424a9873de9f0b024d38f1f7268"
+    missing_data: "Bulgaria has no 2004 observation and is omitted."
+  productivity:
+    publisher: "OECD"
+    dataset: "GDP and GNI per hour worked, constant 2015 USD PPP, 2024"
+    report_url: "https://www.oecd.org/en/publications/oecd-compendium-of-productivity-indicators-2026_734a5e68-en/full-report/labour-productivity-in-oecd-economies-recent-trends-and-shifting-drivers-of-growth_cd896487.html"
+    statlink_url: "https://stat.link/wy9nq7"
+    raw_files:
+      - path: "raw/oecd_productivity_2024.xlsx"
+        sha256: "60ca965fc4d041131438930fc1aaf495f9f3dcbe8589d7a773f0ce20aaedf1a1"
+    revision_note: "Ireland and Luxembourg require GNI context because cross-border income distorts GDP."
+  patents:
+    publisher: "European Patent Office"
+    dataset: "Patent Index 2025 — European patent applications per million inhabitants"
+    url: "https://www.epo.org/en/about-us/statistics/data-download"
+    raw_files:
+      - path: "raw/epo_patent_applications_2025.xlsx"
+        sha256: "6820968095d0770e837085032e5711f292080cce70ac1c727ae4e4d467875c31"
+    context:
+      publisher: "International Monetary Fund"
+      url: "https://www.imf.org/en/blogs/articles/2026/03/12/europe-can-regain-its-productivity-edge-by-scaling-up"
+    comparison_note: "EPO filings have home-market bias and measure applications, not patent grants or commercial value."
+  defence:
+    publisher: "NATO"
+    dataset: "Defence expenditure of NATO countries, 2014–2025"
+    pdf_url: "https://www.nato.int/content/dam/nato/webready/documents/finance/def-exp-2025-en.pdf"
+    summary_url: "https://www.nato.int/en/what-we-do/introduction-to-nato/defence-expenditures-and-natos-5-commitment"
+    raw_files:
+      - path: "raw/nato_defence_expenditure_2025.pdf"
+        sha256: "701525731cae28cccc329e18116382d592feb4aa40a1264978f526d1fe0afede"
+      - path: "raw/nato_defence_commitment_2026.html"
+        sha256: "c3e0b36716e7e1cc1f77f0d75b57ebcb61d68d44ac651a907431eeb4682af93a"
+    revision_note: "2024 and 2025 are estimates; the aggregate's membership changes during the period."
+notes:
+  - "Raw inputs are preserved beside the verification code rather than silently refreshed."
+  - "analysis/launch_month/verify.rb recomputes every plotted value and the main numerical claims."
+  - "Edition frontmatter is the source for both responsive SVG charts and downloadable CSV files."
+  - "No personal or restricted data is used."

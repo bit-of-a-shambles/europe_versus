@@ -14,24 +14,49 @@ class HomeControllerTest < ActionDispatch::IntegrationTest
     get root_url
 
     assert_response :success
-    # Test that the page loads and contains expected content
-    assert_select "title", /europe/i, "Page should have Europe-focused title"
+    assert_select "title", /Common Values/i, "Page should carry the publication name"
   end
 
-  test "index should handle GDP data correctly" do
+  test "index self-hosts the approved brand fonts" do
     get root_url
 
     assert_response :success
-    # Test that GDP-related content is displayed
-    assert_select "body", text: /GDP/i, minimum: 1, message: "Page should contain GDP-related content"
+    assert_select 'link[rel="preload"][href*="besley-roman-latin-v22"]', count: 1
+    assert_select 'link[rel="preload"][href*="public-sans-roman-latin-v21"]', count: 1
+    assert_select 'link[href*="fonts.googleapis.com"]', count: 0
   end
 
-  test "index should handle population data correctly" do
+  test "index should present the launch finding" do
     get root_url
 
     assert_response :success
-    # Test that population-related content is displayed
-    assert_select "body", text: /Population/i, minimum: 1, message: "Page should contain population-related content"
+    assert_select "body", text: /household income/i, minimum: 1
+    assert_select "body", text: /Romania/i, minimum: 1
+  end
+
+  test "index should present the weekly chart" do
+    get root_url
+
+    assert_response :success
+    assert_select "figure.editorial-chart", count: 1
+    assert_select "h1", text: /Europe's income growth moved east/i
+  end
+
+  test "index uses the selected review design and exposes only named previews" do
+    get root_url
+    assert_response :success
+    assert_select "body.headline-home-template.design-review", count: 1
+
+    %w[review graphic atlas].each do |design|
+      get root_url(design: design)
+
+      assert_response :success
+      assert_select "body.headline-home-template.design-#{design}", count: 1
+    end
+
+    get root_url(design: "unknown")
+    assert_response :success
+    assert_select "body.headline-home-template.design-review", count: 1
   end
 
   test "index should render without error even if services fail" do
@@ -47,16 +72,33 @@ class HomeControllerTest < ActionDispatch::IntegrationTest
 
     assert_response :success
 
-    # Check that the response includes Europe-focused content
-    assert_select "title", /europe/i, "Title should mention Europe"
+    assert_select ".masthead-note", /Europe/i, "Masthead proposition should establish the European focus"
   end
 
-  test "index should display comparison data when available" do
+  test "index should disclose source and methodology" do
     get root_url
 
     assert_response :success
-    # Test that comparison data is displayed when available
-    assert_select "body", text: /comparison/i, minimum: 1, message: "Page should display comparison content"
+    assert_select "body", text: /Source and method/i, minimum: 1
+    assert_select 'a[href*="ec.europa.eu/eurostat"]', minimum: 1
+  end
+
+  test "index closes with the colophon footer" do
+    get root_url
+
+    assert_response :success
+    assert_select ".footer-wordmark", "Common Values"
+    assert_select ".footer-tagline", /Progress when the evidence shows it/i
+    assert_select ".footer-group a", minimum: 6
+    assert_select ".footer-colophon", text: /One chart every Friday/
+  end
+
+  test "index keeps the reading progress rule to canonical editions" do
+    get root_url
+
+    assert_response :success
+    assert_select ".reading-progress", count: 0
+    assert_select ".headline-subscribe .subscribe-cta", /Subscribe on Substack/
   end
 
   test "fetch_latest_gdp_data should return proper structure" do

@@ -2,8 +2,8 @@
 # check=error=true
 
 # This Dockerfile is designed for production, not development. Use with Kamal or build'n'run by hand:
-# docker build -t europeversus .
-# docker run -d -p 80:80 -e RAILS_MASTER_KEY=<value from config/master.key> --name europeversus europeversus
+# docker build -t common-values .
+# docker run -d -p 80:80 -e RAILS_MASTER_KEY=<value from config/master.key> --name common-values common-values
 
 # For a containerized dev environment, see Dev Containers: https://guides.rubyonrails.org/getting_started_with_devcontainer.html
 
@@ -16,14 +16,18 @@ WORKDIR /rails
 
 # Install base packages
 RUN apt-get update -qq && \
-    apt-get install --no-install-recommends -y curl libjemalloc2 libvips sqlite3 && \
+    apt-get install --no-install-recommends -y ca-certificates curl gnupg libjemalloc2 libvips sqlite3 && \
+    curl -fsSL https://deb.nodesource.com/setup_22.x | bash - && \
+    apt-get install --no-install-recommends -y chromium nodejs && \
     rm -rf /var/lib/apt/lists /var/cache/apt/archives
 
 # Set production environment
 ENV RAILS_ENV="production" \
     BUNDLE_DEPLOYMENT="1" \
     BUNDLE_PATH="/usr/local/bundle" \
-    BUNDLE_WITHOUT="development"
+    BUNDLE_WITHOUT="development" \
+    GROVER_CHROME_PATH="/usr/bin/chromium" \
+    PUPPETEER_SKIP_DOWNLOAD="true"
 
 # Throw-away build stage to reduce size of final image
 FROM base AS build
@@ -38,6 +42,10 @@ COPY Gemfile Gemfile.lock ./
 RUN bundle install && \
     rm -rf ~/.bundle/ "${BUNDLE_PATH}"/ruby/*/cache "${BUNDLE_PATH}"/ruby/*/bundler/gems/*/.git && \
     bundle exec bootsnap precompile --gemfile
+
+# Install the headless renderer used for weekly chart and social images.
+COPY package.json package-lock.json ./
+RUN npm ci --omit=dev && npm cache clean --force
 
 # Copy application code
 COPY . .

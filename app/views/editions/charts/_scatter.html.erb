@@ -1,0 +1,37 @@
+<% { desktop: [1080, chart.desktop_height], mobile: [360, chart.mobile_height] }.each do |layout, dimensions| %>
+  <% width, height = dimensions %>
+  <% plot = layout == :desktop ? { left: 80, right: 1022, top: 42, bottom: 520 } : { left: 42, right: 342, top: 28, bottom: 350 } %>
+  <% regression = chart.scatter_regression(layout: layout) %>
+  <svg class="editorial-chart-svg chart-<%= layout %>" viewBox="0 0 <%= width %> <%= height %>" role="img" aria-labelledby="chart-title-<%= edition.slug %>-<%= layout %> chart-desc-<%= edition.slug %>-<%= layout %>">
+    <title id="chart-title-<%= edition.slug %>-<%= layout %>"><%= edition.chart.fetch("title") %></title>
+    <desc id="chart-desc-<%= edition.slug %>-<%= layout %>"><%= edition.chart.fetch("description") %></desc>
+
+    <% edition.chart.fetch("y_ticks").each do |tick| %>
+      <% next if tick.zero? %>
+      <line class="chart-gridline" x1="<%= plot[:left] %>" x2="<%= plot[:right] %>" y1="<%= chart.scatter_y(tick, layout: layout) %>" y2="<%= chart.scatter_y(tick, layout: layout) %>" />
+    <% end %>
+    <% edition.chart.fetch("y_ticks").each do |tick| %>
+      <text class="chart-axis-label" x="<%= plot[:left] - (layout == :desktop ? 12 : 6) %>" y="<%= chart.scatter_y(tick, layout: layout) + 5 %>" text-anchor="end"><%= chart.formatted_tick(tick, axis: :y) %></text>
+    <% end %>
+    <% edition.chart.fetch("x_ticks").each do |tick| %>
+      <line class="chart-tick" x1="<%= chart.scatter_x(tick, layout: layout) %>" x2="<%= chart.scatter_x(tick, layout: layout) %>" y1="<%= plot[:bottom] %>" y2="<%= plot[:bottom] + 6 %>" />
+      <text class="chart-axis-label" x="<%= chart.scatter_x(tick, layout: layout) %>" y="<%= plot[:bottom] + (layout == :desktop ? 30 : 20) %>" text-anchor="middle"><%= chart.formatted_tick(tick, axis: :x) %></text>
+    <% end %>
+
+    <% if regression %>
+      <line class="chart-trend-line" x1="<%= regression[:x1] %>" y1="<%= regression[:y1] %>" x2="<%= regression[:x2] %>" y2="<%= regression[:y2] %>" />
+    <% end %>
+
+    <% chart.points.each do |point| %>
+      <circle class="chart-point <%= 'is-highlight' if point.highlight %>" cx="<%= chart.scatter_x(point.x_value, layout: layout) %>" cy="<%= chart.scatter_y(point.y_value, layout: layout) %>" r="<%= point.highlight ? (layout == :desktop ? 7 : 4.5) : (layout == :desktop ? 4.5 : 3) %>" />
+      <% if chart.scatter_label?(point, layout: layout) %>
+        <% dx = point.options.fetch("label_dx", 8).to_f * (layout == :desktop ? 1 : 0.55) %>
+        <% dy = point.options.fetch("label_dy", -8).to_f * (layout == :desktop ? 1 : 0.65) %>
+        <text class="chart-point-label <%= 'is-highlight' if point.highlight %>" x="<%= chart.scatter_x(point.x_value, layout: layout) + dx %>" y="<%= chart.scatter_y(point.y_value, layout: layout) + dy %>" text-anchor="<%= point.options.fetch("label_anchor", "start") %>"><%= point.label %></text>
+      <% end %>
+    <% end %>
+
+    <text class="chart-unit-label" x="<%= plot[:left] %>" y="<%= layout == :desktop ? 22 : 15 %>">Researchers per million people</text>
+    <text class="chart-axis-title" x="<%= (plot[:left] + plot[:right]) / 2 %>" y="<%= height - (layout == :desktop ? 12 : 3) %>" text-anchor="middle">R&amp;D expenditure, % of GDP</text>
+  </svg>
+<% end %>

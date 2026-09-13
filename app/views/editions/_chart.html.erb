@@ -1,0 +1,25 @@
+<figure class="editorial-chart editorial-chart--<%= chart.type.dasherize %>">
+  <figcaption class="chart-heading">
+    <div>
+      <p class="chart-kicker">The chart</p>
+      <h2><%= edition.chart.fetch("title") %></h2>
+      <p><%= edition.chart.fetch("subtitle") %></p>
+      <% if edition.chart["key"].present? %>
+        <p class="chart-key"><%= edition.chart.fetch("key") %></p>
+      <% end %>
+    </div>
+  </figcaption>
+
+  <% if chart.empty? %>
+    <div class="chart-empty">The chart data is being refreshed. The source and analysis remain available below.</div>
+  <% else %>
+    <div class="chart-scroll">
+      <%= render "editions/charts/#{chart.type}", edition: edition, chart: chart %>
+    </div>
+  <% end %>
+
+  <div class="chart-footer">
+    <p>Source: <%= edition.sources.map { |source| source.fetch("name") }.join("; ") %></p>
+    <p><%= edition.chart.fetch("note") %></p>
+  </div>
+</figure>

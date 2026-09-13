@@ -5,9 +5,14 @@ Rails.application.config.after_initialize do
   # Only run in production
   next unless Rails.env.production?
 
+  # Asset compilation boots the production environment with a dummy secret but
+  # has no runtime database to prepare. The container entrypoint runs db:prepare
+  # before the server starts, so loading seeds here is both premature and noisy.
+  next if ENV["SECRET_KEY_BASE_DUMMY"].present?
+
   # Skip during rake tasks (but not rails server)
   # $0 contains the program name - for rake it ends with 'rake'
-  next if $0.end_with?('rake') || ENV["SKIP_SEED_LOAD"].present?
+  next if $0.end_with?("rake") || ENV["SKIP_SEED_LOAD"].present?
 
   seed_file = Rails.root.join("db/seeds/metrics.json")
 

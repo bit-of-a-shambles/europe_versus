@@ -76,8 +76,8 @@ class ApplicationHelperTest < ActionView::TestCase
   end
 
   test "format_value_with_unit formats people/population" do
-    assert_equal "1,000,000", format_value_with_unit(1000000, "people")
-    assert_equal "500,000", format_value_with_unit(500000, "population")
+    assert_equal "1M", format_value_with_unit(1000000, "people")
+    assert_equal "500K", format_value_with_unit(500000, "population")
   end
 
   test "format_value_with_unit formats births per woman" do

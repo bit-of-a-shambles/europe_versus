@@ -1,0 +1,30 @@
+<% { desktop: [1080, chart.desktop_height], mobile: [360, chart.mobile_height] }.each do |layout, dimensions| %>
+  <% width, height = dimensions %>
+  <% plot = layout == :desktop ? { left: 176, right: 1012, top: 44, bottom: height - 38 } : { left: 90, right: 318, top: 38, bottom: height - 34 } %>
+  <% zero_x = chart.ranked_bar_x(0, layout: layout) %>
+  <svg class="editorial-chart-svg chart-<%= layout %>" viewBox="0 0 <%= width %> <%= height %>" role="img" aria-labelledby="chart-title-<%= edition.slug %>-<%= layout %> chart-desc-<%= edition.slug %>-<%= layout %>">
+    <title id="chart-title-<%= edition.slug %>-<%= layout %>"><%= edition.chart.fetch("title") %></title>
+    <desc id="chart-desc-<%= edition.slug %>-<%= layout %>"><%= edition.chart.fetch("description") %></desc>
+
+    <% chart.ranked_bar_ticks.each do |tick| %>
+      <line class="chart-gridline" x1="<%= chart.ranked_bar_x(tick, layout: layout) %>" x2="<%= chart.ranked_bar_x(tick, layout: layout) %>" y1="<%= plot[:top] %>" y2="<%= plot[:bottom] %>" />
+      <text class="chart-axis-label" x="<%= chart.ranked_bar_x(tick, layout: layout) %>" y="<%= layout == :desktop ? 23 : 17 %>" text-anchor="middle"><%= chart.formatted_tick(tick) %></text>
+    <% end %>
+    <% if chart.x_domain.first < 0 && chart.x_domain.last > 0 %>
+      <line class="chart-zero-line" x1="<%= zero_x %>" x2="<%= zero_x %>" y1="<%= plot[:top] %>" y2="<%= plot[:bottom] %>" />
+    <% end %>
+
+    <% chart.series.each_with_index do |series, index| %>
+      <% value = chart.ranked_value(series) %>
+      <% value_x = chart.ranked_bar_x(value, layout: layout) %>
+      <% row_y = chart.ranked_bar_y(index, layout: layout) %>
+      <% bar_x = [zero_x, value_x].min %>
+      <% bar_width = (value_x - zero_x).abs %>
+      <text class="chart-category-label <%= 'is-highlight' if series.highlight %>" x="<%= plot[:left] - (layout == :desktop ? 14 : 7) %>" y="<%= row_y + (layout == :desktop ? 5 : 4) %>" text-anchor="end"><%= series.label %></text>
+      <rect class="chart-ranked-bar <%= 'is-highlight' if series.highlight %>" x="<%= bar_x %>" y="<%= row_y - chart.ranked_bar_height(layout: layout) / 2 %>" width="<%= [bar_width, 1].max %>" height="<%= chart.ranked_bar_height(layout: layout) %>" fill="<%= series.color %>" />
+      <text class="chart-ranked-value <%= 'is-highlight' if series.highlight %>" x="<%= value.negative? ? zero_x + 5 : value_x + 5 %>" y="<%= row_y + (layout == :desktop ? 5 : 4) %>" text-anchor="start"><%= chart.formatted_value(value) %></text>
+    <% end %>
+
+    <text class="chart-unit-label" x="<%= plot[:left] %>" y="<%= height - (layout == :desktop ? 8 : 6) %>"><%= edition.chart.fetch("unit_label") %></text>
+  </svg>
+<% end %>

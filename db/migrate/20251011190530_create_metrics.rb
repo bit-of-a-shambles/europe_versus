@@ -11,8 +11,8 @@ class CreateMetrics < ActiveRecord::Migration[8.0]
 
       t.timestamps
     end
-    
-    add_index :metrics, [:country, :metric_name, :year], unique: true
+
+    add_index :metrics, [ :country, :metric_name, :year ], unique: true
     add_index :metrics, :metric_name
     add_index :metrics, :year
   end

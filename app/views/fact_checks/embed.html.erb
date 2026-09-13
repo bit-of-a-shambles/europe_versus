@@ -3,14 +3,17 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title><%= @fact_check.title %> — EUROPEVERSUS</title>
+  <title><%= @fact_check.title %> — Common Values</title>
   
   <!-- Minimal styles for embed -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
-  
   <style>
+    @font-face { font-family: "Besley"; font-style: normal; font-weight: 400 700; font-display: swap; src: url("<%= asset_path("besley-roman-latin-ext-v22.woff2") %>") format("woff2"); }
+    @font-face { font-family: "Besley"; font-style: normal; font-weight: 400 700; font-display: swap; src: url("<%= asset_path("besley-roman-latin-v22.woff2") %>") format("woff2"); }
+    @font-face { font-family: "Besley"; font-style: italic; font-weight: 400; font-display: swap; src: url("<%= asset_path("besley-italic-latin-ext-v22.woff2") %>") format("woff2"); }
+    @font-face { font-family: "Besley"; font-style: italic; font-weight: 400; font-display: swap; src: url("<%= asset_path("besley-italic-latin-v22.woff2") %>") format("woff2"); }
+    @font-face { font-family: "Public Sans"; font-style: normal; font-weight: 400 700; font-display: swap; src: url("<%= asset_path("public-sans-roman-latin-ext-v21.woff2") %>") format("woff2"); }
+    @font-face { font-family: "Public Sans"; font-style: normal; font-weight: 400 700; font-display: swap; src: url("<%= asset_path("public-sans-roman-latin-v21.woff2") %>") format("woff2"); }
+
     * {
       margin: 0;
       padding: 0;
@@ -18,14 +21,14 @@
     }
     
     body {
-      font-family: 'Inter', sans-serif;
+      font-family: "Public Sans", "Helvetica Neue", Arial, sans-serif;
       background: white;
       padding: 0;
       margin: 0;
     }
     
     .font-mono {
-      font-family: 'Space Mono', monospace;
+      font-family: "Public Sans", "Helvetica Neue", Arial, sans-serif;
     }
     
     .card {
@@ -40,23 +43,24 @@
     }
     
     .badge {
-      background: #0066FF;
+      background: #71394D;
       color: white;
       padding: 4px 8px;
       font-size: 10px;
-      text-transform: uppercase;
-      letter-spacing: 0.12em;
+      font-weight: 600;
       display: inline-block;
       margin-bottom: 8px;
     }
     
     .title {
+      font-family: "Besley", Georgia, serif;
       font-size: 18px;
-      font-weight: 900;
+      font-weight: 500;
       line-height: 1.2;
     }
     
     .subtitle {
+      font-family: "Besley", Georgia, serif;
       font-size: 14px;
       color: rgba(0,0,0,0.6);
       font-style: italic;
@@ -84,14 +88,12 @@
       font-size: 10px;
       padding: 4px 8px;
       border: 1px solid rgba(0,0,0,0.2);
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
     }
     
     .card-footer {
       padding: 12px 20px;
       border-top: 2px solid #000;
-      background: #F5F5F5;
+      background: #E8E0D3;
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -99,7 +101,7 @@
     
     .read-more {
       font-size: 12px;
-      color: #0066FF;
+      color: #71394D;
       text-decoration: none;
     }
     
@@ -143,7 +145,7 @@
       <a href="<%= fact_check_url(slug: @fact_check.slug) %>" target="_blank" class="read-more font-mono">
         Read full analysis →
       </a>
-      <span class="brand font-mono">EUROPEVERSUS</span>
+      <span class="brand font-mono">Common Values</span>
     </div>
   </div>
 </body>

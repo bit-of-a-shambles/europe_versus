@@ -1,4 +1,4 @@
-# EuropeVersus Project Instructions
+# Common Values project instructions
 
 This is a Rails 8 application called "europeversus" designed to compare European statistics with the US, India, and China in a positive, evidence-based way.
 

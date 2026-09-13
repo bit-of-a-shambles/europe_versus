@@ -62,7 +62,7 @@ namespace :data do
       # Delete old Europe population records to ensure fresh calculation
       old_count = Metric.where(metric_name: "population", country: "europe").delete_all
       puts "   → Deleted #{old_count} old Europe population records" if old_count > 0
-      
+
       Rake::Task["data:calculate_europe_population"].invoke
       puts "   ✅ Europe population aggregate calculated"
     rescue => e
@@ -77,7 +77,7 @@ namespace :data do
       # Delete old Europe GDP records to ensure fresh calculation
       old_count = Metric.where(metric_name: "gdp_per_capita_ppp", country: "europe").delete_all
       puts "   → Deleted #{old_count} old Europe GDP records" if old_count > 0
-      
+
       EuropeanMetricsService.calculate_europe_aggregate(
         "gdp_per_capita_ppp",
         start_year: 1990,
@@ -97,7 +97,7 @@ namespace :data do
         print "   • #{metric_name.humanize}... "
         # Delete old EU-27 records to ensure fresh calculation
         Metric.where(metric_name: metric_name, country: "european_union").delete_all
-        
+
         EuropeanMetricsService.calculate_group_aggregate(
           metric_name,
           country_keys: EuropeanMetricsService::EU27_COUNTRIES,
@@ -256,7 +256,7 @@ namespace :data do
       begin
         # Delete old Europe records to ensure fresh calculation
         Metric.where(metric_name: metric_name, country: "europe").delete_all
-        
+
         EuropeanMetricsService.calculate_europe_aggregate(metric_name)
         puts "✅"
       rescue => e
@@ -273,7 +273,7 @@ namespace :data do
       begin
         # Delete old EU-27 records to ensure fresh calculation
         Metric.where(metric_name: metric_name, country: "european_union").delete_all
-        
+
         EuropeanMetricsService.calculate_group_aggregate(
           metric_name,
           country_keys: EuropeanMetricsService::EU27_COUNTRIES,

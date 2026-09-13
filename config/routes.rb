@@ -1,5 +1,12 @@
 Rails.application.routes.draw do
   root "home#index"
+  get "/sitemap.xml", to: "sitemap#show", defaults: { format: :xml }, as: :sitemap
+
+  # Weekly, one-chart editorial editions
+  get "/editions", to: "editions#index", as: :editions
+  get "/editions/:slug", to: "editions#show", as: :edition, constraints: { slug: /[^\/]+(?<!\.png)/ }
+  get "/editions/:slug/chart.png", to: "editions#chart_image", as: :edition_chart_image, format: false
+  get "/editions/:slug/data.csv", to: "editions#data", as: :edition_data, defaults: { format: :csv }
 
   # Methodology page
   get "/methodology", to: "home#methodology", as: :methodology
@@ -21,7 +28,7 @@ Rails.application.routes.draw do
   get "/contribute", to: redirect("https://github.com/duartemartins/europeversus"), as: :contribute
 
   # Favicon route
-  get "/favicon.ico", to: redirect("/icon-192.png")
+  get "/favicon.ico", to: redirect("/favicon.svg")
 
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 

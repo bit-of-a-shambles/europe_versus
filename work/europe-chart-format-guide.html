@@ -1,0 +1,484 @@
+<style>
+  @font-face { font-family: "Besley"; font-style: normal; font-weight: 400 700; font-display: swap; src: url("../app/assets/fonts/besley-roman-latin-v22.woff2") format("woff2"); }
+  @font-face { font-family: "Besley"; font-style: italic; font-weight: 400; font-display: swap; src: url("../app/assets/fonts/besley-italic-latin-v22.woff2") format("woff2"); }
+  @font-face { font-family: "Public Sans"; font-style: normal; font-weight: 400 700; font-display: swap; src: url("../app/assets/fonts/public-sans-roman-latin-v21.woff2") format("woff2"); }
+
+  #europe-chart-format-guide {
+    width: 100%;
+    color: var(--foreground);
+    font-family: "Public Sans", system-ui, sans-serif;
+  }
+
+  #europe-chart-format-guide h1,
+  #europe-chart-format-guide h2 {
+    font-family: "Besley", Georgia, serif;
+    font-weight: 500;
+  }
+
+  #europe-chart-format-guide .guide-intro {
+    max-width: 60ch;
+    margin-bottom: 2rem;
+  }
+
+  #europe-chart-format-guide .guide-chart {
+    padding: 1.5rem 0 2rem;
+    border-top: 1px solid var(--border);
+  }
+
+  #europe-chart-format-guide .guide-chart header {
+    max-width: 60ch;
+    margin-bottom: 1rem;
+  }
+
+  #europe-chart-format-guide .guide-chart h2 {
+    text-wrap: balance;
+  }
+
+  #europe-chart-format-guide .chart-kind {
+    margin-bottom: 0.25rem;
+    color: var(--red);
+    font-weight: 500;
+  }
+
+  #europe-chart-format-guide .chart-deck,
+  #europe-chart-format-guide .chart-source {
+    color: var(--muted-foreground);
+  }
+
+  #europe-chart-format-guide .chart-source {
+    max-width: 68ch;
+    margin-top: 0.75rem;
+  }
+
+  #europe-chart-format-guide .chart-slot {
+    width: 100%;
+    min-width: 0;
+  }
+
+  #europe-chart-format-guide svg {
+    display: block;
+    width: 100%;
+    height: auto;
+    overflow: visible;
+  }
+
+  #europe-chart-format-guide svg text {
+    fill: var(--foreground);
+    font-family: "Public Sans", system-ui, sans-serif;
+    font-size: 12px;
+  }
+
+  #europe-chart-format-guide svg .axis text,
+  #europe-chart-format-guide svg .secondary-label {
+    fill: var(--muted-foreground);
+  }
+
+  #europe-chart-format-guide svg .axis path,
+  #europe-chart-format-guide svg .axis line,
+  #europe-chart-format-guide svg .grid line {
+    stroke: var(--border);
+  }
+
+  #europe-chart-format-guide svg .axis path,
+  #europe-chart-format-guide svg .axis line,
+  #europe-chart-format-guide svg .grid line {
+    shape-rendering: crispEdges;
+  }
+
+  #europe-chart-format-guide svg .axis-title {
+    fill: var(--muted-foreground);
+    font-weight: 400;
+  }
+
+  #europe-chart-format-guide svg .direct-label,
+  #europe-chart-format-guide svg .value-label {
+    font-weight: 500;
+  }
+
+  #europe-chart-format-guide svg .reference-line,
+  #europe-chart-format-guide svg .trend-line {
+    stroke: var(--muted-foreground);
+    stroke-width: 1.5;
+    stroke-dasharray: 4 4;
+    opacity: 0.55;
+  }
+
+  #europe-chart-format-guide svg .tabular {
+    font-variant-numeric: tabular-nums lining-nums;
+  }
+
+  #europe-chart-format-guide .chart-key {
+    margin-top: 0.5rem;
+    color: var(--muted-foreground);
+  }
+</style>
+
+<div id="europe-chart-format-guide">
+  <header class="guide-intro">
+    <h1>Chart formats</h1>
+    <p>One argument, one primary chart, one highlighted series. Labels sit on the data; sources stay attached to it.</p>
+  </header>
+
+  <section class="guide-chart">
+    <header>
+      <p class="chart-kind">Trend · line chart</p>
+      <h2>Poland has closed 43% of its productivity gap with Italy</h2>
+      <p class="chart-deck">Output per hour worked, constant 2021 international dollars at purchasing-power parity, 2005–2025.</p>
+    </header>
+    <div class="chart-slot" data-chart="line"></div>
+    <p class="chart-source text-small">Source: ILOSTAT modelled estimates. Values may be revised.</p>
+  </section>
+
+  <section class="guide-chart">
+    <header>
+      <p class="chart-kind">Ranking · horizontal bars</p>
+      <h2>Poland’s income per person is 61% of Denmark’s</h2>
+      <p class="chart-deck">Gross domestic product per person, constant purchasing-power-adjusted international dollars, 2024.</p>
+    </header>
+    <div class="chart-slot" data-chart="bars"></div>
+    <p class="chart-source text-small">Source: World Bank via Our World in Data.</p>
+  </section>
+
+  <section class="guide-chart">
+    <header>
+      <p class="chart-kind">Change · dumbbell chart</p>
+      <h2>Denmark made the largest low-carbon leap</h2>
+      <p class="chart-deck">Low-carbon sources as a share of primary energy consumption, 2000 and 2024.</p>
+      <p class="chart-key text-small">Hollow circles mark 2000; filled circles mark 2024.</p>
+    </header>
+    <div class="chart-slot" data-chart="dumbbell"></div>
+    <p class="chart-source text-small">Source: Energy Institute Statistical Review via Our World in Data.</p>
+  </section>
+
+  <section class="guide-chart">
+    <header>
+      <p class="chart-kind">Relationship · scatterplot</p>
+      <h2>Research spending and researcher density move together</h2>
+      <p class="chart-deck">Research and development spending and researchers per million people, 2022.</p>
+    </header>
+    <div class="chart-slot" data-chart="scatter"></div>
+    <p class="chart-source text-small">Source: World Bank. Labels identify the subject and notable outliers.</p>
+  </section>
+
+  <section class="guide-chart">
+    <header>
+      <p class="chart-kind">Comparison · small multiples</p>
+      <h2>Europe’s fertility decline is not one story</h2>
+      <p class="chart-deck">Total fertility rate, measured as births per woman, 1990–2020.</p>
+    </header>
+    <div class="chart-slot" data-chart="multiples"></div>
+    <p class="chart-source text-small">Source: UN World Population Prospects via Our World in Data.</p>
+  </section>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js"></script>
+<script>
+(() => {
+  const root = document.getElementById("europe-chart-format-guide");
+  if (!root || !window.d3) return;
+
+  const accent = "var(--red)";
+  const ink = "var(--foreground)";
+  const muted = "var(--muted-foreground)";
+  const border = "var(--border)";
+
+  const productivity = [
+    {country: "Italy", year: 2005, value: 72.90}, {country: "Italy", year: 2010, value: 72.77},
+    {country: "Italy", year: 2015, value: 73.75}, {country: "Italy", year: 2020, value: 74.22},
+    {country: "Italy", year: 2025, value: 74.11}, {country: "Poland", year: 2005, value: 28.54},
+    {country: "Poland", year: 2010, value: 32.27}, {country: "Poland", year: 2015, value: 36.25},
+    {country: "Poland", year: 2020, value: 43.77}, {country: "Poland", year: 2025, value: 48.84}
+  ];
+
+  const gdp = [
+    {country: "Denmark", value: 73709}, {country: "Netherlands", value: 70902},
+    {country: "Sweden", value: 63259}, {country: "Germany", value: 62830},
+    {country: "France", value: 54465}, {country: "Italy", value: 53115},
+    {country: "Spain", value: 48373}, {country: "Poland", value: 45113}
+  ];
+
+  const lowCarbon = [
+    {country: "Sweden", start: 61.77, end: 72.21},
+    {country: "France", start: 43.84, end: 53.86},
+    {country: "Denmark", start: 6.76, end: 41.72},
+    {country: "Portugal", start: 12.41, end: 39.74},
+    {country: "Spain", start: 18.00, end: 34.20},
+    {country: "Poland", start: 0.64, end: 13.05}
+  ];
+
+  const research = [
+    {country: "Germany", spend: 3.13, researchers: 5787},
+    {country: "France", spend: 2.23, researchers: 5182},
+    {country: "Italy", spend: 1.39, researchers: 2796},
+    {country: "Spain", spend: 1.44, researchers: 3388},
+    {country: "Poland", spend: 1.45, researchers: 3721},
+    {country: "Romania", spend: 0.46, researchers: 999},
+    {country: "Sweden", spend: 3.41, researchers: 8624},
+    {country: "Netherlands", spend: 2.26, researchers: 6319},
+    {country: "Denmark", spend: 2.89, researchers: 8736},
+    {country: "Czechia", spend: 1.96, researchers: 4697},
+    {country: "Portugal", spend: 1.70, researchers: 5687},
+    {country: "Greece", spend: 1.49, researchers: 4927}
+  ];
+
+  const fertility = [
+    {country: "France", year: 1990, value: 1.78}, {country: "France", year: 2000, value: 1.88},
+    {country: "France", year: 2010, value: 2.02}, {country: "France", year: 2020, value: 1.79},
+    {country: "Italy", year: 1990, value: 1.33}, {country: "Italy", year: 2000, value: 1.25},
+    {country: "Italy", year: 2010, value: 1.44}, {country: "Italy", year: 2020, value: 1.24},
+    {country: "Poland", year: 1990, value: 2.07}, {country: "Poland", year: 2000, value: 1.37},
+    {country: "Poland", year: 2010, value: 1.41}, {country: "Poland", year: 2020, value: 1.38},
+    {country: "Sweden", year: 1990, value: 2.12}, {country: "Sweden", year: 2000, value: 1.54},
+    {country: "Sweden", year: 2010, value: 1.97}, {country: "Sweden", year: 2020, value: 1.67}
+  ];
+
+  function baseSvg(slot, height, margin) {
+    const width = Math.max(300, Math.round(slot.getBoundingClientRect().width));
+    d3.select(slot).selectAll("*").remove();
+    const svg = d3.select(slot).append("svg")
+      .attr("viewBox", `0 0 ${width} ${height}`)
+      .attr("role", "img");
+    svg.append("rect")
+      .attr("data-chart-frame", "")
+      .attr("x", margin.left).attr("y", margin.top)
+      .attr("width", width - margin.left - margin.right)
+      .attr("height", height - margin.top - margin.bottom)
+      .attr("fill", "none");
+    return {svg, width, height, innerWidth: width - margin.left - margin.right, innerHeight: height - margin.top - margin.bottom};
+  }
+
+  function styleAxis(group) {
+    group.attr("class", "axis");
+    group.selectAll("text").attr("fill", muted);
+    group.selectAll("path,line").attr("stroke", border);
+  }
+
+  function axisTitle(svg, text, x, y, axis, rotate) {
+    const label = svg.append("text").attr("class", "axis-title").attr("data-axis", axis)
+      .attr("x", x).attr("y", y).attr("text-anchor", "middle").text(text);
+    if (rotate) label.attr("transform", `rotate(-90 ${x} ${y})`);
+  }
+
+  function drawLine(slot) {
+    const margin = {top: 18, right: 98, bottom: 48, left: 64};
+    const {svg, width, height, innerWidth, innerHeight} = baseSvg(slot, 300, margin);
+    svg.attr("aria-label", "Line chart of output per hour in Italy and Poland from 2005 to 2025");
+    const xDomain = d3.extent(productivity, d => d.year);
+    const valueExtent = d3.extent(productivity, d => d.value);
+    const valuePadding = (valueExtent[1] - valueExtent[0]) * 0.12;
+    const yDomain = [
+      Math.floor((valueExtent[0] - valuePadding) / 10) * 10,
+      Math.ceil((valueExtent[1] + valuePadding) / 10) * 10
+    ];
+    const x = d3.scaleLinear().domain(xDomain).range([margin.left, margin.left + innerWidth]);
+    const y = d3.scaleLinear().domain(yDomain).range([margin.top + innerHeight, margin.top]);
+    const yTicks = d3.range(yDomain[0], yDomain[1] + 1, 20);
+    const grid = svg.append("g").attr("class", "grid");
+    grid.selectAll("line").data(yTicks).join("line")
+      .attr("x1", margin.left).attr("x2", width - margin.right)
+      .attr("y1", d => y(d)).attr("y2", d => y(d)).attr("stroke", border);
+    styleAxis(svg.append("g").attr("transform", `translate(0,${height - margin.bottom})`)
+      .call(d3.axisBottom(x).tickValues([xDomain[0], 2015, xDomain[1]]).tickFormat(d3.format("d")).tickSize(0).tickPadding(10)));
+    styleAxis(svg.append("g").attr("transform", `translate(${margin.left},0)`)
+      .call(d3.axisLeft(y).tickValues(yTicks).tickFormat(d => `$${d}`).tickSize(0).tickPadding(8)));
+    const line = d3.line().x(d => x(d.year)).y(d => y(d.value));
+    const grouped = d3.groups(productivity, d => d.country);
+    grouped.forEach(([country, values]) => {
+      const color = country === "Poland" ? accent : muted;
+      svg.append("path").datum(values).attr("fill", "none").attr("stroke", color)
+        .attr("stroke-width", country === "Poland" ? 3 : 2).attr("d", line);
+      const last = values[values.length - 1];
+      const first = values[0];
+      const growth = Math.round((last.value / first.value - 1) * 100);
+      svg.append("circle").attr("cx", x(last.year)).attr("cy", y(last.value)).attr("r", 4).attr("fill", color);
+      const label = svg.append("text").attr("class", "direct-label").attr("x", x(last.year) + 9).attr("y", y(last.value) - 4)
+        .attr("fill", ink);
+      label.append("tspan").text(country);
+      label.append("tspan").attr("class", "secondary-label tabular").attr("x", x(last.year) + 9).attr("dy", 16)
+        .text(`$${Math.round(last.value)} · +${growth}%`);
+    });
+    axisTitle(svg, "Year", margin.left + innerWidth / 2, height - 7, "x", false);
+    axisTitle(svg, "International $ per hour", 13, margin.top + innerHeight / 2, "y", true);
+  }
+
+  function drawBars(slot) {
+    const margin = {top: 16, right: 72, bottom: 48, left: 92};
+    const height = 340;
+    const {svg, width, innerWidth, innerHeight} = baseSvg(slot, height, margin);
+    svg.attr("aria-label", "Ranked horizontal bars of GDP per person in eight European countries in 2024");
+    const xMax = Math.ceil(d3.max(gdp, d => d.value) / 10000) * 10000;
+    const x = d3.scaleLinear().domain([0, xMax]).range([margin.left, margin.left + innerWidth]);
+    const y = d3.scaleBand().domain(gdp.map(d => d.country)).range([margin.top, margin.top + innerHeight]).padding(0.32);
+    styleAxis(svg.append("g").attr("transform", `translate(0,${height - margin.bottom})`)
+      .call(d3.axisBottom(x).tickValues([0, xMax / 2, xMax]).tickFormat(d => d === 0 ? "$0" : `$${d / 1000}k`).tickSize(0).tickPadding(10)));
+    svg.selectAll(".country-label").data(gdp).join("text").attr("class", "country-label")
+      .attr("x", margin.left - 8).attr("y", d => y(d.country) + y.bandwidth() / 2 + 4)
+      .attr("text-anchor", "end").attr("fill", ink).attr("font-weight", d => d.country === "Poland" ? 500 : 400).text(d => d.country);
+    svg.selectAll(".bar").data(gdp).join("rect").attr("class", "bar")
+      .attr("x", x(0)).attr("y", d => y(d.country)).attr("height", y.bandwidth())
+      .attr("width", d => x(d.value) - x(0)).attr("fill", d => d.country === "Poland" ? accent : muted)
+      .attr("opacity", d => d.country === "Poland" ? 1 : .38);
+    svg.selectAll(".bar-value").data(gdp).join("text").attr("class", "value-label bar-value")
+      .attr("x", d => Math.min(width - 8, x(d.value) + 6)).attr("y", d => y(d.country) + y.bandwidth() / 2 + 4)
+      .attr("fill", ink).attr("class", "value-label bar-value tabular").text(d => `$${(d.value / 1000).toFixed(1)}k`);
+    axisTitle(svg, "International $ per person", margin.left + innerWidth / 2, height - 7, "x", false);
+    axisTitle(svg, "Country", 13, margin.top + innerHeight / 2, "y", true);
+  }
+
+  function drawDumbbell(slot) {
+    const margin = {top: 18, right: 74, bottom: 48, left: 88};
+    const height = 300;
+    const {svg, width, innerWidth, innerHeight} = baseSvg(slot, height, margin);
+    svg.attr("aria-label", "Dumbbell chart of low-carbon energy share in six European countries in 2000 and 2024");
+    const endpointExtent = d3.extent(lowCarbon.flatMap(d => [d.start, d.end]));
+    const xMax = Math.ceil((endpointExtent[1] * 1.08) / 10) * 10;
+    const x = d3.scaleLinear().domain([0, xMax]).range([margin.left, margin.left + innerWidth]);
+    const y = d3.scaleBand().domain(lowCarbon.map(d => d.country)).range([margin.top, margin.top + innerHeight]).padding(0.42);
+    styleAxis(svg.append("g").attr("transform", `translate(0,${height - margin.bottom})`)
+      .call(d3.axisBottom(x).tickValues([0, xMax / 2, xMax]).tickFormat(d => `${d}%`).tickSize(0).tickPadding(10)));
+    svg.selectAll(".dumbbell-line").data(lowCarbon).join("line")
+      .attr("x1", d => x(d.start)).attr("x2", d => x(d.end))
+      .attr("y1", d => y(d.country) + y.bandwidth() / 2).attr("y2", d => y(d.country) + y.bandwidth() / 2)
+      .attr("stroke", d => d.country === "Denmark" ? accent : muted).attr("stroke-width", d => d.country === "Denmark" ? 3 : 2)
+      .attr("opacity", d => d.country === "Denmark" ? 1 : 0.7);
+    svg.selectAll(".dumbbell-start").data(lowCarbon).join("circle")
+      .attr("cx", d => x(d.start)).attr("cy", d => y(d.country) + y.bandwidth() / 2).attr("r", 4)
+      .attr("fill", "var(--background)").attr("stroke", d => d.country === "Denmark" ? accent : muted).attr("stroke-width", 2);
+    svg.selectAll(".dumbbell-end").data(lowCarbon).join("circle")
+      .attr("cx", d => x(d.end)).attr("cy", d => y(d.country) + y.bandwidth() / 2).attr("r", 5)
+      .attr("fill", d => d.country === "Denmark" ? accent : ink);
+    svg.selectAll(".dumbbell-country").data(lowCarbon).join("text")
+      .attr("x", margin.left - 8).attr("y", d => y(d.country) + y.bandwidth() / 2 + 4)
+      .attr("text-anchor", "end").attr("fill", ink).attr("font-weight", d => d.country === "Denmark" ? 500 : 400).text(d => d.country);
+    svg.selectAll(".dumbbell-start-value").data(lowCarbon).join("text").attr("class", "secondary-label tabular")
+      .attr("x", d => x(d.start))
+      .attr("y", d => y(d.country) + y.bandwidth() / 2 - 9)
+      .attr("text-anchor", "middle")
+      .text(d => d.start.toFixed(1));
+    svg.selectAll(".dumbbell-end-value").data(lowCarbon).join("text").attr("class", "value-label tabular")
+      .attr("x", d => x(d.end))
+      .attr("y", d => y(d.country) + y.bandwidth() / 2 + 17)
+      .attr("text-anchor", "middle").attr("fill", ink).text(d => `${d.end.toFixed(1)}%`);
+    axisTitle(svg, "Low-carbon share of primary energy", margin.left + innerWidth / 2, height - 7, "x", false);
+    axisTitle(svg, "Country", 13, margin.top + innerHeight / 2, "y", true);
+  }
+
+  function drawScatter(slot) {
+    const margin = {top: 18, right: 58, bottom: 54, left: 68};
+    const height = 340;
+    const {svg, width, innerWidth, innerHeight} = baseSvg(slot, height, margin);
+    svg.attr("aria-label", "Scatterplot of research spending and researchers per million people in twelve European countries in 2022");
+    const xMax = Math.ceil(d3.max(research, d => d.spend) * 1.08 * 10) / 10;
+    const yMax = Math.ceil(d3.max(research, d => d.researchers) * 1.08 / 500) * 500;
+    const x = d3.scaleLinear().domain([0, xMax]).range([margin.left, margin.left + innerWidth]);
+    const y = d3.scaleLinear().domain([0, yMax]).range([margin.top + innerHeight, margin.top]);
+    const xTicks = [0, 1, 2, 3].filter(d => d <= xMax);
+    const yTicks = [0, 3000, 6000, 9000].filter(d => d <= yMax);
+    const grid = svg.append("g").attr("class", "grid");
+    grid.selectAll("line.horizontal").data(yTicks.slice(1)).join("line").attr("class", "horizontal")
+      .attr("x1", margin.left).attr("x2", width - margin.right)
+      .attr("y1", d => y(d)).attr("y2", d => y(d)).attr("stroke", border);
+    styleAxis(svg.append("g").attr("transform", `translate(0,${height - margin.bottom})`)
+      .call(d3.axisBottom(x).tickValues(xTicks).tickFormat(d => `${d}%`).tickSize(0).tickPadding(10)));
+    styleAxis(svg.append("g").attr("transform", `translate(${margin.left},0)`)
+      .call(d3.axisLeft(y).tickValues(yTicks).tickFormat(d => d === 0 ? "0" : `${d / 1000}k`).tickSize(0).tickPadding(8)));
+    const meanX = d3.mean(research, d => d.spend);
+    const meanY = d3.mean(research, d => d.researchers);
+    const slope = d3.sum(research, d => (d.spend - meanX) * (d.researchers - meanY)) /
+      d3.sum(research, d => (d.spend - meanX) ** 2);
+    const intercept = meanY - slope * meanX;
+    const trendExtent = d3.extent(research, d => d.spend);
+    svg.append("line").attr("class", "trend-line")
+      .attr("x1", x(trendExtent[0])).attr("x2", x(trendExtent[1]))
+      .attr("y1", y(intercept + slope * trendExtent[0])).attr("y2", y(intercept + slope * trendExtent[1]));
+    svg.selectAll(".scatter-dot").data(research).join("circle").attr("class", "scatter-dot")
+      .attr("cx", d => x(d.spend)).attr("cy", d => y(d.researchers)).attr("r", d => d.country === "Poland" ? 6 : 4.5)
+      .attr("fill", d => d.country === "Poland" ? accent : muted).attr("opacity", d => d.country === "Poland" ? 1 : .68);
+    const labelled = research.filter(d => ["Poland", "Romania", "Sweden", "Denmark", "Germany"].includes(d.country));
+    const labelPosition = {
+      Denmark: {dx: 8, dy: -10, anchor: "start"},
+      Sweden: {dx: -8, dy: 15, anchor: "end"},
+      Germany: {dx: 8, dy: 15, anchor: "start"},
+      Poland: {dx: 8, dy: -8, anchor: "start"},
+      Romania: {dx: 8, dy: -8, anchor: "start"}
+    };
+    svg.selectAll(".scatter-label").data(labelled).join("text").attr("class", "direct-label scatter-label")
+      .attr("x", d => x(d.spend) + labelPosition[d.country].dx)
+      .attr("y", d => y(d.researchers) + labelPosition[d.country].dy)
+      .attr("text-anchor", d => labelPosition[d.country].anchor)
+      .attr("fill", ink).text(d => d.country);
+    axisTitle(svg, "R&D spending, % of GDP", margin.left + innerWidth / 2, height - 7, "x", false);
+    axisTitle(svg, "Researchers per million", 13, margin.top + innerHeight / 2, "y", true);
+  }
+
+  function drawMultiples(slot) {
+    const width = Math.max(300, Math.round(slot.getBoundingClientRect().width));
+    const columns = width >= 620 ? 2 : 1;
+    const rows = Math.ceil(4 / columns);
+    const panelHeight = columns === 1 ? 172 : 160;
+    const height = rows * panelHeight + 28;
+    d3.select(slot).selectAll("*").remove();
+    const svg = d3.select(slot).append("svg").attr("viewBox", `0 0 ${width} ${height}`)
+      .attr("role", "img").attr("aria-label", "Small multiple line charts of fertility rates in France, Italy, Poland and Sweden from 1990 to 2020");
+    const panelWidth = width / columns;
+    const countries = ["France", "Italy", "Poland", "Sweden"];
+    const yearDomain = d3.extent(fertility, d => d.year);
+    const fertilityExtent = d3.extent([...fertility.map(d => d.value), 2.1]);
+    const fertilityPadding = (fertilityExtent[1] - fertilityExtent[0]) * 0.1;
+    const fertilityDomain = [
+      Math.floor((fertilityExtent[0] - fertilityPadding) * 10) / 10,
+      Math.ceil((fertilityExtent[1] + fertilityPadding) * 10) / 10
+    ];
+    countries.forEach((country, index) => {
+      const col = index % columns;
+      const row = Math.floor(index / columns);
+      const left = col * panelWidth + 48;
+      const top = row * panelHeight + 24;
+      const right = (col + 1) * panelWidth - 18;
+      const bottom = (row + 1) * panelHeight - 26;
+      const x = d3.scaleLinear().domain(yearDomain).range([left, right]);
+      const y = d3.scaleLinear().domain(fertilityDomain).range([bottom, top]);
+      svg.append("rect").attr("data-chart-frame", "").attr("x", left).attr("y", top)
+        .attr("width", right - left).attr("height", bottom - top).attr("fill", "none");
+      const values = fertility.filter(d => d.country === country);
+      const first = values[0];
+      const last = values[values.length - 1];
+      const change = last.value - first.value;
+      svg.append("text").attr("class", "direct-label").attr("x", left).attr("y", top - 8).text(country);
+      svg.append("text").attr("class", "secondary-label tabular").attr("x", right).attr("y", top - 8)
+        .attr("text-anchor", "end").text(`${change > 0 ? "+" : ""}${change.toFixed(2)} since 1990`);
+      svg.append("line").attr("class", "reference-line")
+        .attr("x1", left).attr("x2", right).attr("y1", y(2.1)).attr("y2", y(2.1));
+      if (index === 0) {
+        svg.append("text").attr("class", "secondary-label").attr("x", left + 6).attr("y", y(2.1) + 14)
+          .text("Replacement level 2.1");
+      }
+      svg.append("path").datum(values)
+        .attr("fill", "none").attr("stroke", accent).attr("stroke-width", 2.5)
+        .attr("d", d3.line().x(d => x(d.year)).y(d => y(d.value)));
+      svg.append("circle").attr("cx", x(last.year)).attr("cy", y(last.value)).attr("r", 4).attr("fill", accent);
+      svg.append("text").attr("class", "value-label tabular").attr("x", x(last.year) - 3).attr("y", y(last.value) - 8)
+        .attr("text-anchor", "end").attr("fill", ink).text(last.value.toFixed(2));
+      yearDomain.forEach(year => svg.append("text").attr("class", "secondary-label").attr("x", x(year)).attr("y", bottom + 17)
+        .attr("text-anchor", year === yearDomain[0] ? "start" : "end").text(year));
+      [1.2, 2.0].filter(value => value >= fertilityDomain[0] && value <= fertilityDomain[1]).forEach(value => svg.append("text").attr("class", "secondary-label").attr("x", left - 7).attr("y", y(value) + 4)
+        .attr("text-anchor", "end").text(value.toFixed(1)));
+    });
+    axisTitle(svg, "Year", width / 2, height - 4, "x", false);
+    axisTitle(svg, "Births per woman", 12, height / 2, "y", true);
+  }
+
+  const renderers = {line: drawLine, bars: drawBars, dumbbell: drawDumbbell, scatter: drawScatter, multiples: drawMultiples};
+  let frame;
+  function drawAll() {
+    cancelAnimationFrame(frame);
+    frame = requestAnimationFrame(() => {
+      root.querySelectorAll("[data-chart]").forEach(slot => renderers[slot.dataset.chart](slot));
+    });
+  }
+
+  const observer = new ResizeObserver(drawAll);
+  observer.observe(root);
+  drawAll();
+})();
+</script>

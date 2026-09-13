@@ -1,0 +1,12 @@
+<% content_for :title, "#{@edition.title} — Common Values" %>
+<% content_for :body_class, "edition-page" %>
+<% content_for :head do %>
+  <link rel="canonical" href="<%= edition_url(@edition.slug) %>">
+  <meta property="og:title" content="<%= @edition.title %>">
+  <meta property="og:description" content="<%= @edition.dek %>">
+  <meta property="og:type" content="article">
+  <meta property="og:image" content="<%= edition_chart_image_url(@edition.slug) %>">
+  <meta name="twitter:card" content="summary_large_image">
+<% end %>
+
+<%= render "edition", edition: @edition, chart: @chart, canonical: true %>

@@ -1,0 +1,7 @@
+{
+  "name": "europe-in-one-chart",
+  "private": true,
+  "dependencies": {
+    "puppeteer": "25.9.0"
+  }
+}

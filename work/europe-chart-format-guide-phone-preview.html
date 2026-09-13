@@ -1,0 +1,1761 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="referrer" content="no-referrer">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline' 'unsafe-eval' 'wasm-unsafe-eval' blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; style-src 'unsafe-inline' blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; img-src blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; font-src blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; media-src blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; worker-src blob:; connect-src blob: data:; frame-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
+<title>Europe Chart Format Guide</title>
+<style>:root{color-scheme:light;background:light-dark(rgb(255 247 244), rgb(24 24 24))}html,body{margin:0}body{box-sizing:border-box;padding:1rem;background:inherit}iframe{display:block;width:100%;height:calc(100vh - 2rem);margin:0 auto;border:0}</style>
+</head>
+<body>
+<iframe sandbox="allow-scripts" referrerpolicy="no-referrer" title="Europe Chart Format Guide" srcdoc="&lt;!doctype html&gt;
+&lt;html lang=&quot;en&quot;&gt;
+&lt;head&gt;
+&lt;meta charset=&quot;utf-8&quot;&gt;
+&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;&gt;
+&lt;meta name=&quot;referrer&quot; content=&quot;no-referrer&quot;&gt;
+&lt;meta http-equiv=&quot;Content-Security-Policy&quot; content=&quot;default-src &#x27;none&#x27;; script-src &#x27;unsafe-inline&#x27; &#x27;unsafe-eval&#x27; &#x27;wasm-unsafe-eval&#x27; blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; style-src &#x27;unsafe-inline&#x27; blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; img-src blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; font-src blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; media-src blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; worker-src blob:; connect-src blob: data:; frame-src &#x27;none&#x27;; object-src &#x27;none&#x27;; base-uri &#x27;none&#x27;; form-action &#x27;none&#x27;&quot;&gt;
+&lt;title&gt;Europe Chart Format Guide&lt;/title&gt;
+&lt;style&gt;:root {
+  color-scheme: light;
+  background-color: var(
+    --background,
+    var(--color-background-primary, light-dark(rgb(255 247 244), rgb(24 24 24)))
+  ) !important;
+
+  /* Agent-facing contract; keep in sync with SKILL.md. */
+  --background: var(
+    --color-background-primary,
+    light-dark(rgb(255 247 244), rgb(24 24 24))
+  );
+  --foreground: var(
+    --color-text-primary,
+    light-dark(rgb(24 20 17), rgb(255 247 244))
+  );
+  --card: color-mix(in oklab, var(--foreground) 5%, var(--background));
+  --card-foreground: var(
+    --color-text-primary,
+    light-dark(rgb(24 20 17), rgb(255 247 244))
+  );
+  --popover: var(
+    --color-background-secondary,
+    light-dark(rgb(255 247 244), rgb(45 45 45))
+  );
+  --popover-foreground: var(
+    --color-text-primary,
+    light-dark(rgb(24 20 17), rgb(255 247 244))
+  );
+  --primary: var(
+    --color-text-info,
+    light-dark(rgb(51 156 255), rgb(131 195 255))
+  );
+  --primary-foreground: var(
+    --color-text-inverse,
+    light-dark(rgb(255 247 244), rgb(13 13 13))
+  );
+  --secondary: var(
+    --color-background-secondary,
+    light-dark(rgb(255 255 255 / 96%), rgb(54 54 54 / 96%))
+  );
+  --secondary-foreground: var(
+    --color-text-primary,
+    light-dark(rgb(24 20 17), rgb(255 247 244))
+  );
+  --muted: color-mix(in srgb, var(--foreground) 10%, transparent);
+  --muted-foreground: var(
+    --color-text-secondary,
+    light-dark(rgb(26 28 31 / 49.4%), rgb(255 255 255 / 49.8%))
+  );
+  --accent: var(
+    --color-background-info,
+    light-dark(rgb(229 242 255), rgb(13 39 63))
+  );
+  --accent-foreground: var(
+    --color-text-info,
+    light-dark(rgb(51 156 255), rgb(131 195 255))
+  );
+  --destructive: var(
+    --color-text-warning,
+    light-dark(rgb(226 85 7), rgb(255 133 73))
+  );
+  --border: var(
+    --color-border-secondary,
+    light-dark(rgb(26 28 31 / 8%), rgb(255 255 255 / 8.2%))
+  );
+  --input: var(
+    --color-border-primary,
+    light-dark(
+      rgb(26 28 31 / 11.8%),
+      color-mix(in oklab, rgb(0 0 0) 10%, transparent)
+    )
+  );
+  --ring: var(
+    --color-ring-primary,
+    light-dark(rgb(51 156 255), rgb(131 195 255 / 76%))
+  );
+  --font-size-base: var(--font-text-md-size, 14px);
+  --blue: light-dark(rgb(51 156 255), rgb(51 156 255));
+  --orange: light-dark(rgb(226 85 7), rgb(251 106 34));
+  --green: light-dark(rgb(0 162 64), rgb(64 201 119));
+  --red: light-dark(rgb(211 19 70), rgb(255 103 100));
+  --purple: light-dark(rgb(146 79 247), rgb(173 123 249));
+  --yellow: light-dark(rgb(255 195 0), rgb(255 210 64));
+  --viz-series-1: var(--primary);
+  --viz-series-2: light-dark(rgb(243 136 59), rgb(245 154 86));
+  --viz-series-3: light-dark(rgb(93 201 119), rgb(116 213 139));
+  --viz-series-4: light-dark(rgb(235 119 177), rgb(240 143 192));
+  --viz-series-5: light-dark(rgb(155 121 236), rgb(170 145 239));
+  --viz-series-6: light-dark(rgb(58 185 177), rgb(90 203 194));
+
+  /* Internal implementation variables; not part of the agent contract. */
+  --font-sans: -apple-system, system-ui, &quot;Segoe UI&quot;, sans-serif;
+  --font-mono:
+    ui-monospace, SFMono-Regular, &quot;SF Mono&quot;, Menlo, Consolas, &quot;Liberation Mono&quot;,
+    monospace;
+  --font-size-normal: max(11px, var(--font-size-base));
+  --font-size-tooltip: calc(var(--font-size-base) - 1px);
+  --font-size-small: max(11px, calc(var(--font-size-base) - 2px));
+  --font-size-h1: calc(var(--font-size-normal) * 1.7142857143);
+  --font-size-h2: calc(var(--font-size-normal) * 1.4285714286);
+  --font-size-h3: calc(var(--font-size-normal) * 1.2857142857);
+  --font-weight-normal: 430;
+  --font-weight-medium: 500;
+  --line-height-normal: calc(var(--font-size-normal) * 1.5);
+  --line-height-tooltip: calc(var(--font-size-tooltip) * 1.4285714286);
+  --line-height-small: calc(var(--font-size-small) + 4px);
+  --radius: var(--border-radius-lg, 12.5px);
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-2xl: calc(var(--radius) * 1.6);
+  --radius-full: 9999px;
+  --shadow-sm: 0 1px 2px -1px rgb(0 0 0 / 8%);
+  --checkmark-image: url(&quot;data:image/svg+xml,%3Csvg xmlns=&#x27;http://www.w3.org/2000/svg&#x27; viewBox=&#x27;0 0 17 17&#x27;%3E%3Cpath d=&#x27;M12.8961 3.64101C13.1297 3.41418 13.4984 3.37523 13.7779 3.56581C14.0571 3.75635 14.1554 4.11331 14.0299 4.41347L13.9615 4.53847L7.71151 13.7045C7.59411 13.8767 7.4063 13.9877 7.19881 14.0072C6.99136 14.0267 6.78564 13.9533 6.63826 13.806L2.88826 10.056L2.79842 9.9457C2.6192 9.67407 2.64927 9.30496 2.88826 9.06581C3.12738 8.82669 3.49647 8.79676 3.76815 8.97597L3.8785 9.06581L7.03084 12.2182L12.8053 3.74941L12.8961 3.64101Z&#x27;/%3E%3C/svg%3E&quot;);
+
+  /* Legacy aliases; not part of the current agent contract. */
+  --viz-bg: transparent;
+  --viz-panel: var(--card);
+  --viz-border: var(--border);
+  --viz-text: var(--foreground);
+  --viz-muted: var(--muted-foreground);
+  --viz-accent: var(--primary);
+  --viz-accent-text: var(--primary-foreground);
+  --viz-accent-bg: var(--accent);
+  --viz-font-size: var(--font-size-base);
+  --viz-warning: var(--destructive);
+}
+
+:root[data-theme=&quot;light&quot;] {
+  color-scheme: light;
+}
+
+:root[data-theme=&quot;dark&quot;] {
+  color-scheme: dark;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html &gt; body {
+  /* Preserve MCP aliases for older inline renderers without creating :root cycles. */
+  --color-background-primary: var(
+    --background,
+    light-dark(rgb(255 247 244), rgb(24 24 24))
+  );
+  --color-text-primary: var(
+    --foreground,
+    light-dark(rgb(24 20 17), rgb(255 247 244))
+  );
+  --color-border-secondary: var(
+    --border,
+    light-dark(rgb(26 28 31 / 8%), rgb(255 255 255 / 8.2%))
+  );
+
+  margin: 0;
+  padding: 5px;
+  color: var(--foreground);
+  background: transparent !important;
+  font-family: var(--font-sans) !important;
+  font-size: var(--font-size-normal);
+  font-weight: var(--font-weight-normal);
+  line-height: var(--line-height-normal);
+}
+
+a {
+  color: color-mix(in srgb, var(--viz-accent) 80%, var(--viz-text) 20%);
+  cursor: pointer;
+  font-weight: var(--font-weight-medium, 500);
+  text-decoration: none;
+  text-underline-offset: 2px;
+}
+
+a:is(:hover, :focus-visible) {
+  text-decoration-line: underline;
+  text-decoration-style: dashed;
+  text-decoration-thickness: 0.5px;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p {
+  margin-block: 0;
+}
+
+h1 {
+  font-size: var(--font-size-h1);
+  font-weight: var(--font-weight-medium);
+  line-height: 1.25;
+}
+
+h2 {
+  font-size: var(--font-size-h2);
+  font-weight: var(--font-weight-medium);
+  line-height: 1.25;
+}
+
+h3,
+h4,
+h5,
+h6 {
+  font-size: var(--font-size-h3);
+  font-weight: var(--font-weight-medium);
+  line-height: 1.3;
+}
+
+b,
+strong,
+th {
+  font-weight: var(--font-weight-medium);
+}
+
+code:not(pre code) {
+  display: inline;
+  padding: 1px 6px;
+  border-radius: var(--radius-sm);
+  corner-shape: superellipse(1.5);
+  background: var(--muted);
+  font-family: var(--font-mono);
+  font-size: 0.92em;
+  overflow-wrap: anywhere;
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+  word-break: break-word;
+}
+
+.table-responsive {
+  width: 100%;
+  overflow-x: auto;
+  scrollbar-width: thin;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  color: var(--foreground);
+  font: inherit;
+  text-align: start;
+}
+
+.table :is(th, td) {
+  padding-block: 10px;
+  padding-inline: 0 24px;
+  overflow-wrap: anywhere;
+  border-bottom: 1px solid var(--border);
+  text-align: start;
+  vertical-align: top;
+}
+
+.table-responsive &gt; .table :is(th, td) {
+  overflow-wrap: break-word;
+}
+
+.table :is(th, td):last-child {
+  padding-inline-end: 0;
+}
+
+.table :is(caption, thead th) {
+  font-weight: 600;
+}
+
+.table thead th {
+  padding-block: 8px;
+  border-bottom-color: color-mix(in srgb, var(--foreground) 16%, transparent);
+}
+
+.table tbody tr:last-child :is(th, td) {
+  border-bottom: 0;
+}
+
+.table.table-sm :is(th, td) {
+  padding-block: 6px;
+}
+
+.table.table-sm :is(th, td):not(:last-child) {
+  padding-inline-end: 16px;
+}
+
+.table :is(.text-end, [align=&quot;right&quot;]) {
+  text-align: end;
+  font-variant-numeric: tabular-nums;
+}
+
+.table :is(.text-center, [align=&quot;center&quot;]) {
+  text-align: center;
+}
+
+.table .text-nowrap {
+  white-space: nowrap;
+}
+
+#widget {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+  padding: 0;
+  background: transparent !important;
+}
+
+.card {
+  min-width: 0;
+  padding: 12px;
+  overflow: hidden;
+  overflow-wrap: break-word;
+  border-radius: var(--radius-2xl);
+  corner-shape: superellipse(1.5);
+  color: var(--card-foreground);
+  background: var(--card);
+}
+
+#widget &gt; :not(.card, .progress) {
+  width: 100% !important;
+  max-width: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+.tooltip {
+  position: fixed;
+  z-index: 50;
+  top: 0;
+  left: 0;
+  width: max-content;
+  max-width: min(
+    20rem,
+    var(--tooltip-available-width, calc(100vw - 10px)),
+    calc(100vw - 10px)
+  );
+  max-height: min(
+    var(--tooltip-available-height, calc(100vh - 10px)),
+    calc(100vh - 10px)
+  );
+  padding: 4px 8px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  corner-shape: superellipse(1.5);
+  color: var(--popover-foreground);
+  background: var(--popover);
+  box-shadow: none;
+  font-size: var(--font-size-tooltip);
+  line-height: var(--line-height-tooltip);
+  overflow-wrap: break-word;
+  white-space: normal;
+  pointer-events: none;
+  user-select: none;
+}
+
+.viz-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(max(180px, 24%), 1fr));
+  gap: 10px;
+}
+
+.viz-stat {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.viz-stat-value {
+  font-size: var(--font-size-h2);
+  font-weight: var(--font-weight-medium);
+  line-height: 1.25;
+}
+
+.viz-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+}
+
+.progress {
+  display: flex;
+  height: 6px;
+  margin-block: calc((var(--line-height-normal, 1.5em) - 6px) / 2);
+  overflow: hidden;
+  border: 0;
+  border-radius: var(--radius-full);
+  background: var(--muted);
+}
+
+.progress-bar {
+  height: 100%;
+  flex-shrink: 0;
+  border: 0;
+  background: var(--viz-series-1);
+}
+
+.viz-badge {
+  padding: 3px 8px;
+  border-radius: var(--radius-full);
+  color: var(--accent-foreground);
+  background: var(--accent);
+  font-weight: var(--font-weight-medium);
+}
+
+small,
+.text-small,
+.viz-badge {
+  font-size: var(--font-size-small);
+  line-height: var(--line-height-small);
+}
+
+.text-muted {
+  color: var(--muted-foreground);
+}
+
+.tabular-nums {
+  font-variant-numeric: tabular-nums;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.viz-controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+
+.viz-controls &gt; .form-label {
+  display: grid;
+  min-width: min(100%, 260px);
+  flex: 1 1 280px;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: baseline;
+  gap: 2px 12px;
+  margin-bottom: 0;
+}
+
+.viz-controls &gt; .form-label &gt; :is(.form-control, .form-range, .form-select) {
+  grid-column: 1 / -1;
+}
+
+.btn,
+.form-check-input,
+.form-control,
+.form-range,
+.form-select {
+  font: inherit;
+}
+
+.btn {
+  appearance: button;
+  display: inline-flex;
+  inline-size: fit-content;
+  max-inline-size: 100%;
+  min-height: 28px;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  margin: 0;
+  padding: 0 8px;
+  -webkit-app-region: no-drag;
+  border: 1px solid var(--input);
+  border-radius: var(--radius-lg);
+  corner-shape: superellipse(1.5);
+  color: var(--secondary-foreground);
+  background: var(--secondary);
+  cursor: var(--cursor-interaction, pointer);
+  text-align: center;
+  text-decoration: none;
+  white-space: nowrap;
+  user-select: none;
+  -webkit-font-smoothing: antialiased;
+}
+
+.btn:is(.btn-block, .viz-tile) {
+  inline-size: 100%;
+}
+
+.btn.viz-tile {
+  min-width: 0;
+  overflow-wrap: anywhere;
+  white-space: normal;
+}
+
+a.btn {
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.btn:not(:disabled):hover {
+  background: color-mix(in srgb, var(--foreground) 6%, var(--secondary));
+}
+
+.btn-primary {
+  border-color: transparent;
+  color: var(--primary-foreground);
+  background: var(--foreground);
+  background-clip: padding-box;
+}
+
+.btn-primary .text-muted {
+  color: color-mix(in srgb, var(--primary-foreground) 50%, transparent);
+}
+
+.btn-primary:not(:disabled):hover {
+  background: color-mix(in srgb, var(--foreground) 80%, transparent);
+  background-clip: padding-box;
+}
+
+.btn-ghost {
+  border-color: transparent;
+  color: var(--muted-foreground);
+  background: transparent;
+}
+
+.btn-ghost:not(:disabled):hover {
+  color: var(--foreground);
+  background: color-mix(in srgb, var(--foreground) 6%, var(--secondary));
+}
+
+.btn:disabled {
+  cursor: not-allowed;
+  opacity: 0.4;
+}
+
+[data-lucide] {
+  stroke-width: 1.6;
+}
+
+.form-label {
+  display: block;
+  margin-bottom: 6px;
+  color: var(--foreground);
+}
+
+.form-control {
+  display: block;
+  width: 100%;
+  min-height: 28px;
+  padding: 0 8px;
+  outline: none;
+  border: 1px solid var(--input);
+  border-radius: var(--radius-lg);
+  corner-shape: superellipse(1.5);
+  color: var(--foreground);
+  background: var(--secondary);
+}
+
+.form-control::placeholder {
+  color: var(--muted-foreground);
+}
+
+.form-control[type=&quot;file&quot;] {
+  padding: 0;
+  overflow: hidden;
+  cursor: var(--cursor-interaction, pointer);
+}
+
+.form-control[type=&quot;file&quot;]::file-selector-button {
+  min-height: 26px;
+  margin-right: 8px;
+  padding: 0 8px;
+  border: 0;
+  border-right: 1px solid var(--input);
+  color: var(--secondary-foreground);
+  background: var(--secondary);
+  cursor: inherit;
+  font: inherit;
+}
+
+.form-control[type=&quot;file&quot;]:not(:disabled):hover::file-selector-button {
+  background: color-mix(in srgb, var(--foreground) 6%, var(--secondary));
+}
+
+.form-control-color[type=&quot;color&quot;] {
+  width: 40px;
+  height: 28px;
+  padding: 3px;
+  cursor: var(--cursor-interaction, pointer);
+}
+
+.form-control-color[type=&quot;color&quot;]::-webkit-color-swatch-wrapper {
+  padding: 0;
+}
+
+.form-control-color[type=&quot;color&quot;]::-webkit-color-swatch {
+  border: 0;
+  border-radius: calc(var(--radius-lg) - 4px);
+  corner-shape: superellipse(1.5);
+}
+
+textarea.form-control {
+  height: auto;
+  min-height: 72px;
+  padding: 8px 10px;
+  resize: vertical;
+}
+
+.form-control:focus-visible {
+  border-color: var(--ring);
+  box-shadow: inset 0 0 0 1px var(--ring);
+}
+
+.form-control:disabled,
+.form-select:disabled {
+  cursor: not-allowed;
+  opacity: 0.4;
+}
+
+.form-select {
+  appearance: none;
+  display: block;
+  width: 100%;
+  min-height: 28px;
+  margin: 0;
+  padding: 0 32px 0 8px;
+  outline: none;
+  border: 1px solid var(--input);
+  border-radius: var(--radius-lg);
+  corner-shape: superellipse(1.5);
+  color: var(--foreground);
+  background-color: var(--secondary);
+  background-image:
+    linear-gradient(45deg, transparent 50%, var(--muted-foreground) 50%),
+    linear-gradient(135deg, var(--muted-foreground) 50%, transparent 50%);
+  background-position:
+    calc(100% - 14px) 50%,
+    calc(100% - 10px) 50%;
+  background-repeat: no-repeat;
+  background-size: 4px 4px;
+  cursor: var(--cursor-interaction, default);
+}
+
+.form-select:not(:disabled):hover {
+  background-color: color-mix(in srgb, var(--foreground) 6%, var(--secondary));
+}
+
+.form-select:focus-visible {
+  border-color: var(--ring);
+  box-shadow: inset 0 0 0 1px var(--ring);
+}
+
+.form-check {
+  display: flex;
+  min-height: 20px;
+  align-items: center;
+  gap: 6px;
+}
+
+.form-check-input {
+  appearance: none;
+  width: 14px;
+  height: 14px;
+  flex: 0 0 auto;
+  margin: 0;
+  border: 1px solid var(--input);
+  color: var(--primary-foreground);
+  background-color: transparent;
+  cursor: var(--cursor-interaction, default);
+  transition:
+    background-color 150ms,
+    border-color 150ms,
+    box-shadow 150ms;
+}
+
+.form-check:not(.form-switch) .form-check-input[type=&quot;checkbox&quot;] {
+  border-color: var(--input);
+  border-radius: var(--radius-sm);
+  corner-shape: superellipse(1.5);
+  background-color: var(--secondary);
+  box-shadow: var(--shadow-sm);
+}
+
+.form-check:not(.form-switch)
+  .form-check-input:not(:disabled):not(:checked):hover {
+  background-color: var(--card);
+}
+
+.form-check:not(.form-switch) .form-check-input[type=&quot;checkbox&quot;]:checked {
+  border-color: var(--primary);
+  background-color: var(--primary);
+}
+
+.form-check:not(.form-switch)
+  .form-check-input[type=&quot;checkbox&quot;]:checked::before {
+  display: block;
+  width: 100%;
+  height: 100%;
+  background: var(--primary-foreground);
+  content: &quot;&quot;;
+  mask: var(--checkmark-image) center / 12px 12px no-repeat;
+}
+
+.form-check-input[type=&quot;radio&quot;] {
+  width: 14px;
+  height: 14px;
+  border-radius: var(--radius-full);
+}
+
+.form-check-input[type=&quot;radio&quot;]:checked {
+  border: 2px solid var(--primary);
+  background:
+    radial-gradient(circle, var(--primary-foreground) 0 2.5px, transparent 3px),
+    var(--primary);
+}
+
+.form-check:not(.form-switch) .form-check-input:focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 2px;
+}
+
+.form-check:not(.form-switch) .form-check-input:disabled {
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.form-check:not(.form-switch) .form-check-input:disabled + .form-check-label {
+  cursor: not-allowed;
+}
+
+.form-switch .form-check-input:disabled,
+.form-switch .form-check-input:disabled + .form-check-label {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.form-check-label {
+  color: var(--foreground);
+  cursor: var(--cursor-interaction, default);
+}
+
+.form-switch .form-check-input {
+  position: relative;
+  width: 32px;
+  height: 20px;
+  border: 0;
+  border-radius: var(--radius-full);
+  background: var(--muted);
+  box-shadow: none;
+  transition: background-color 200ms cubic-bezier(0, 0, 0.2, 1);
+}
+
+.form-switch .form-check-input::before {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  width: 16px;
+  height: 16px;
+  box-sizing: border-box;
+  border: 1px solid light-dark(var(--primary-foreground), var(--foreground));
+  border-radius: var(--radius-full);
+  background: light-dark(var(--primary-foreground), var(--foreground));
+  box-shadow: var(--shadow-sm);
+  content: &quot;&quot;;
+  transform: translate(2px, -50%);
+  transition: transform 200ms cubic-bezier(0, 0, 0.2, 1);
+}
+
+.form-switch .form-check-input:checked {
+  background: var(--primary);
+}
+
+.form-switch .form-check-input:checked::before {
+  transform: translate(14px, -50%);
+}
+
+.form-switch .form-check-input:focus-visible {
+  box-shadow: 0 0 0 2px var(--ring);
+}
+
+.form-range {
+  appearance: none;
+  display: block;
+  width: 100%;
+  height: 28px;
+  flex: 1;
+  margin: 0;
+  padding: 0;
+  outline: none;
+  border: 0;
+  accent-color: var(--primary);
+  background: linear-gradient(
+      color-mix(in srgb, var(--foreground) 7%, transparent),
+      color-mix(in srgb, var(--foreground) 7%, transparent)
+    )
+    center / 100% 2px no-repeat;
+}
+
+.form-range::-webkit-slider-runnable-track {
+  height: 28px;
+  background: transparent;
+}
+
+.form-range::-webkit-slider-thumb {
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  margin-top: 4px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-full);
+  background: light-dark(var(--primary-foreground), var(--foreground));
+}
+
+.form-range:focus-visible::-webkit-slider-thumb {
+  border-color: var(--ring);
+  box-shadow: inset 0 0 0 1px var(--ring);
+}
+
+.form-range::-moz-range-track {
+  height: 28px;
+  background: transparent;
+}
+
+.form-range::-moz-range-thumb {
+  width: 20px;
+  height: 20px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-full);
+  background: light-dark(var(--primary-foreground), var(--foreground));
+}
+
+.form-range:focus-visible::-moz-range-thumb {
+  border-color: var(--ring);
+  box-shadow: inset 0 0 0 1px var(--ring);
+}
+
+.form-range:disabled {
+  cursor: not-allowed;
+  opacity: 0.4;
+}
+
+.btn:not(.btn-primary, .viz-tile):is(
+  [aria-pressed=&quot;true&quot;],
+  [aria-selected=&quot;true&quot;],
+  .is-selected
+) {
+  border-color: var(--primary);
+  color: var(--primary-foreground);
+  background: var(--primary);
+}
+
+.btn.viz-tile:is([aria-pressed=&quot;true&quot;], [aria-selected=&quot;true&quot;], .is-selected) {
+  border-color: var(--primary);
+  box-shadow: inset 0 0 0 1px var(--primary);
+}
+
+.btn:focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 2px;
+}
+
+@media (pointer: coarse) {
+  .btn,
+  .form-control,
+  .form-select {
+    min-width: 44px;
+    min-height: 44px;
+  }
+
+  .form-control,
+  .form-select {
+    font-size: max(16px, var(--font-size-normal));
+  }
+
+  .form-control[type=&quot;file&quot;]::file-selector-button {
+    min-width: 44px;
+    min-height: 44px;
+  }
+
+  .form-control-color[type=&quot;color&quot;] {
+    width: 44px;
+    height: 44px;
+  }
+
+  .form-control:is(
+    [type=&quot;date&quot;],
+    [type=&quot;datetime-local&quot;],
+    [type=&quot;month&quot;],
+    [type=&quot;time&quot;],
+    [type=&quot;week&quot;]
+  ) {
+    min-width: 0;
+    max-width: 100%;
+    padding-block: 8px;
+  }
+
+  .form-check {
+    min-height: 44px;
+    padding-inline: 15px;
+  }
+
+  .form-check-input {
+    position: relative;
+  }
+
+  .form-check-input::after {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 44px;
+    height: 44px;
+    content: &quot;&quot;;
+    transform: translate(-50%, -50%);
+  }
+
+  .form-check-label {
+    display: inline-flex;
+    min-width: 44px;
+    min-height: 44px;
+    align-items: center;
+  }
+
+  .form-range {
+    height: 44px;
+    touch-action: pan-y;
+  }
+
+  .form-range::-webkit-slider-runnable-track {
+    height: 44px;
+  }
+
+  .form-range::-moz-range-track {
+    height: 44px;
+  }
+
+  .form-range::-webkit-slider-thumb {
+    margin-top: 12px;
+  }
+}
+
+svg {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+#widget &gt; svg {
+  width: 100%;
+}
+
+/* Model-authored chart rules can otherwise stretch icons after these styles load. */
+svg.lucide {
+  display: block;
+  width: 16px !important;
+  height: 16px !important;
+  flex: none;
+  margin: 0 !important;
+  stroke-width: 1.6;
+}
+
+.text-warning,
+.text-destructive {
+  color: var(--destructive);
+}
+
+html&gt;body{padding:0}&lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;style&gt;
+  @import url(&#x27;https://fonts.googleapis.com/css2?family=Besley:ital,wght@0,400;0,500;1,400&amp;family=Public+Sans:wght@400;500&amp;display=swap&#x27;);
+
+  #europe-chart-format-guide {
+    width: 100%;
+    color: var(--foreground);
+    font-family: &quot;Public Sans&quot;, system-ui, sans-serif;
+  }
+
+  #europe-chart-format-guide h1,
+  #europe-chart-format-guide h2 {
+    font-family: &quot;Besley&quot;, Georgia, serif;
+    font-weight: 500;
+  }
+
+  #europe-chart-format-guide .guide-intro {
+    max-width: 60ch;
+    margin-bottom: 2rem;
+  }
+
+  #europe-chart-format-guide .guide-chart {
+    padding: 1.5rem 0 2rem;
+    border-top: 1px solid var(--border);
+  }
+
+  #europe-chart-format-guide .guide-chart header {
+    max-width: 60ch;
+    margin-bottom: 1rem;
+  }
+
+  #europe-chart-format-guide .guide-chart h2 {
+    text-wrap: balance;
+  }
+
+  #europe-chart-format-guide .chart-kind {
+    margin-bottom: 0.25rem;
+    color: var(--red);
+    font-weight: 500;
+  }
+
+  #europe-chart-format-guide .chart-deck,
+  #europe-chart-format-guide .chart-source {
+    color: var(--muted-foreground);
+  }
+
+  #europe-chart-format-guide .chart-source {
+    max-width: 68ch;
+    margin-top: 0.75rem;
+  }
+
+  #europe-chart-format-guide .chart-slot {
+    width: 100%;
+    min-width: 0;
+  }
+
+  #europe-chart-format-guide svg {
+    display: block;
+    width: 100%;
+    height: auto;
+    overflow: visible;
+  }
+
+  #europe-chart-format-guide svg text {
+    fill: var(--foreground);
+    font-family: &quot;Public Sans&quot;, system-ui, sans-serif;
+    font-size: 12px;
+  }
+
+  #europe-chart-format-guide svg .axis text,
+  #europe-chart-format-guide svg .secondary-label {
+    fill: var(--muted-foreground);
+  }
+
+  #europe-chart-format-guide svg .axis path,
+  #europe-chart-format-guide svg .axis line,
+  #europe-chart-format-guide svg .grid line {
+    stroke: var(--border);
+  }
+
+  #europe-chart-format-guide svg .axis path,
+  #europe-chart-format-guide svg .axis line,
+  #europe-chart-format-guide svg .grid line {
+    shape-rendering: crispEdges;
+  }
+
+  #europe-chart-format-guide svg .axis-title {
+    fill: var(--muted-foreground);
+    font-weight: 400;
+  }
+
+  #europe-chart-format-guide svg .direct-label,
+  #europe-chart-format-guide svg .value-label {
+    font-weight: 500;
+  }
+
+  #europe-chart-format-guide svg .reference-line,
+  #europe-chart-format-guide svg .trend-line {
+    stroke: var(--muted-foreground);
+    stroke-width: 1.5;
+    stroke-dasharray: 4 4;
+    opacity: 0.55;
+  }
+
+  #europe-chart-format-guide svg .tabular {
+    font-variant-numeric: tabular-nums lining-nums;
+  }
+
+  #europe-chart-format-guide .chart-key {
+    margin-top: 0.5rem;
+    color: var(--muted-foreground);
+  }
+&lt;/style&gt;
+
+&lt;div id=&quot;europe-chart-format-guide&quot;&gt;
+  &lt;header class=&quot;guide-intro&quot;&gt;
+    &lt;h1&gt;Chart formats&lt;/h1&gt;
+    &lt;p&gt;One argument, one primary chart, one highlighted series. Labels sit on the data; sources stay attached to it.&lt;/p&gt;
+  &lt;/header&gt;
+
+  &lt;section class=&quot;guide-chart&quot;&gt;
+    &lt;header&gt;
+      &lt;p class=&quot;chart-kind&quot;&gt;Trend · line chart&lt;/p&gt;
+      &lt;h2&gt;Poland has closed 43% of its productivity gap with Italy&lt;/h2&gt;
+      &lt;p class=&quot;chart-deck&quot;&gt;Output per hour worked, constant 2021 international dollars at purchasing-power parity, 2005–2025.&lt;/p&gt;
+    &lt;/header&gt;
+    &lt;div class=&quot;chart-slot&quot; data-chart=&quot;line&quot;&gt;&lt;/div&gt;
+    &lt;p class=&quot;chart-source text-small&quot;&gt;Source: ILOSTAT modelled estimates. Values may be revised.&lt;/p&gt;
+  &lt;/section&gt;
+
+  &lt;section class=&quot;guide-chart&quot;&gt;
+    &lt;header&gt;
+      &lt;p class=&quot;chart-kind&quot;&gt;Ranking · horizontal bars&lt;/p&gt;
+      &lt;h2&gt;Poland’s income per person is 61% of Denmark’s&lt;/h2&gt;
+      &lt;p class=&quot;chart-deck&quot;&gt;Gross domestic product per person, constant purchasing-power-adjusted international dollars, 2024.&lt;/p&gt;
+    &lt;/header&gt;
+    &lt;div class=&quot;chart-slot&quot; data-chart=&quot;bars&quot;&gt;&lt;/div&gt;
+    &lt;p class=&quot;chart-source text-small&quot;&gt;Source: World Bank via Our World in Data.&lt;/p&gt;
+  &lt;/section&gt;
+
+  &lt;section class=&quot;guide-chart&quot;&gt;
+    &lt;header&gt;
+      &lt;p class=&quot;chart-kind&quot;&gt;Change · dumbbell chart&lt;/p&gt;
+      &lt;h2&gt;Denmark made the largest low-carbon leap&lt;/h2&gt;
+      &lt;p class=&quot;chart-deck&quot;&gt;Low-carbon sources as a share of primary energy consumption, 2000 and 2024.&lt;/p&gt;
+      &lt;p class=&quot;chart-key text-small&quot;&gt;Hollow circles mark 2000; filled circles mark 2024.&lt;/p&gt;
+    &lt;/header&gt;
+    &lt;div class=&quot;chart-slot&quot; data-chart=&quot;dumbbell&quot;&gt;&lt;/div&gt;
+    &lt;p class=&quot;chart-source text-small&quot;&gt;Source: Energy Institute Statistical Review via Our World in Data.&lt;/p&gt;
+  &lt;/section&gt;
+
+  &lt;section class=&quot;guide-chart&quot;&gt;
+    &lt;header&gt;
+      &lt;p class=&quot;chart-kind&quot;&gt;Relationship · scatterplot&lt;/p&gt;
+      &lt;h2&gt;Research spending and researcher density move together&lt;/h2&gt;
+      &lt;p class=&quot;chart-deck&quot;&gt;Research and development spending and researchers per million people, 2022.&lt;/p&gt;
+    &lt;/header&gt;
+    &lt;div class=&quot;chart-slot&quot; data-chart=&quot;scatter&quot;&gt;&lt;/div&gt;
+    &lt;p class=&quot;chart-source text-small&quot;&gt;Source: World Bank. Labels identify the subject and notable outliers.&lt;/p&gt;
+  &lt;/section&gt;
+
+  &lt;section class=&quot;guide-chart&quot;&gt;
+    &lt;header&gt;
+      &lt;p class=&quot;chart-kind&quot;&gt;Comparison · small multiples&lt;/p&gt;
+      &lt;h2&gt;Europe’s fertility decline is not one story&lt;/h2&gt;
+      &lt;p class=&quot;chart-deck&quot;&gt;Total fertility rate, measured as births per woman, 1990–2020.&lt;/p&gt;
+    &lt;/header&gt;
+    &lt;div class=&quot;chart-slot&quot; data-chart=&quot;multiples&quot;&gt;&lt;/div&gt;
+    &lt;p class=&quot;chart-source text-small&quot;&gt;Source: UN World Population Prospects via Our World in Data.&lt;/p&gt;
+  &lt;/section&gt;
+&lt;/div&gt;
+
+&lt;script src=&quot;https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js&quot;&gt;&lt;/script&gt;
+&lt;script&gt;
+(() =&gt; {
+  const root = document.getElementById(&quot;europe-chart-format-guide&quot;);
+  if (!root || !window.d3) return;
+
+  const accent = &quot;var(--red)&quot;;
+  const ink = &quot;var(--foreground)&quot;;
+  const muted = &quot;var(--muted-foreground)&quot;;
+  const border = &quot;var(--border)&quot;;
+
+  const productivity = [
+    {country: &quot;Italy&quot;, year: 2005, value: 72.90}, {country: &quot;Italy&quot;, year: 2010, value: 72.77},
+    {country: &quot;Italy&quot;, year: 2015, value: 73.75}, {country: &quot;Italy&quot;, year: 2020, value: 74.22},
+    {country: &quot;Italy&quot;, year: 2025, value: 74.11}, {country: &quot;Poland&quot;, year: 2005, value: 28.54},
+    {country: &quot;Poland&quot;, year: 2010, value: 32.27}, {country: &quot;Poland&quot;, year: 2015, value: 36.25},
+    {country: &quot;Poland&quot;, year: 2020, value: 43.77}, {country: &quot;Poland&quot;, year: 2025, value: 48.84}
+  ];
+
+  const gdp = [
+    {country: &quot;Denmark&quot;, value: 73709}, {country: &quot;Netherlands&quot;, value: 70902},
+    {country: &quot;Sweden&quot;, value: 63259}, {country: &quot;Germany&quot;, value: 62830},
+    {country: &quot;France&quot;, value: 54465}, {country: &quot;Italy&quot;, value: 53115},
+    {country: &quot;Spain&quot;, value: 48373}, {country: &quot;Poland&quot;, value: 45113}
+  ];
+
+  const lowCarbon = [
+    {country: &quot;Sweden&quot;, start: 61.77, end: 72.21},
+    {country: &quot;France&quot;, start: 43.84, end: 53.86},
+    {country: &quot;Denmark&quot;, start: 6.76, end: 41.72},
+    {country: &quot;Portugal&quot;, start: 12.41, end: 39.74},
+    {country: &quot;Spain&quot;, start: 18.00, end: 34.20},
+    {country: &quot;Poland&quot;, start: 0.64, end: 13.05}
+  ];
+
+  const research = [
+    {country: &quot;Germany&quot;, spend: 3.13, researchers: 5787},
+    {country: &quot;France&quot;, spend: 2.23, researchers: 5182},
+    {country: &quot;Italy&quot;, spend: 1.39, researchers: 2796},
+    {country: &quot;Spain&quot;, spend: 1.44, researchers: 3388},
+    {country: &quot;Poland&quot;, spend: 1.45, researchers: 3721},
+    {country: &quot;Romania&quot;, spend: 0.46, researchers: 999},
+    {country: &quot;Sweden&quot;, spend: 3.41, researchers: 8624},
+    {country: &quot;Netherlands&quot;, spend: 2.26, researchers: 6319},
+    {country: &quot;Denmark&quot;, spend: 2.89, researchers: 8736},
+    {country: &quot;Czechia&quot;, spend: 1.96, researchers: 4697},
+    {country: &quot;Portugal&quot;, spend: 1.70, researchers: 5687},
+    {country: &quot;Greece&quot;, spend: 1.49, researchers: 4927}
+  ];
+
+  const fertility = [
+    {country: &quot;France&quot;, year: 1990, value: 1.78}, {country: &quot;France&quot;, year: 2000, value: 1.88},
+    {country: &quot;France&quot;, year: 2010, value: 2.02}, {country: &quot;France&quot;, year: 2020, value: 1.79},
+    {country: &quot;Italy&quot;, year: 1990, value: 1.33}, {country: &quot;Italy&quot;, year: 2000, value: 1.25},
+    {country: &quot;Italy&quot;, year: 2010, value: 1.44}, {country: &quot;Italy&quot;, year: 2020, value: 1.24},
+    {country: &quot;Poland&quot;, year: 1990, value: 2.07}, {country: &quot;Poland&quot;, year: 2000, value: 1.37},
+    {country: &quot;Poland&quot;, year: 2010, value: 1.41}, {country: &quot;Poland&quot;, year: 2020, value: 1.38},
+    {country: &quot;Sweden&quot;, year: 1990, value: 2.12}, {country: &quot;Sweden&quot;, year: 2000, value: 1.54},
+    {country: &quot;Sweden&quot;, year: 2010, value: 1.97}, {country: &quot;Sweden&quot;, year: 2020, value: 1.67}
+  ];
+
+  function baseSvg(slot, height, margin) {
+    const width = Math.max(300, Math.round(slot.getBoundingClientRect().width));
+    d3.select(slot).selectAll(&quot;*&quot;).remove();
+    const svg = d3.select(slot).append(&quot;svg&quot;)
+      .attr(&quot;viewBox&quot;, `0 0 ${width} ${height}`)
+      .attr(&quot;role&quot;, &quot;img&quot;);
+    svg.append(&quot;rect&quot;)
+      .attr(&quot;data-chart-frame&quot;, &quot;&quot;)
+      .attr(&quot;x&quot;, margin.left).attr(&quot;y&quot;, margin.top)
+      .attr(&quot;width&quot;, width - margin.left - margin.right)
+      .attr(&quot;height&quot;, height - margin.top - margin.bottom)
+      .attr(&quot;fill&quot;, &quot;none&quot;);
+    return {svg, width, height, innerWidth: width - margin.left - margin.right, innerHeight: height - margin.top - margin.bottom};
+  }
+
+  function styleAxis(group) {
+    group.attr(&quot;class&quot;, &quot;axis&quot;);
+    group.selectAll(&quot;text&quot;).attr(&quot;fill&quot;, muted);
+    group.selectAll(&quot;path,line&quot;).attr(&quot;stroke&quot;, border);
+  }
+
+  function axisTitle(svg, text, x, y, axis, rotate) {
+    const label = svg.append(&quot;text&quot;).attr(&quot;class&quot;, &quot;axis-title&quot;).attr(&quot;data-axis&quot;, axis)
+      .attr(&quot;x&quot;, x).attr(&quot;y&quot;, y).attr(&quot;text-anchor&quot;, &quot;middle&quot;).text(text);
+    if (rotate) label.attr(&quot;transform&quot;, `rotate(-90 ${x} ${y})`);
+  }
+
+  function drawLine(slot) {
+    const margin = {top: 18, right: 98, bottom: 48, left: 64};
+    const {svg, width, height, innerWidth, innerHeight} = baseSvg(slot, 300, margin);
+    svg.attr(&quot;aria-label&quot;, &quot;Line chart of output per hour in Italy and Poland from 2005 to 2025&quot;);
+    const xDomain = d3.extent(productivity, d =&gt; d.year);
+    const valueExtent = d3.extent(productivity, d =&gt; d.value);
+    const valuePadding = (valueExtent[1] - valueExtent[0]) * 0.12;
+    const yDomain = [
+      Math.floor((valueExtent[0] - valuePadding) / 10) * 10,
+      Math.ceil((valueExtent[1] + valuePadding) / 10) * 10
+    ];
+    const x = d3.scaleLinear().domain(xDomain).range([margin.left, margin.left + innerWidth]);
+    const y = d3.scaleLinear().domain(yDomain).range([margin.top + innerHeight, margin.top]);
+    const yTicks = d3.range(yDomain[0], yDomain[1] + 1, 20);
+    const grid = svg.append(&quot;g&quot;).attr(&quot;class&quot;, &quot;grid&quot;);
+    grid.selectAll(&quot;line&quot;).data(yTicks).join(&quot;line&quot;)
+      .attr(&quot;x1&quot;, margin.left).attr(&quot;x2&quot;, width - margin.right)
+      .attr(&quot;y1&quot;, d =&gt; y(d)).attr(&quot;y2&quot;, d =&gt; y(d)).attr(&quot;stroke&quot;, border);
+    styleAxis(svg.append(&quot;g&quot;).attr(&quot;transform&quot;, `translate(0,${height - margin.bottom})`)
+      .call(d3.axisBottom(x).tickValues([xDomain[0], 2015, xDomain[1]]).tickFormat(d3.format(&quot;d&quot;)).tickSize(0).tickPadding(10)));
+    styleAxis(svg.append(&quot;g&quot;).attr(&quot;transform&quot;, `translate(${margin.left},0)`)
+      .call(d3.axisLeft(y).tickValues(yTicks).tickFormat(d =&gt; `$${d}`).tickSize(0).tickPadding(8)));
+    const line = d3.line().x(d =&gt; x(d.year)).y(d =&gt; y(d.value));
+    const grouped = d3.groups(productivity, d =&gt; d.country);
+    grouped.forEach(([country, values]) =&gt; {
+      const color = country === &quot;Poland&quot; ? accent : muted;
+      svg.append(&quot;path&quot;).datum(values).attr(&quot;fill&quot;, &quot;none&quot;).attr(&quot;stroke&quot;, color)
+        .attr(&quot;stroke-width&quot;, country === &quot;Poland&quot; ? 3 : 2).attr(&quot;d&quot;, line);
+      const last = values[values.length - 1];
+      const first = values[0];
+      const growth = Math.round((last.value / first.value - 1) * 100);
+      svg.append(&quot;circle&quot;).attr(&quot;cx&quot;, x(last.year)).attr(&quot;cy&quot;, y(last.value)).attr(&quot;r&quot;, 4).attr(&quot;fill&quot;, color);
+      const label = svg.append(&quot;text&quot;).attr(&quot;class&quot;, &quot;direct-label&quot;).attr(&quot;x&quot;, x(last.year) + 9).attr(&quot;y&quot;, y(last.value) - 4)
+        .attr(&quot;fill&quot;, ink);
+      label.append(&quot;tspan&quot;).text(country);
+      label.append(&quot;tspan&quot;).attr(&quot;class&quot;, &quot;secondary-label tabular&quot;).attr(&quot;x&quot;, x(last.year) + 9).attr(&quot;dy&quot;, 16)
+        .text(`$${Math.round(last.value)} · +${growth}%`);
+    });
+    axisTitle(svg, &quot;Year&quot;, margin.left + innerWidth / 2, height - 7, &quot;x&quot;, false);
+    axisTitle(svg, &quot;International $ per hour&quot;, 13, margin.top + innerHeight / 2, &quot;y&quot;, true);
+  }
+
+  function drawBars(slot) {
+    const margin = {top: 16, right: 72, bottom: 48, left: 92};
+    const height = 340;
+    const {svg, width, innerWidth, innerHeight} = baseSvg(slot, height, margin);
+    svg.attr(&quot;aria-label&quot;, &quot;Ranked horizontal bars of GDP per person in eight European countries in 2024&quot;);
+    const xMax = Math.ceil(d3.max(gdp, d =&gt; d.value) / 10000) * 10000;
+    const x = d3.scaleLinear().domain([0, xMax]).range([margin.left, margin.left + innerWidth]);
+    const y = d3.scaleBand().domain(gdp.map(d =&gt; d.country)).range([margin.top, margin.top + innerHeight]).padding(0.32);
+    styleAxis(svg.append(&quot;g&quot;).attr(&quot;transform&quot;, `translate(0,${height - margin.bottom})`)
+      .call(d3.axisBottom(x).tickValues([0, xMax / 2, xMax]).tickFormat(d =&gt; d === 0 ? &quot;$0&quot; : `$${d / 1000}k`).tickSize(0).tickPadding(10)));
+    svg.selectAll(&quot;.country-label&quot;).data(gdp).join(&quot;text&quot;).attr(&quot;class&quot;, &quot;country-label&quot;)
+      .attr(&quot;x&quot;, margin.left - 8).attr(&quot;y&quot;, d =&gt; y(d.country) + y.bandwidth() / 2 + 4)
+      .attr(&quot;text-anchor&quot;, &quot;end&quot;).attr(&quot;fill&quot;, ink).attr(&quot;font-weight&quot;, d =&gt; d.country === &quot;Poland&quot; ? 500 : 400).text(d =&gt; d.country);
+    svg.selectAll(&quot;.bar&quot;).data(gdp).join(&quot;rect&quot;).attr(&quot;class&quot;, &quot;bar&quot;)
+      .attr(&quot;x&quot;, x(0)).attr(&quot;y&quot;, d =&gt; y(d.country)).attr(&quot;height&quot;, y.bandwidth())
+      .attr(&quot;width&quot;, d =&gt; x(d.value) - x(0)).attr(&quot;fill&quot;, d =&gt; d.country === &quot;Poland&quot; ? accent : muted)
+      .attr(&quot;opacity&quot;, d =&gt; d.country === &quot;Poland&quot; ? 1 : .38);
+    svg.selectAll(&quot;.bar-value&quot;).data(gdp).join(&quot;text&quot;).attr(&quot;class&quot;, &quot;value-label bar-value&quot;)
+      .attr(&quot;x&quot;, d =&gt; Math.min(width - 8, x(d.value) + 6)).attr(&quot;y&quot;, d =&gt; y(d.country) + y.bandwidth() / 2 + 4)
+      .attr(&quot;fill&quot;, ink).attr(&quot;class&quot;, &quot;value-label bar-value tabular&quot;).text(d =&gt; `$${(d.value / 1000).toFixed(1)}k`);
+    axisTitle(svg, &quot;International $ per person&quot;, margin.left + innerWidth / 2, height - 7, &quot;x&quot;, false);
+    axisTitle(svg, &quot;Country&quot;, 13, margin.top + innerHeight / 2, &quot;y&quot;, true);
+  }
+
+  function drawDumbbell(slot) {
+    const margin = {top: 18, right: 74, bottom: 48, left: 88};
+    const height = 300;
+    const {svg, width, innerWidth, innerHeight} = baseSvg(slot, height, margin);
+    svg.attr(&quot;aria-label&quot;, &quot;Dumbbell chart of low-carbon energy share in six European countries in 2000 and 2024&quot;);
+    const endpointExtent = d3.extent(lowCarbon.flatMap(d =&gt; [d.start, d.end]));
+    const xMax = Math.ceil((endpointExtent[1] * 1.08) / 10) * 10;
+    const x = d3.scaleLinear().domain([0, xMax]).range([margin.left, margin.left + innerWidth]);
+    const y = d3.scaleBand().domain(lowCarbon.map(d =&gt; d.country)).range([margin.top, margin.top + innerHeight]).padding(0.42);
+    styleAxis(svg.append(&quot;g&quot;).attr(&quot;transform&quot;, `translate(0,${height - margin.bottom})`)
+      .call(d3.axisBottom(x).tickValues([0, xMax / 2, xMax]).tickFormat(d =&gt; `${d}%`).tickSize(0).tickPadding(10)));
+    svg.selectAll(&quot;.dumbbell-line&quot;).data(lowCarbon).join(&quot;line&quot;)
+      .attr(&quot;x1&quot;, d =&gt; x(d.start)).attr(&quot;x2&quot;, d =&gt; x(d.end))
+      .attr(&quot;y1&quot;, d =&gt; y(d.country) + y.bandwidth() / 2).attr(&quot;y2&quot;, d =&gt; y(d.country) + y.bandwidth() / 2)
+      .attr(&quot;stroke&quot;, d =&gt; d.country === &quot;Denmark&quot; ? accent : muted).attr(&quot;stroke-width&quot;, d =&gt; d.country === &quot;Denmark&quot; ? 3 : 2)
+      .attr(&quot;opacity&quot;, d =&gt; d.country === &quot;Denmark&quot; ? 1 : 0.7);
+    svg.selectAll(&quot;.dumbbell-start&quot;).data(lowCarbon).join(&quot;circle&quot;)
+      .attr(&quot;cx&quot;, d =&gt; x(d.start)).attr(&quot;cy&quot;, d =&gt; y(d.country) + y.bandwidth() / 2).attr(&quot;r&quot;, 4)
+      .attr(&quot;fill&quot;, &quot;var(--background)&quot;).attr(&quot;stroke&quot;, d =&gt; d.country === &quot;Denmark&quot; ? accent : muted).attr(&quot;stroke-width&quot;, 2);
+    svg.selectAll(&quot;.dumbbell-end&quot;).data(lowCarbon).join(&quot;circle&quot;)
+      .attr(&quot;cx&quot;, d =&gt; x(d.end)).attr(&quot;cy&quot;, d =&gt; y(d.country) + y.bandwidth() / 2).attr(&quot;r&quot;, 5)
+      .attr(&quot;fill&quot;, d =&gt; d.country === &quot;Denmark&quot; ? accent : ink);
+    svg.selectAll(&quot;.dumbbell-country&quot;).data(lowCarbon).join(&quot;text&quot;)
+      .attr(&quot;x&quot;, margin.left - 8).attr(&quot;y&quot;, d =&gt; y(d.country) + y.bandwidth() / 2 + 4)
+      .attr(&quot;text-anchor&quot;, &quot;end&quot;).attr(&quot;fill&quot;, ink).attr(&quot;font-weight&quot;, d =&gt; d.country === &quot;Denmark&quot; ? 500 : 400).text(d =&gt; d.country);
+    svg.selectAll(&quot;.dumbbell-start-value&quot;).data(lowCarbon).join(&quot;text&quot;).attr(&quot;class&quot;, &quot;secondary-label tabular&quot;)
+      .attr(&quot;x&quot;, d =&gt; x(d.start))
+      .attr(&quot;y&quot;, d =&gt; y(d.country) + y.bandwidth() / 2 - 9)
+      .attr(&quot;text-anchor&quot;, &quot;middle&quot;)
+      .text(d =&gt; d.start.toFixed(1));
+    svg.selectAll(&quot;.dumbbell-end-value&quot;).data(lowCarbon).join(&quot;text&quot;).attr(&quot;class&quot;, &quot;value-label tabular&quot;)
+      .attr(&quot;x&quot;, d =&gt; x(d.end))
+      .attr(&quot;y&quot;, d =&gt; y(d.country) + y.bandwidth() / 2 + 17)
+      .attr(&quot;text-anchor&quot;, &quot;middle&quot;).attr(&quot;fill&quot;, ink).text(d =&gt; `${d.end.toFixed(1)}%`);
+    axisTitle(svg, &quot;Low-carbon share of primary energy&quot;, margin.left + innerWidth / 2, height - 7, &quot;x&quot;, false);
+    axisTitle(svg, &quot;Country&quot;, 13, margin.top + innerHeight / 2, &quot;y&quot;, true);
+  }
+
+  function drawScatter(slot) {
+    const margin = {top: 18, right: 58, bottom: 54, left: 68};
+    const height = 340;
+    const {svg, width, innerWidth, innerHeight} = baseSvg(slot, height, margin);
+    svg.attr(&quot;aria-label&quot;, &quot;Scatterplot of research spending and researchers per million people in twelve European countries in 2022&quot;);
+    const xMax = Math.ceil(d3.max(research, d =&gt; d.spend) * 1.08 * 10) / 10;
+    const yMax = Math.ceil(d3.max(research, d =&gt; d.researchers) * 1.08 / 500) * 500;
+    const x = d3.scaleLinear().domain([0, xMax]).range([margin.left, margin.left + innerWidth]);
+    const y = d3.scaleLinear().domain([0, yMax]).range([margin.top + innerHeight, margin.top]);
+    const xTicks = [0, 1, 2, 3].filter(d =&gt; d &lt;= xMax);
+    const yTicks = [0, 3000, 6000, 9000].filter(d =&gt; d &lt;= yMax);
+    const grid = svg.append(&quot;g&quot;).attr(&quot;class&quot;, &quot;grid&quot;);
+    grid.selectAll(&quot;line.horizontal&quot;).data(yTicks.slice(1)).join(&quot;line&quot;).attr(&quot;class&quot;, &quot;horizontal&quot;)
+      .attr(&quot;x1&quot;, margin.left).attr(&quot;x2&quot;, width - margin.right)
+      .attr(&quot;y1&quot;, d =&gt; y(d)).attr(&quot;y2&quot;, d =&gt; y(d)).attr(&quot;stroke&quot;, border);
+    styleAxis(svg.append(&quot;g&quot;).attr(&quot;transform&quot;, `translate(0,${height - margin.bottom})`)
+      .call(d3.axisBottom(x).tickValues(xTicks).tickFormat(d =&gt; `${d}%`).tickSize(0).tickPadding(10)));
+    styleAxis(svg.append(&quot;g&quot;).attr(&quot;transform&quot;, `translate(${margin.left},0)`)
+      .call(d3.axisLeft(y).tickValues(yTicks).tickFormat(d =&gt; d === 0 ? &quot;0&quot; : `${d / 1000}k`).tickSize(0).tickPadding(8)));
+    const meanX = d3.mean(research, d =&gt; d.spend);
+    const meanY = d3.mean(research, d =&gt; d.researchers);
+    const slope = d3.sum(research, d =&gt; (d.spend - meanX) * (d.researchers - meanY)) /
+      d3.sum(research, d =&gt; (d.spend - meanX) ** 2);
+    const intercept = meanY - slope * meanX;
+    const trendExtent = d3.extent(research, d =&gt; d.spend);
+    svg.append(&quot;line&quot;).attr(&quot;class&quot;, &quot;trend-line&quot;)
+      .attr(&quot;x1&quot;, x(trendExtent[0])).attr(&quot;x2&quot;, x(trendExtent[1]))
+      .attr(&quot;y1&quot;, y(intercept + slope * trendExtent[0])).attr(&quot;y2&quot;, y(intercept + slope * trendExtent[1]));
+    svg.selectAll(&quot;.scatter-dot&quot;).data(research).join(&quot;circle&quot;).attr(&quot;class&quot;, &quot;scatter-dot&quot;)
+      .attr(&quot;cx&quot;, d =&gt; x(d.spend)).attr(&quot;cy&quot;, d =&gt; y(d.researchers)).attr(&quot;r&quot;, d =&gt; d.country === &quot;Poland&quot; ? 6 : 4.5)
+      .attr(&quot;fill&quot;, d =&gt; d.country === &quot;Poland&quot; ? accent : muted).attr(&quot;opacity&quot;, d =&gt; d.country === &quot;Poland&quot; ? 1 : .68);
+    const labelled = research.filter(d =&gt; [&quot;Poland&quot;, &quot;Romania&quot;, &quot;Sweden&quot;, &quot;Denmark&quot;, &quot;Germany&quot;].includes(d.country));
+    const labelPosition = {
+      Denmark: {dx: 8, dy: -10, anchor: &quot;start&quot;},
+      Sweden: {dx: -8, dy: 15, anchor: &quot;end&quot;},
+      Germany: {dx: 8, dy: 15, anchor: &quot;start&quot;},
+      Poland: {dx: 8, dy: -8, anchor: &quot;start&quot;},
+      Romania: {dx: 8, dy: -8, anchor: &quot;start&quot;}
+    };
+    svg.selectAll(&quot;.scatter-label&quot;).data(labelled).join(&quot;text&quot;).attr(&quot;class&quot;, &quot;direct-label scatter-label&quot;)
+      .attr(&quot;x&quot;, d =&gt; x(d.spend) + labelPosition[d.country].dx)
+      .attr(&quot;y&quot;, d =&gt; y(d.researchers) + labelPosition[d.country].dy)
+      .attr(&quot;text-anchor&quot;, d =&gt; labelPosition[d.country].anchor)
+      .attr(&quot;fill&quot;, ink).text(d =&gt; d.country);
+    axisTitle(svg, &quot;R&amp;D spending, % of GDP&quot;, margin.left + innerWidth / 2, height - 7, &quot;x&quot;, false);
+    axisTitle(svg, &quot;Researchers per million&quot;, 13, margin.top + innerHeight / 2, &quot;y&quot;, true);
+  }
+
+  function drawMultiples(slot) {
+    const width = Math.max(300, Math.round(slot.getBoundingClientRect().width));
+    const columns = width &gt;= 620 ? 2 : 1;
+    const rows = Math.ceil(4 / columns);
+    const panelHeight = columns === 1 ? 172 : 160;
+    const height = rows * panelHeight + 28;
+    d3.select(slot).selectAll(&quot;*&quot;).remove();
+    const svg = d3.select(slot).append(&quot;svg&quot;).attr(&quot;viewBox&quot;, `0 0 ${width} ${height}`)
+      .attr(&quot;role&quot;, &quot;img&quot;).attr(&quot;aria-label&quot;, &quot;Small multiple line charts of fertility rates in France, Italy, Poland and Sweden from 1990 to 2020&quot;);
+    const panelWidth = width / columns;
+    const countries = [&quot;France&quot;, &quot;Italy&quot;, &quot;Poland&quot;, &quot;Sweden&quot;];
+    const yearDomain = d3.extent(fertility, d =&gt; d.year);
+    const fertilityExtent = d3.extent([...fertility.map(d =&gt; d.value), 2.1]);
+    const fertilityPadding = (fertilityExtent[1] - fertilityExtent[0]) * 0.1;
+    const fertilityDomain = [
+      Math.floor((fertilityExtent[0] - fertilityPadding) * 10) / 10,
+      Math.ceil((fertilityExtent[1] + fertilityPadding) * 10) / 10
+    ];
+    countries.forEach((country, index) =&gt; {
+      const col = index % columns;
+      const row = Math.floor(index / columns);
+      const left = col * panelWidth + 48;
+      const top = row * panelHeight + 24;
+      const right = (col + 1) * panelWidth - 18;
+      const bottom = (row + 1) * panelHeight - 26;
+      const x = d3.scaleLinear().domain(yearDomain).range([left, right]);
+      const y = d3.scaleLinear().domain(fertilityDomain).range([bottom, top]);
+      svg.append(&quot;rect&quot;).attr(&quot;data-chart-frame&quot;, &quot;&quot;).attr(&quot;x&quot;, left).attr(&quot;y&quot;, top)
+        .attr(&quot;width&quot;, right - left).attr(&quot;height&quot;, bottom - top).attr(&quot;fill&quot;, &quot;none&quot;);
+      const values = fertility.filter(d =&gt; d.country === country);
+      const first = values[0];
+      const last = values[values.length - 1];
+      const change = last.value - first.value;
+      svg.append(&quot;text&quot;).attr(&quot;class&quot;, &quot;direct-label&quot;).attr(&quot;x&quot;, left).attr(&quot;y&quot;, top - 8).text(country);
+      svg.append(&quot;text&quot;).attr(&quot;class&quot;, &quot;secondary-label tabular&quot;).attr(&quot;x&quot;, right).attr(&quot;y&quot;, top - 8)
+        .attr(&quot;text-anchor&quot;, &quot;end&quot;).text(`${change &gt; 0 ? &quot;+&quot; : &quot;&quot;}${change.toFixed(2)} since 1990`);
+      svg.append(&quot;line&quot;).attr(&quot;class&quot;, &quot;reference-line&quot;)
+        .attr(&quot;x1&quot;, left).attr(&quot;x2&quot;, right).attr(&quot;y1&quot;, y(2.1)).attr(&quot;y2&quot;, y(2.1));
+      if (index === 0) {
+        svg.append(&quot;text&quot;).attr(&quot;class&quot;, &quot;secondary-label&quot;).attr(&quot;x&quot;, left + 6).attr(&quot;y&quot;, y(2.1) + 14)
+          .text(&quot;Replacement level 2.1&quot;);
+      }
+      svg.append(&quot;path&quot;).datum(values)
+        .attr(&quot;fill&quot;, &quot;none&quot;).attr(&quot;stroke&quot;, accent).attr(&quot;stroke-width&quot;, 2.5)
+        .attr(&quot;d&quot;, d3.line().x(d =&gt; x(d.year)).y(d =&gt; y(d.value)));
+      svg.append(&quot;circle&quot;).attr(&quot;cx&quot;, x(last.year)).attr(&quot;cy&quot;, y(last.value)).attr(&quot;r&quot;, 4).attr(&quot;fill&quot;, accent);
+      svg.append(&quot;text&quot;).attr(&quot;class&quot;, &quot;value-label tabular&quot;).attr(&quot;x&quot;, x(last.year) - 3).attr(&quot;y&quot;, y(last.value) - 8)
+        .attr(&quot;text-anchor&quot;, &quot;end&quot;).attr(&quot;fill&quot;, ink).text(last.value.toFixed(2));
+      yearDomain.forEach(year =&gt; svg.append(&quot;text&quot;).attr(&quot;class&quot;, &quot;secondary-label&quot;).attr(&quot;x&quot;, x(year)).attr(&quot;y&quot;, bottom + 17)
+        .attr(&quot;text-anchor&quot;, year === yearDomain[0] ? &quot;start&quot; : &quot;end&quot;).text(year));
+      [1.2, 2.0].filter(value =&gt; value &gt;= fertilityDomain[0] &amp;&amp; value &lt;= fertilityDomain[1]).forEach(value =&gt; svg.append(&quot;text&quot;).attr(&quot;class&quot;, &quot;secondary-label&quot;).attr(&quot;x&quot;, left - 7).attr(&quot;y&quot;, y(value) + 4)
+        .attr(&quot;text-anchor&quot;, &quot;end&quot;).text(value.toFixed(1)));
+    });
+    axisTitle(svg, &quot;Year&quot;, width / 2, height - 4, &quot;x&quot;, false);
+    axisTitle(svg, &quot;Births per woman&quot;, 12, height / 2, &quot;y&quot;, true);
+  }
+
+  const renderers = {line: drawLine, bars: drawBars, dumbbell: drawDumbbell, scatter: drawScatter, multiples: drawMultiples};
+  let frame;
+  function drawAll() {
+    cancelAnimationFrame(frame);
+    frame = requestAnimationFrame(() =&gt; {
+      root.querySelectorAll(&quot;[data-chart]&quot;).forEach(slot =&gt; renderers[slot.dataset.chart](slot));
+    });
+  }
+
+  const observer = new ResizeObserver(drawAll);
+  observer.observe(root);
+  drawAll();
+})();
+&lt;/script&gt;
+
+&lt;script src=&quot;https://unpkg.com/@floating-ui/core@1.7.3/dist/floating-ui.core.umd.min.js&quot;&gt;&lt;/script&gt;
+&lt;script src=&quot;https://unpkg.com/@floating-ui/dom@1.7.4/dist/floating-ui.dom.umd.min.js&quot;&gt;&lt;/script&gt;
+&lt;script&gt;
+(() =&gt; {
+  if (window.FloatingUIDOM == null) {
+    return;
+  }
+  const { autoUpdate, computePosition, flip, offset, shift, size } =
+    window.FloatingUIDOM;
+  const tooltipPlacements = new Set([&quot;top&quot;, &quot;right&quot;, &quot;bottom&quot;, &quot;left&quot;]);
+  const tooltipId = `codex-visualization-tooltip-${
+    window.crypto?.randomUUID?.() ?? Date.now().toString(36)
+  }`;
+  const tooltipGap = 5;
+  const hoverDelay = 700;
+  const skipDelay = 300;
+  let activeTrigger = null;
+  let pendingTrigger = null;
+  let tooltip = null;
+  let openTimeout = null;
+  let autoUpdateCleanup = null;
+  let positionRequest = 0;
+  let skipDelayUntil = 0;
+  let lastPointerWasTouch = false;
+  let pinnedByTouch = false;
+
+  const getTrigger = (target) =&gt;
+    target?.nodeType === Node.ELEMENT_NODE
+      ? target.closest(&quot;[data-tooltip]&quot;)
+      : null;
+  const containsTarget = (trigger, target) =&gt;
+    target?.nodeType != null &amp;&amp; trigger.contains(target);
+  const getContent = (trigger) =&gt;
+    trigger.getAttribute(&quot;data-tooltip&quot;)?.trim() ?? &quot;&quot;;
+  const getPlacement = (trigger) =&gt; {
+    const placement = trigger.getAttribute(&quot;data-tooltip-placement&quot;);
+    return tooltipPlacements.has(placement) ? placement : &quot;top&quot;;
+  };
+  const getTooltip = () =&gt; {
+    if (tooltip == null) {
+      tooltip = document.createElement(&quot;div&quot;);
+      tooltip.id = tooltipId;
+      tooltip.className = &quot;tooltip&quot;;
+      tooltip.setAttribute(&quot;role&quot;, &quot;tooltip&quot;);
+    }
+    return tooltip;
+  };
+  const setDescribedBy = (trigger, described) =&gt; {
+    const ids = new Set(
+      (trigger.getAttribute(&quot;aria-describedby&quot;) ?? &quot;&quot;)
+        .split(/\s+/)
+        .filter(Boolean),
+    );
+    if (described) {
+      ids.add(tooltipId);
+    } else {
+      ids.delete(tooltipId);
+    }
+    if (ids.size === 0) {
+      trigger.removeAttribute(&quot;aria-describedby&quot;);
+    } else {
+      trigger.setAttribute(&quot;aria-describedby&quot;, [...ids].join(&quot; &quot;));
+    }
+  };
+  const clearOpenTimeout = () =&gt; {
+    if (openTimeout != null) {
+      window.clearTimeout(openTimeout);
+      openTimeout = null;
+    }
+    pendingTrigger = null;
+  };
+  const closeTooltip = (activateSkipDelay = true) =&gt; {
+    clearOpenTimeout();
+    pinnedByTouch = false;
+    positionRequest += 1;
+    autoUpdateCleanup?.();
+    autoUpdateCleanup = null;
+    if (activeTrigger == null) {
+      return;
+    }
+    setDescribedBy(activeTrigger, false);
+    activeTrigger = null;
+    tooltip?.remove();
+    if (activateSkipDelay) {
+      skipDelayUntil = Date.now() + skipDelay;
+    }
+  };
+  const updatePosition = (trigger, floating) =&gt; {
+    const request = ++positionRequest;
+    void computePosition(trigger, floating, {
+      middleware: [
+        offset(tooltipGap),
+        flip({ padding: tooltipGap }),
+        shift({ padding: tooltipGap }),
+        size({
+          padding: tooltipGap,
+          apply({ availableHeight, availableWidth, elements }) {
+            elements.floating.style.setProperty(
+              &quot;--tooltip-available-width&quot;,
+              `${Math.max(0, availableWidth)}px`,
+            );
+            elements.floating.style.setProperty(
+              &quot;--tooltip-available-height&quot;,
+              `${Math.max(0, availableHeight)}px`,
+            );
+          },
+        }),
+      ],
+      placement: getPlacement(trigger),
+      strategy: &quot;fixed&quot;,
+    })
+      .then(({ x, y }) =&gt; {
+        if (activeTrigger !== trigger || request !== positionRequest) {
+          return;
+        }
+        const scale = window.devicePixelRatio || 1;
+        floating.style.transform = `translate(${Math.round(x * scale) / scale}px, ${Math.round(y * scale) / scale}px)`;
+        floating.style.visibility = &quot;visible&quot;;
+      })
+      .catch(() =&gt; {
+        if (activeTrigger === trigger &amp;&amp; request === positionRequest) {
+          closeTooltip(false);
+        }
+      });
+  };
+  const openTooltip = (trigger) =&gt; {
+    const content = getContent(trigger);
+    if (!trigger.isConnected || content.length === 0) {
+      return;
+    }
+    clearOpenTimeout();
+    if (activeTrigger === trigger) {
+      return;
+    }
+    closeTooltip();
+    const floating = getTooltip();
+    floating.textContent = content;
+    floating.style.visibility = &quot;hidden&quot;;
+    floating.style.transform = &quot;translate(0, 0)&quot;;
+    document.body.appendChild(floating);
+    activeTrigger = trigger;
+    setDescribedBy(trigger, true);
+    autoUpdateCleanup = autoUpdate(trigger, floating, () =&gt; {
+      updatePosition(trigger, floating);
+    });
+  };
+  const requestOpen = (trigger, immediate = false) =&gt; {
+    if (
+      getContent(trigger).length === 0 ||
+      activeTrigger === trigger ||
+      pendingTrigger === trigger
+    ) {
+      return;
+    }
+    clearOpenTimeout();
+    pendingTrigger = trigger;
+    const delay =
+      immediate || activeTrigger != null || Date.now() &lt; skipDelayUntil
+        ? 0
+        : hoverDelay;
+    if (delay === 0) {
+      openTooltip(trigger);
+      return;
+    }
+    openTimeout = window.setTimeout(() =&gt; {
+      openTimeout = null;
+      pendingTrigger = null;
+      openTooltip(trigger);
+    }, delay);
+  };
+  const handlePointerOpen = (event) =&gt; {
+    if (event.pointerType === &quot;touch&quot;) {
+      return;
+    }
+    const trigger = getTrigger(event.target);
+    if (trigger == null || containsTarget(trigger, event.relatedTarget)) {
+      return;
+    }
+    requestOpen(trigger);
+  };
+  const handlePointer = (event) =&gt; {
+    lastPointerWasTouch =
+      event.type === &quot;pointerdown&quot; &amp;&amp; event.pointerType === &quot;touch&quot;;
+  };
+  const handleTouchClick = (event) =&gt; {
+    const isTouch = event.pointerType === &quot;touch&quot; || lastPointerWasTouch;
+    lastPointerWasTouch = false;
+    if (!isTouch || event.detail === 0) {
+      return;
+    }
+    const trigger = getTrigger(event.target);
+    if (
+      trigger == null ||
+      !trigger.isConnected ||
+      getContent(trigger).length === 0 ||
+      (pinnedByTouch &amp;&amp; activeTrigger === trigger)
+    ) {
+      if (pinnedByTouch) {
+        closeTooltip();
+      }
+      return;
+    }
+    openTooltip(trigger);
+    pinnedByTouch = activeTrigger === trigger;
+    window.setTimeout(() =&gt; {
+      if (activeTrigger === trigger &amp;&amp; !trigger.isConnected) {
+        closeTooltip(false);
+      }
+    }, 0);
+  };
+  const handleLeave = (event) =&gt; {
+    if (pinnedByTouch) {
+      return;
+    }
+    const trigger = getTrigger(event.target);
+    if (trigger == null || containsTarget(trigger, event.relatedTarget)) {
+      return;
+    }
+    if (activeTrigger === trigger || pendingTrigger === trigger) {
+      closeTooltip();
+    }
+  };
+  const handleFocusIn = (event) =&gt; {
+    const trigger = getTrigger(event.target);
+    if (trigger?.matches(&quot;:focus-visible&quot;)) {
+      requestOpen(trigger, true);
+    }
+  };
+  const handleKeyDown = (event) =&gt; {
+    if (event.key === &quot;Escape&quot;) {
+      closeTooltip();
+    }
+  };
+  const handleContextMenu = (event) =&gt; {
+    lastPointerWasTouch = false;
+    const trigger = getTrigger(event.target);
+    if (activeTrigger === trigger || pendingTrigger === trigger) {
+      closeTooltip();
+    }
+  };
+  const destroy = () =&gt; {
+    closeTooltip(false);
+    lastPointerWasTouch = false;
+    document.removeEventListener(&quot;pointerover&quot;, handlePointerOpen);
+    document.removeEventListener(&quot;pointerdown&quot;, handlePointer);
+    document.removeEventListener(&quot;pointercancel&quot;, handlePointer);
+    document.removeEventListener(&quot;click&quot;, handleTouchClick);
+    document.removeEventListener(&quot;pointerout&quot;, handleLeave);
+    document.removeEventListener(&quot;focusin&quot;, handleFocusIn);
+    document.removeEventListener(&quot;focusout&quot;, handleLeave);
+    document.removeEventListener(&quot;keydown&quot;, handleKeyDown);
+    document.removeEventListener(&quot;contextmenu&quot;, handleContextMenu);
+    tooltip = null;
+  };
+
+  document.addEventListener(&quot;pointerover&quot;, handlePointerOpen);
+  document.addEventListener(&quot;pointerdown&quot;, handlePointer);
+  document.addEventListener(&quot;pointercancel&quot;, handlePointer);
+  document.addEventListener(&quot;click&quot;, handleTouchClick);
+  document.addEventListener(&quot;pointerout&quot;, handleLeave);
+  document.addEventListener(&quot;focusin&quot;, handleFocusIn);
+  document.addEventListener(&quot;focusout&quot;, handleLeave);
+  document.addEventListener(&quot;keydown&quot;, handleKeyDown);
+  document.addEventListener(&quot;contextmenu&quot;, handleContextMenu);
+  window.addEventListener(&quot;pagehide&quot;, destroy, { once: true });
+})();
+&lt;/script&gt;
+&lt;script id=&quot;codex-visualization-lucide&quot; async src=&quot;https://unpkg.com/lucide@1.17.0/dist/umd/lucide.js&quot;&gt;&lt;/script&gt;
+&lt;script&gt;
+(() =&gt; {
+  const initialize = () =&gt; {
+    globalThis.lucide?.createIcons({ attrs: { width: 16, height: 16 } });
+  };
+  if (globalThis.lucide != null) {
+    initialize();
+    return;
+  }
+  document
+    .getElementById(&quot;codex-visualization-lucide&quot;)
+    ?.addEventListener(&quot;load&quot;, initialize, { once: true });
+})();
+&lt;/script&gt;
+
+&lt;/body&gt;
+&lt;/html&gt;
+"></iframe>
+</body>
+</html>

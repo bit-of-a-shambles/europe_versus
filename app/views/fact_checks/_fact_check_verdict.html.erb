@@ -37,10 +37,10 @@
       icon: '◐',
       description: 'Has elements of truth but is misleading'
     },
-    'mostly_true' => { 
-      value: 3, 
-      label: 'Mostly True', 
-      color: '#0066FF', 
+    'mostly_true' => {
+      value: 3,
+      label: 'Mostly True',
+      color: '#71394D',
       bg: '#DBEAFE',
       icon: '◑',
       description: 'Accurate but lacks important context'
@@ -126,7 +126,7 @@
 
     <!-- Summary -->
     <% if summary.present? %>
-      <div class="p-6 bg-[#F5F5F5]">
+      <div class="p-6 bg-[#E8E0D3]">
         <div class="flex gap-3">
           <div class="shrink-0 w-1 rounded-full" style="background-color: <%= config[:color] %>;"></div>
           <p class="text-base md:text-lg leading-relaxed text-black/80">
@@ -139,7 +139,7 @@
     <!-- Footer -->
     <div class="border-t-2 border-black/20 px-6 py-3 flex items-center justify-between">
       <span class="font-mono text-xs text-black/50">
-        EUROPEVERSUS Fact Check
+        Common Values fact check
       </span>
       <span class="font-mono text-xs uppercase tracking-brutal" style="color: <%= config[:color] %>;">
         <%= config[:description] %>

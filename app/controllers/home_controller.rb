@@ -5,11 +5,9 @@ class HomeController < ApplicationController
     response.headers["Pragma"] = "no-cache"
     response.headers["Expires"] = "0"
 
-    # Only fetch metrics that exist in the database
-    @gdp_data = fetch_latest_gdp_data
-    @population_data = fetch_latest_population_data
-    @child_mortality_data = fetch_latest_child_mortality_data
-    @healthy_life_expectancy_data = fetch_latest_healthy_life_expectancy_data
+    @edition = Edition.latest
+    @chart = EditorialChartPresenter.new(@edition)
+    @archive = Edition.all.drop(1).first(5)
   end
 
   def methodology

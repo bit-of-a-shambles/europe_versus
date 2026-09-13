@@ -68,6 +68,9 @@ end
 # Server-side HTML to PDF/PNG rendering [https://github.com/Studiosity/grover]
 gem "grover"
 
+# Draft weekly editions to Substack. Publishing remains a deliberate manual step.
+gem "Substack", git: "https://github.com/bit-of-a-shambles/substack.git"
+
 group :test do
   # Use system testing [https://guides.rubyonrails.org/testing.html#system-testing]
   gem "capybara"
