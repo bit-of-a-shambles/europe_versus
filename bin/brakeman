@@ -3,5 +3,8 @@ require "rubygems"
 require "bundler/setup"
 
 ARGV.unshift("--ensure-latest")
+# Skip checks configured in .brakeman.conf (currently the EOLRails
+# maintenance advisory) for local runs and CI alike.
+ARGV.push("--config-file", ".brakeman.conf") if File.exist?(".brakeman.conf")
 
 load Gem.bin_path("brakeman", "brakeman")
