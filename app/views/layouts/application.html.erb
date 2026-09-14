@@ -59,7 +59,7 @@
       <div class="masthead-actions">
         <%= link_to "Method", methodology_path %>
         <% substack_url = ENV.fetch("SUBSTACK_PUBLICATION_URL", editions_path) %>
-        <a class="nav-subscribe" href="<%= substack_url %>">Subscribe <span class="link-arrow" aria-hidden="true">→</span></a>
+        <a class="nav-subscribe" href="<%= substack_url %>"><span data-controller="gradient-text">Subscribe</span> <span class="link-arrow" aria-hidden="true">→</span></a>
       </div>
 
       <button class="nav-toggle" data-action="click->mobile-menu#toggle" aria-label="Open navigation" aria-expanded="false" aria-controls="mobile-nav">
@@ -72,7 +72,7 @@
       <%= link_to "Archive", editions_path %>
       <%= link_to "Data library", statistics_path %>
       <%= link_to "Method", methodology_path %>
-      <a href="<%= ENV.fetch("SUBSTACK_PUBLICATION_URL", editions_path) %>">Subscribe</a>
+      <a href="<%= ENV.fetch("SUBSTACK_PUBLICATION_URL", editions_path) %>"><span class="gradient-text--paper" data-controller="gradient-text">Subscribe</span></a>
     </nav>
   </header>
 

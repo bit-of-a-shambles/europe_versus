@@ -174,6 +174,43 @@ button:focus-visible,
 
 .nav-subscribe:hover { background: var(--accent); color: var(--paper); }
 
+/* Gradient text — a from-scratch recreation of transitions.dev's
+ * "pro gradient text" behaviour (owner-directed exception to the
+ * no-gradient rule; see BRAND_GUIDELINES.md §4). One element: a large
+ * rainbow colour field is clipped to the glyphs and orbits in two
+ * dimensions, so colour washes drift through the letters rather than
+ * sweeping left-to-right. The base class changes nothing visually;
+ * only .is-active paints, so toggling never affects layout.
+ * Typography, weight, line-height and sizing are inherited untouched. */
+.gradient-text {
+  --gradient-duration: 10s;
+  --gradient-stops: #ff5fa2 0%, #a855f7 14%, #4f7df7 28%, #2ec8e0 43%, #3ecf74 57%, #f4c445 71%, #ef5a4e 86%, #ff5fa2 100%;
+}
+/* Deepened stops for labels on vellum paper (mobile nav, subscribe band):
+ * same hue journey, darker tones that stay legible on a light ground. */
+.gradient-text--paper {
+  --gradient-stops: #d63d85 0%, #7c3aed 14%, #3454d1 28%, #15789e 43%, #1e9e5a 57%, #c07a17 71%, #c53a2e 86%, #d63d85 100%;
+}
+.gradient-text.is-active {
+  background-image: linear-gradient(115deg, var(--gradient-stops));
+  background-size: 300% 300%;
+  background-position: 50% 50%;
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .gradient-text.is-active { animation: cv-gradient-orbit var(--gradient-duration) linear infinite; }
+}
+@keyframes cv-gradient-orbit {
+  0% { background-position: 0% 50%; }
+  25% { background-position: 50% 100%; }
+  50% { background-position: 100% 50%; }
+  75% { background-position: 50% 0%; }
+  100% { background-position: 0% 50%; }
+}
+
 .primary-nav {
   position: sticky;
   top: 0;

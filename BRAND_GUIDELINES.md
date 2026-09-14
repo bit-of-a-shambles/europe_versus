@@ -143,6 +143,17 @@ The page should feel like a well-edited weekly review: vellum paper, carbon ink,
 
 The subscribe control may be a restrained pill because it is an action. That exception does not extend to editorial content.
 
+**Gradient-text exception (v1.5, September 2026, owner-directed).** The
+subscribe labels alone may carry the "gradient text" treatment recreated
+from transitions.dev's pro-gradient-text effect: a large rainbow colour
+field clipped to the glyphs, orbiting in two dimensions over ~10 seconds
+(a deepened-stop variant runs on light backgrounds for legibility). This
+is the publication's single gradient exception — it applies to the
+Subscribe word only, sits behind `prefers-reduced-motion` (reduced motion
+freezes a static frame), and never extends to headlines, body copy, charts
+or navigation. Implementation: `gradient_text_controller.js` and
+`.gradient-text` in `application.css`.
+
 ## 5. Colour
 
 | Token | Value | Use |

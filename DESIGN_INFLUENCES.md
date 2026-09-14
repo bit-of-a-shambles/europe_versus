@@ -191,3 +191,35 @@ Still rejected on editorial grounds: confetti, gooey physics, shimmer
 (gradient-based), skeleton loaders (everything is server-rendered),
 notification badges (brand bans metadata pills) and error shakes (no
 forms on site).
+
+### Third pass: gradient text (September 2026, v1.5)
+
+Owner-directed recreation of transitions.dev's pro-gradient-text effect,
+built from its published behaviour rather than its source: a single
+element whose glyphs are filled by a rainbow colour field (pink, violet,
+blue, cyan, green, yellow-orange, red) sized to 300% of the label and
+orbiting in two dimensions — left-centre → bottom-centre → right-centre →
+top-centre → left-centre — over 10 seconds, so colour washes drift
+through the letters instead of sweeping left-to-right. Applies to the
+subscribe labels only (the publication's single gradient exception,
+recorded in BRAND_GUIDELINES.md §4).
+
+**Component:** `app/javascript/controllers/gradient_text_controller.js`
+with `.gradient-text` in `application.css`.
+
+```html
+<!-- default: animated rainbow orbit -->
+<span data-controller="gradient-text">Subscribe</span>
+
+<!-- on a light background: deepened stops for legibility -->
+<span class="gradient-text--paper" data-controller="gradient-text">Subscribe</span>
+
+<!-- customised: 12s cycle, custom colours, toggleable -->
+<span data-controller="gradient-text"
+      data-gradient-text-duration-value="12"
+      data-gradient-text-colours-value="#f0f 0%, #0ff 50%, #f0f 100%"
+      data-action="click->gradient-text#toggle">Subscribe</span>
+```
+
+Reduced motion freezes the field on a static centred frame; the inactive
+state renders ordinary foreground text with no layout shift.
